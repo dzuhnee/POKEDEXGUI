@@ -23,7 +23,7 @@
 
       <VBox alignment="TOP_CENTER" spacing="10">
          <padding>
-            <Insets bottom="20" left="20" right="20" top="50" />
+            <Insets bottom="20" left="20" right="20" top="85" />
          </padding>
 
          <TextField fx:id="searchField" promptText="Enter move name with keyword" />

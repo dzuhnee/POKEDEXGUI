@@ -16,17 +16,7 @@
                </image>
             </ImageView>
 
-            <Button fx:id="addBtn" contentDisplay="GRAPHIC_ONLY" layoutX="92.0" layoutY="144.0" mnemonicParsing="false" style="-fx-padding: 0; -fx-background-color: transparent;">
-               <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@list.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-
-            <Button fx:id="viewBtn" contentDisplay="GRAPHIC_ONLY" layoutX="259.0" layoutY="145.0" mnemonicParsing="false" style="-fx-padding: 0; -fx-background-color: transparent;">
+            <Button fx:id="viewBtn" contentDisplay="GRAPHIC_ONLY" layoutX="180.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleView" style="-fx-padding: 0; -fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -36,7 +26,7 @@
                </graphic>
             </Button>
 
-            <Button fx:id="searchBtn" contentDisplay="GRAPHIC_ONLY" layoutX="434.0" layoutY="144.0" mnemonicParsing="false" style="-fx-padding: 0; -fx-background-color: transparent;">
+            <Button fx:id="searchBtn" contentDisplay="GRAPHIC_ONLY" layoutX="350.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleSearch" style="-fx-padding: 0; -fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
