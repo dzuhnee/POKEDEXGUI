@@ -41,7 +41,7 @@ public class ViewTrainersController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("trainerId"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("trainerID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         birthdateColumn.setCellValueFactory(new PropertyValueFactory<>("birthdate"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));

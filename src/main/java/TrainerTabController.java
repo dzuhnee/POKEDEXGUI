@@ -19,7 +19,7 @@ public class TrainerTabController {
     private void initialize() {
         addBtn.setOnAction(e -> openAddTrainer());
         viewBtn.setOnAction(e -> openViewTrainer());
-        searchBtn.setOnAction(e -> System.out.println("Search Trainer clicked"));
+        searchBtn.setOnAction(e -> openSearchTrainer());
     }
 
     private void openAddTrainer() {
@@ -39,6 +39,17 @@ public class TrainerTabController {
             Parent viewTrainerRoot = loader.load();
             Stage stage = (Stage) viewBtn.getScene().getWindow();
             stage.setScene(new Scene(viewTrainerRoot));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openSearchTrainer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SearchTrainer.fxml"));
+            Parent searchTrainerRoot = loader.load();
+            Stage stage = (Stage) viewBtn.getScene().getWindow();
+            stage.setScene(new Scene(searchTrainerRoot));
         } catch (IOException e) {
             e.printStackTrace();
         }

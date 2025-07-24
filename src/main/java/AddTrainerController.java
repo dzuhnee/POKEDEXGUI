@@ -50,6 +50,14 @@ public class AddTrainerController {
         }
     }
 
+    public void initialize() {
+        trainerIdField.setPromptText("eg. 1");
+        nameField.setPromptText("eg. Ash Ketchum");
+        birthdateField.setPromptText("eg. 1987-05-22");
+        genderField.setPromptText("eg. Male");
+        hometownField.setPromptText("eg. Pallet Town");
+        descriptionField.setPromptText("eg. Pokemon Trainer from Kanto");
+    }
 
     @FXML
     private void handleSave() {

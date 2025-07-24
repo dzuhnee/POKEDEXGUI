@@ -6,3 +6,35 @@ Gender: male
 Hometown: recto
 Description: hates aj
 --------------------------------------------------
+Trainer Info:
+ID: 1
+Name: Ash Ketchum
+Birthdate: 1987-05-22
+Gender: Male
+Hometown: Pallet Town
+Description: Pokemon Trainer from Kanto
+--------------------------------------------------
+Trainer Info:
+ID: 21
+Name: Kyle
+Birthdate: 2006-01-21
+Gender: Female
+Hometown: Cabsy
+Description: Ganda lang
+--------------------------------------------------
+Trainer Info:
+ID: 2
+Name: Riki
+Birthdate: 2005-12-09
+Gender: Male
+Hometown: Japan
+Description: Pogi
+--------------------------------------------------
+Trainer Info:
+ID: 03
+Name: Harley Davidson
+Birthdate: 2006-04-03
+Gender: Male
+Hometown: Cabsy
+Description: Pogi
+--------------------------------------------------
