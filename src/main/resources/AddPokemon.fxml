@@ -10,7 +10,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+
 <?import javafx.scene.control.ComboBox?>
+
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pokedex.app.AddPokemonController">
     <children>
@@ -37,10 +39,9 @@
                         <TextField fx:id="pokedexNumberField" GridPane.columnIndex="1" />
                         <TextField fx:id="pokemonNameField" prefHeight="17.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ComboBox fx:id="typeField" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="211.0" />
-                        <Label style="-fx-font-style: 'Poppins';" text="Pokedex Number:" />
+                        <Label text="Pokedex Number:" />
                         <Label text="Name:" GridPane.rowIndex="1" />
                         <Label text="Type 1:" GridPane.rowIndex="2" />
-
                     </children>
                 </GridPane>
 
@@ -54,7 +55,7 @@
                         <RowConstraints />
                         <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="33.759002685546875" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="38.240997314453125" minHeight="10.0" prefHeight="37.006011962890625" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="44.45799255371094" minHeight="10.0" prefHeight="35.493988037109375" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="44.45799255371094" minHeight="10.0" prefHeight="35.493988037109375" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <ComboBox fx:id="type2Field" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="211.0" />
@@ -87,71 +88,74 @@
                         </ImageView>
                     </graphic>
                 </Button>
-            <GridPane layoutX="60.0" layoutY="261.0" prefHeight="49.0" prefWidth="316.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="106.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="210.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Evolves To:" />
-                   <TextField fx:id="evolvesToField" GridPane.columnIndex="1" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="166.0" layoutY="310.0" prefHeight="35.0" prefWidth="69.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="22.890609741210938" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="46.10939025878906" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <TextField fx:id="hpField" prefHeight="26.0" prefWidth="41.0" GridPane.columnIndex="1" />
-                  <Label text="HP:" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="242.0" layoutY="311.0" prefHeight="35.0" prefWidth="76.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextField fx:id="atkField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
-                  <Label text="ATK:" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="325.0" layoutY="310.0" prefHeight="35.0" prefWidth="76.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextField fx:id="defField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
-                  <Label text="DEF:" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="409.0" layoutY="310.0" prefHeight="35.0" prefWidth="76.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextField fx:id="spdField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
-                  <Label text="SPD:" />
-               </children>
-            </GridPane>
+                <GridPane layoutX="58.0" layoutY="273.0" prefHeight="63.0" prefWidth="316.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="106.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="210.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Evolves To:" />
+                        <TextField fx:id="evolvesToField" GridPane.columnIndex="1" />
+                        <Label text="Evolution Level:" GridPane.rowIndex="1" />
+                        <TextField fx:id="evolutionLevelField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    </children>
+                </GridPane>
+                <GridPane layoutX="396.0" layoutY="241.0" prefHeight="35.0" prefWidth="69.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="22.890609741210938" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="46.10939025878906" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextField fx:id="hpField" prefHeight="26.0" prefWidth="41.0" GridPane.columnIndex="1" />
+                        <Label text="HP:" />
+                    </children>
+                </GridPane>
+                <GridPane layoutX="466.0" layoutY="243.0" prefHeight="35.0" prefWidth="76.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextField fx:id="atkField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
+                        <Label text="ATK:" />
+                    </children>
+                </GridPane>
+                <GridPane layoutX="389.0" layoutY="279.0" prefHeight="35.0" prefWidth="76.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextField fx:id="defField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
+                        <Label text="DEF:" />
+                    </children>
+                </GridPane>
+                <GridPane layoutX="467.0" layoutY="279.0" prefHeight="35.0" prefWidth="76.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="29.861328125" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="39.638671875" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextField fx:id="spdField" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" />
+                        <Label text="SPD:" />
+                    </children>
+                </GridPane>
 
             </children>
         </Group>

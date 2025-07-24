@@ -13,9 +13,7 @@ import javafx.scene.Scene;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AddPokemonController {
 
@@ -26,6 +24,7 @@ public class AddPokemonController {
     @FXML private TextField baseLevelField;
     @FXML private TextField evolvesFromField;
     @FXML private TextField evolvesToField;
+    @FXML private TextField evolutionLevelField;  // ✅ NEW FIELD
     @FXML private TextField hpField;
     @FXML private TextField atkField;
     @FXML private TextField defField;
@@ -45,17 +44,16 @@ public class AddPokemonController {
 
     @FXML
     private void handleSave(ActionEvent event) {
-        // Check all fields are filled
         if (isAnyFieldEmpty()) {
             showAlert("Please fill in all required fields!");
             return;
         }
 
-        // Validate number-only fields
         if (!isInteger(pokedexNumberField.getText()) || !isInteger(baseLevelField.getText()) ||
+                !isInteger(evolutionLevelField.getText()) ||
                 !isInteger(hpField.getText()) || !isInteger(atkField.getText()) ||
                 !isInteger(defField.getText()) || !isInteger(spdField.getText())) {
-            showAlert("Base level and all stats must be valid numbers!");
+            showAlert("Level and stats must be valid numbers!");
             return;
         }
 
@@ -65,19 +63,19 @@ public class AddPokemonController {
             return;
         }
 
-        // Check for duplicates in .txt file
         if (isDuplicate(pokedexNumberField.getText(), pokemonNameField.getText())) {
             showAlert("Duplicate Pokedex number or Pokémon name detected!");
             return;
         }
 
-        // Format data
+        // ✅ Save evolution level as well
         String data = String.join(",",
                 pokedexNumberField.getText(),
                 pokemonNameField.getText(),
                 typeField.getValue(),
                 type2Field.getValue(),
                 baseLevelField.getText(),
+                evolutionLevelField.getText(),
                 evolvesFromField.getText(),
                 evolvesToField.getText(),
                 hpField.getText(),
@@ -103,6 +101,7 @@ public class AddPokemonController {
                 typeField.getValue() == null ||
                 type2Field.getValue() == null ||
                 baseLevelField.getText().isEmpty() ||
+                evolutionLevelField.getText().isEmpty() ||
                 evolvesFromField.getText().isEmpty() ||
                 evolvesToField.getText().isEmpty() ||
                 hpField.getText().isEmpty() ||

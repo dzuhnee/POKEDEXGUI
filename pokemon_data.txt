@@ -1,1 +1,2 @@
-1,Bulbasaur,Grass,Poison,1,16,32,45,49,49,45
+1,Bulbasaur,Grass,Poison,1,16,32,23,45,49,49,45
+2,Ivysaur,Grass,Poison,2,16,16,32,60,62,65,63

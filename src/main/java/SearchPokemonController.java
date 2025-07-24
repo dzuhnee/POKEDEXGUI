@@ -11,41 +11,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.pokedex.app.PokemonBasic;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
+
+import com.pokedex.app.PokemonBasic;
 
 public class SearchPokemonController {
 
-    @FXML
-    private TextField searchField;
-
-    @FXML
-    private TableView<PokemonBasic> resultTable;
-
-    @FXML
-    private TableColumn<PokemonBasic, Integer> colDex;
-
-    @FXML
-    private TableColumn<PokemonBasic, String> colName;
-
-    @FXML
-    private TableColumn<PokemonBasic, Integer> colHP;
-
-    @FXML
-    private TableColumn<PokemonBasic, Integer> colAttack;
-
-    @FXML
-    private TableColumn<PokemonBasic, Integer> colDefense;
-
-    @FXML
-    private TableColumn<PokemonBasic, Integer> colSpeed;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> typeComboBox;
+    @FXML private TableView<PokemonBasic> resultTable;
+    @FXML private TableColumn<PokemonBasic, Integer> colDex;
+    @FXML private TableColumn<PokemonBasic, String> colName;
+    @FXML private TableColumn<PokemonBasic, Integer> colHP;
+    @FXML private TableColumn<PokemonBasic, Integer> colAttack;
+    @FXML private TableColumn<PokemonBasic, Integer> colDefense;
+    @FXML private TableColumn<PokemonBasic, Integer> colSpeed;
 
     private final ObservableList<PokemonBasic> allPokemon = FXCollections.observableArrayList();
+    private final Map<PokemonBasic, List<String>> typeMap = new HashMap<>();
 
     @FXML
     public void initialize() {
-        // Bind columns
         colDex.setCellValueFactory(new PropertyValueFactory<>("dexNumber"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colHP.setCellValueFactory(new PropertyValueFactory<>("hp"));
@@ -53,40 +41,95 @@ public class SearchPokemonController {
         colDefense.setCellValueFactory(new PropertyValueFactory<>("defense"));
         colSpeed.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
-        // Sample data
-        allPokemon.addAll(
-                new PokemonBasic(1, "Bulbasaur", 45, 49, 49, 45),
-                new PokemonBasic(4, "Charmander", 39, 52, 43, 65),
-                new PokemonBasic(7, "Squirtle", 44, 48, 65, 43)
+        loadPokemonDataFromFile();
+        initializeTypeComboBox();
+        resultTable.setVisible(false);
+    }
+
+    private void initializeTypeComboBox() {
+        List<String> allTypes = Arrays.asList(
+                "Normal", "Fire", "Water", "Electric", "Grass", "Ice",
+                "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug",
+                "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
         );
 
-        resultTable.setVisible(false); // Hide table initially
+        ObservableList<String> typeOptions = FXCollections.observableArrayList();
+        typeOptions.add("-- Select Type --");
+        typeOptions.addAll(allTypes);
+
+        typeComboBox.setItems(typeOptions);
+        typeComboBox.setValue("-- Select Type --");
+    }
+
+    private void loadPokemonDataFromFile() {
+        File file = new File("pokemon_data.txt");
+        if (!file.exists()) {
+            System.err.println("❌ File not found: pokemon_data.txt");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split(",");
+                if (tokens.length < 12) continue;
+
+                try {
+                    int dex = Integer.parseInt(tokens[0].trim());
+                    String name = tokens[1].trim();
+                    List<String> types = List.of(tokens[2].trim(), tokens[3].trim());
+                    int hp = Integer.parseInt(tokens[8].trim());
+                    int attack = Integer.parseInt(tokens[9].trim());
+                    int defense = Integer.parseInt(tokens[10].trim());
+                    int speed = Integer.parseInt(tokens[11].trim());
+
+                    PokemonBasic p = new PokemonBasic(dex, name, hp, attack, defense, speed);
+                    allPokemon.add(p);
+                    typeMap.put(p, types);
+                } catch (NumberFormatException e) {
+                    System.err.println("⚠️ Skipping malformed line: " + line);
+                }
+            }
+
+            System.out.println("✅ Loaded " + allPokemon.size() + " Pokémon.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void handleSearch(ActionEvent event) {
         String keyword = searchField.getText().trim().toLowerCase();
+        String selectedType = typeComboBox.getValue();
 
         ObservableList<PokemonBasic> filteredList = FXCollections.observableArrayList();
 
-        if (keyword.isEmpty()) {
-            filteredList.addAll(allPokemon); // Show all if empty
-        } else {
-            for (PokemonBasic p : allPokemon) {
-                if (p.getName().toLowerCase().contains(keyword)) {
-                    filteredList.add(p);
-                }
+        for (PokemonBasic p : allPokemon) {
+            boolean matchesKeyword = keyword.isEmpty()
+                    || p.getName().toLowerCase().contains(keyword)
+                    || String.valueOf(p.getDexNumber()).equals(keyword);
+
+            boolean matchesType = selectedType == null
+                    || selectedType.equals("-- Select Type --")
+                    || typeMap.get(p).contains(selectedType);
+
+            if (matchesKeyword && matchesType) {
+                filteredList.add(p);
             }
         }
 
+        if (filteredList.isEmpty()) {
+            System.out.println("🔍 No data found for that search.");
+        }
+
         resultTable.setItems(filteredList);
-        resultTable.setVisible(true); // Show table only after search
+        resultTable.setVisible(true);
     }
 
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/PokemonTab.fxml")); // adjust path if needed
+            Parent root = FXMLLoader.load(getClass().getResource("/PokemonTab.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

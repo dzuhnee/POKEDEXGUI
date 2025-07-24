@@ -46,13 +46,13 @@ public class ViewPokemonController {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 11) {
+                if (parts.length >= 12) {
                     int dex = Integer.parseInt(parts[0]);
                     String name = parts[1];
-                    int hp = Integer.parseInt(parts[7]);
-                    int atk = Integer.parseInt(parts[8]);
-                    int def = Integer.parseInt(parts[9]);
-                    int spd = Integer.parseInt(parts[10]);
+                    int hp = Integer.parseInt(parts[8]);
+                    int atk = Integer.parseInt(parts[9]);
+                    int def = Integer.parseInt(parts[10]);
+                    int spd = Integer.parseInt(parts[11]);
 
                     list.add(new com.pokedex.app.PokemonBasic(dex, name, hp, atk, def, spd));
                 }
