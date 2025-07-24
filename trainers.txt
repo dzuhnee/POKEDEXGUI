@@ -1,0 +1,8 @@
+Trainer Info:
+ID: 124234
+Name: chas
+Birthdate: 2005-11-20
+Gender: male
+Hometown: recto
+Description: hates aj
+--------------------------------------------------

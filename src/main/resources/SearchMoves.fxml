@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane prefHeight="400" prefWidth="600" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pokedex.app.SearchMovesController">
+
+   <children>
+      <ImageView fitHeight="400" fitWidth="600" preserveRatio="false">
+         <image>
+            <Image url="@searchmovesbg.jpg" />
+         </image>
+      </ImageView>
+
+      <VBox alignment="TOP_CENTER" spacing="10">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="50" />
+         </padding>
+
+         <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Search Moves by Name" />
+
+         <TextField fx:id="searchField" promptText="Enter move name" />
+
+         <Button onAction="#handleSearch" text="Search" />
+
+         <TableView fx:id="resultTable" prefHeight="185.0" prefWidth="519.0" visible="false">
+            <columns>
+               <TableColumn fx:id="colName" minWidth="100.0" text="Move Name">
+                  <cellValueFactory>
+                     <PropertyValueFactory property="name" />
+                  </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="colDescription" minWidth="293.0" text="Description">
+                  <cellValueFactory>
+                     <PropertyValueFactory property="description" />
+                  </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="colClassification" minWidth="165.0" text="Classification">
+                  <cellValueFactory>
+                     <PropertyValueFactory property="classification" />
+                  </cellValueFactory>
+               </TableColumn>
+            </columns>
+         </TableView>
+
+         <Button onAction="#handleBack" text="Back" />
+      </VBox>
+   </children>
+</StackPane>

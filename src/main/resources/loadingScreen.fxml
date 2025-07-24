@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="root" fx:controller="com.pokedex.app.LoadingScreenController"
+            prefHeight="400.0" prefWidth="600.0">
+
+   <children>
+
+      <!-- Resizable Background -->
+      <ImageView fx:id="backgroundImage" preserveRatio="false" pickOnBounds="true">
+         <image>
+            <Image url="@loading.jpg" />
+         </image>
+      </ImageView>
+
+      <!-- Start Button -->
+      <Button fx:id="startButton" text="Start" textFill="#1c3eff" onAction="#handleStartButton">
+         <font>
+            <Font name="Andale Mono" size="13.0" />
+         </font>
+         <AnchorPane.bottomAnchor>20.0</AnchorPane.bottomAnchor>
+         <AnchorPane.rightAnchor>20.0</AnchorPane.rightAnchor>
+      </Button>
+
+      <!-- Pikachu GIF -->
+      <ImageView fx:id="pikachuGif" fitHeight="150.0" fitWidth="200.0" preserveRatio="true" pickOnBounds="true">
+         <image>
+            <Image url="@pikachu.gif" />
+         </image>
+         <AnchorPane.bottomAnchor>0.0</AnchorPane.bottomAnchor>
+         <AnchorPane.leftAnchor>0.0</AnchorPane.leftAnchor>
+      </ImageView>
+
+   </children>
+</AnchorPane>
