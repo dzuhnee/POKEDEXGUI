@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.*;
 
 import com.pokedex.app.AppState;
-import com.pokedex.app.TrainerBasic;
+import com.pokedex.app.Trainer;
 
 public class SwitchPokemonFromStorageController {
 

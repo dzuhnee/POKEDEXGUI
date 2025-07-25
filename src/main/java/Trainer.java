@@ -4,6 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.pokedex.app.Pokemon;
+import com.pokedex.app.Item;
+import com.pokedex.app.PokemonManager;
+import com.pokedex.app.Move;
+
 public class Trainer {
     // Attributes
     private int trainerID;

@@ -16,7 +16,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import com.pokedex.app.AppState;
-import com.pokedex.app.TrainerBasic;
 
 public class AddPokemonToLineUpController {
 

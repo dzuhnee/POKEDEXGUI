@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.pokedex.app.Trainer;
+import com.pokedex.app.TrainerBasic;
+import com.pokedex.app.ManageTrainerController;
 
 public class TrainerResultsController {
 

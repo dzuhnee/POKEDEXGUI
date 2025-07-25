@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.pokedex.app.Trainer;
+import com.pokedex.app.Item;
+import com.pokedex.app.ItemManager;
+import com.pokedex.app.ManageTrainerController;
+
 public class BuyItemController implements Initializable {
 
     @FXML private TableView<Item> shopTable;
