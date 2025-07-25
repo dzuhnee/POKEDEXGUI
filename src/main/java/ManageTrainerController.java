@@ -20,6 +20,7 @@ import com.pokedex.app.SwitchPokemonFromStorageController;
 import com.pokedex.app.AppState;
 
 import com.pokedex.app.Trainer;
+import com.pokedex.app.ReleasePokemonController;
 
 
 
@@ -127,9 +128,29 @@ public class ManageTrainerController {
 
     @FXML
     public void handleReleasePokemon(ActionEvent event) {
-        System.out.println("Release Pokemon clicked!");
-        // navigateToScreen("/ReleasePokemon.fxml", event);
+        if (trainer == null) {
+            System.out.println("No trainer selected!");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReleasePokemon.fxml"));
+            Parent root = loader.load();
+
+            // Pass selected trainer
+            ReleasePokemonController controller = loader.getController();
+            controller.setTrainerName(trainer.getName()); // this is where the trainer is passed
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     @FXML
     public void handleTeachMove(ActionEvent event) {

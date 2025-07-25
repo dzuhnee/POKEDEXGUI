@@ -3,6 +3,10 @@ package com.pokedex.app;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -58,7 +62,6 @@ public class SwitchPokemonFromStorageController {
 
 
         switchButton.setOnAction(e -> handleSwitch());
-        backButton.setOnAction(e -> handleBack());
     }
 
     private void loadPokemonData() {
@@ -195,8 +198,17 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
-    private void handleBack() {
-        Stage stage = (Stage) backButton.getScene().getWindow();
-        stage.close();
+    @FXML
+    private void handleBack(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

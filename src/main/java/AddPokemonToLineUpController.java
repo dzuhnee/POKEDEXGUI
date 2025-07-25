@@ -65,7 +65,14 @@ public class AddPokemonToLineUpController {
         }
 
         String fullPokemonLine = fullPokemonDataMap.get(selectedDisplay);
-        String assignment = trainerName + " -> " + fullPokemonLine;
+        String[] tokens = fullPokemonLine.split(",");
+        if (tokens.length < 2) {
+            showAlert(Alert.AlertType.ERROR, "Data Error", "Invalid Pokémon data format.");
+            return;
+        }
+
+        String trimmedLine = tokens[0] + "," + tokens[1];  // Only ID and name
+        String assignment = trainerName + " -> " + trimmedLine;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("trainer_lineup.txt", true))) {
             writer.write(assignment);
@@ -78,6 +85,7 @@ public class AddPokemonToLineUpController {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Assigned Pokémon to " + trainerName + "!");
         pokemonListView.getSelectionModel().clearSelection();
     }
+
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
