@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import com.pokedex.app.TrainerBasic;
 import jdk.swing.interop.SwingInterOpUtils;
+import com.pokedex.app.AddPokemonToLineUpController;
 
 public class ManageTrainerController {
 
@@ -54,9 +55,22 @@ public class ManageTrainerController {
 
     @FXML
     public void handleAddToLineup(ActionEvent event) {
-        System.out.println("Add to Lineup clicked");
-        // navigateToScreen("/AddToLineup.fxml", event);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddPokemonToLineUp.fxml"));
+            Parent root = loader.load();
+
+            AddPokemonToLineUpController controller = loader.getController();
+            controller.setTrainerName(selectedTrainer.getName());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add Pokémon to Lineup");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     public void handleSwitchPokemon(ActionEvent event) {
