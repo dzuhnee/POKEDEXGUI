@@ -161,9 +161,12 @@ public class TrainerResultsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
 
-            // to pass the selected trainer BUT WHY ARE THEY IN REEEEEDD
             ManageTrainerController manageController = loader.getController();
             manageController.setTrainer(selectedTrainer);
+
+            // Pass the search keyword so we can recreate results on back
+            String currentSearch = searchLabel.getText().replace("Search results for: ", "").replace("No trainers found for: ", "");
+            manageController.setSearchKeyword(currentSearch);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -189,17 +192,11 @@ public class TrainerResultsController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
-            Parent root = loader.load();
-
-            TrainerResultsController controller = loader.getController();
-
-            controller.setResults(lastSearchResults);
-
+            // Go back to search screen
+            Parent root = FXMLLoader.load(getClass().getResource("/TrainerTab.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -16,10 +16,12 @@ import jdk.swing.interop.SwingInterOpUtils;
 public class ManageTrainerController {
 
     private TrainerBasic selectedTrainer;
+    private String searchKeyword;
 
     public void setTrainer(TrainerBasic trainer) {
         this.selectedTrainer = trainer;
     }
+    public void setSearchKeyword(String keyword) { this.searchKeyword = keyword; }
 
     // UNCOMMENT LATER
     @FXML
@@ -85,7 +87,13 @@ public class ManageTrainerController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/TrainerResults.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
+            Parent root = loader.load();
+
+            // Get controller and perform the same search again
+            TrainerResultsController resultsController = loader.getController();
+            resultsController.performSearch(searchKeyword);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
