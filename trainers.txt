@@ -38,3 +38,19 @@ Gender: Male
 Hometown: Cabsy
 Description: Pogi
 --------------------------------------------------
+Trainer Info:
+ID: 17
+Name: ella
+Birthdate: 2005-11-20
+Gender: female
+Hometown: nacalub
+Description: sybau
+--------------------------------------------------
+Trainer Info:
+ID: 19
+Name: blair
+Birthdate: 2025-07-26
+Gender: female
+Hometown: nyc
+Description: wtf
+--------------------------------------------------

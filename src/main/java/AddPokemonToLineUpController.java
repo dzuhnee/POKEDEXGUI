@@ -15,6 +15,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import com.pokedex.app.AppState;
+import com.pokedex.app.TrainerBasic;
 
 public class AddPokemonToLineUpController {
 
@@ -34,7 +36,8 @@ public class AddPokemonToLineUpController {
     // This method will be called by the previous controller to pass the trainer name
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
-        trainerNameLabel.setText("Trainer: " + trainerName);  // update UI
+        trainerNameLabel.setText(trainerName);
+        AppState.setSelectedTrainerName(trainerName); // ✅ use the correct method
     }
 
     private void loadPokemonData() {

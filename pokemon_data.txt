@@ -1,2 +1,4 @@
 1,Bulbasaur,Grass,Poison,1,16,32,23,45,49,49,45
 2,Ivysaur,Grass,Poison,2,16,16,32,60,62,65,63
+3,Venusaur,Grass,Poison,3,34,23,22,23,12,44,32
+4,Charmander,Fire,Fire,12,22,3,21,18,42,22,33

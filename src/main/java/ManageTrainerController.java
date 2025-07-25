@@ -10,9 +10,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 import com.pokedex.app.TrainerBasic;
 import jdk.swing.interop.SwingInterOpUtils;
 import com.pokedex.app.AddPokemonToLineUpController;
+import com.pokedex.app.SwitchPokemonFromStorageController;
+import com.pokedex.app.AppState;
 
 public class ManageTrainerController {
 
@@ -62,6 +67,9 @@ public class ManageTrainerController {
             AddPokemonToLineUpController controller = loader.getController();
             controller.setTrainerName(selectedTrainer.getName());
 
+            // ✅ Store globally so it's remembered later (e.g., Switch screen)
+            AppState.setSelectedTrainerName(selectedTrainer.getName());
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Add Pokémon to Lineup");
@@ -71,11 +79,38 @@ public class ManageTrainerController {
         }
     }
 
-
     @FXML
     public void handleSwitchPokemon(ActionEvent event) {
-        System.out.println("Switch Pokemon clicked!");
-        // navigateToScreen("/SwitchPokemon.fxml", event);
+        if (selectedTrainer == null) {
+            TrainerBasic trainerFromState = AppState.getSelectedTrainer();
+            if (trainerFromState != null) {
+                selectedTrainer = trainerFromState;
+            }
+        }
+
+        if (selectedTrainer == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Trainer Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a trainer first.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SwitchPokemonFromStorage.fxml"));
+            Parent root = loader.load();
+
+            // ✅ Store globally so Switch controller can access it
+            AppState.setSelectedTrainerName(selectedTrainer.getName());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Switch Pokemon From Storage");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

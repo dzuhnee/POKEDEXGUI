@@ -63,6 +63,15 @@
                     </children>
                 </GridPane>
 
+                <!-- Feedback Label -->
+                <Label fx:id="feedbackLabel"
+                       layoutX="160.0"
+                       layoutY="340.0"
+                       prefWidth="300.0"
+                       text=""
+                       textFill="white"
+                       style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
                 <!-- Save Button -->
                 <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" layoutX="463.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="100.0" prefWidth="120.0" style="-fx-padding: 0; -fx-border-color: transparent;; -fx-background-color: transparent;;">
                     <graphic>
