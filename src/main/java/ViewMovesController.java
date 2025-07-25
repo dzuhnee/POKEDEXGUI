@@ -17,14 +17,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.pokedex.app.Move;
-
 public class ViewMovesController {
 
-    @FXML private TableView<Move> movesTable;
-    @FXML private TableColumn<Move, String> nameColumn;
-    @FXML private TableColumn<Move, String> descriptionColumn;
-    @FXML private TableColumn<Move, String> classificationColumn;
+    @FXML private TableView<MoveBasic> movesTable;
+    @FXML private TableColumn<MoveBasic, String> nameColumn;
+    @FXML private TableColumn<MoveBasic, String> descriptionColumn;
+    @FXML private TableColumn<MoveBasic, String> classificationColumn;
     @FXML private Button backButton;
 
     @FXML
@@ -34,11 +32,11 @@ public class ViewMovesController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         classificationColumn.setCellValueFactory(new PropertyValueFactory<>("classification"));
 
-        List<Move> moveList = new ArrayList<>();
+        List<MoveBasic> moveBasicList = new ArrayList<>();
 
         // Add default moves first
-        moveList.add(new Move("Tackle", "A basic physical attack", "TM (Technical Machine)"));
-        moveList.add(new Move("Defend", "Brace to reduce damage", "HM (Hidden Machine"));
+        moveBasicList.add(new MoveBasic("Tackle", "A basic physical attack", "TM (Technical Machine)"));
+        moveBasicList.add(new MoveBasic("Defend", "Brace to reduce damage", "HM (Hidden Machine"));
 
         // Then try to load moves from file
         try {
@@ -50,14 +48,14 @@ public class ViewMovesController {
                     String description = parts[1].trim();
                     String classification = parts[parts.length - 1].trim();
 
-                    moveList.add(new Move(name, description, classification));
+                    moveBasicList.add(new MoveBasic(name, description, classification));
                 }
             }
         } catch (IOException e) {
             System.out.println("Could not load move.txt. Default moves will be used.");
         }
 
-        movesTable.getItems().addAll(moveList);
+        movesTable.getItems().addAll(moveBasicList);
     }
 
 

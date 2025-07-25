@@ -1,9 +1,9 @@
 package com.pokedex.app;
 
 import javafx.collections.ObservableList;
-import com.pokedex.app.TrainerBasic;
+import com.pokedex.app.Trainer;
 
 public class TrainerSession {
-    public static ObservableList<TrainerBasic> lastResults = null;
+    public static ObservableList<Trainer> lastResults = null;
     public static String lastSearchLabel = "";
 }

@@ -1,3 +1,5 @@
+package com.pokedex.app;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -377,7 +379,3 @@ public class PokemonManager {
 
 }
 
-
-// TODO
-// Add Pokemonmanager
-// Rename PokemonBasic to Pokemon then change all PokemonBasic to Pokemon in the other files

@@ -1,5 +1,7 @@
 package com.pokedex.app;
 
+import com.pokedex.app.BuyItemController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,16 +12,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import com.pokedex.app.TrainerBasic;
 import jdk.swing.interop.SwingInterOpUtils;
 import com.pokedex.app.AddPokemonToLineUpController;
 
 public class ManageTrainerController {
 
-    private TrainerBasic selectedTrainer;
+    private Trainer selectedTrainer;
     private String searchKeyword;
 
-    public void setTrainer(TrainerBasic trainer) {
+    public void setTrainer(Trainer trainer) {
         this.selectedTrainer = trainer;
     }
     public void setSearchKeyword(String keyword) { this.searchKeyword = keyword; }
@@ -27,8 +28,7 @@ public class ManageTrainerController {
     // UNCOMMENT LATER
     @FXML
     public void handleBuyItem(ActionEvent event) {
-        System.out.println("Buy Item clicked!");
-        // navigateToScreen("/BuyItem.fxml", event);
+        navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
@@ -104,7 +104,6 @@ public class ManageTrainerController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
             Parent root = loader.load();
 
-            // Get controller and perform the same search again
             TrainerResultsController resultsController = loader.getController();
             resultsController.performSearch(searchKeyword);
 
@@ -125,10 +124,13 @@ public class ManageTrainerController {
             Object controller = loader.getController();
 
             // Pass trainer to all controllers that need it
-            /* UNCOMMENT ME LATER
             if (controller instanceof BuyItemController) {
-                ((BuyItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof SellItemController) {
+                BuyItemController buyController = (BuyItemController) controller;
+                buyController.setTrainer(selectedTrainer);
+                buyController.setSearchKeyword(searchKeyword);
+            }
+            /* UNCOMMENT ME LATER
+            else if (controller instanceof SellItemController) {
                 ((SellItemController) controller).setTrainer(selectedTrainer);
             } else if (controller instanceof UseItemController) {
                 ((UseItemController) controller).setTrainer(selectedTrainer);
@@ -152,7 +154,6 @@ public class ManageTrainerController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
