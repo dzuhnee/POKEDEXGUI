@@ -1,7 +1,5 @@
 package com.pokedex.app;
 
-import com.pokedex.app.TrainerBasic;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,19 +23,18 @@ import java.time.format.DateTimeFormatter;
 
 
 public class ViewTrainersController {
-    @FXML private TableView<com.pokedex.app.TrainerBasic> trainersTable;
+    @FXML private TableView<com.pokedex.app.Trainer> trainersTable;
 
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, Integer> idColumn;
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, String> nameColumn;
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, LocalDate> birthdateColumn;
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, String> genderColumn;
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, String> hometownColumn;
-    @FXML private TableColumn<com.pokedex.app.TrainerBasic, String> descriptionColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, Integer> idColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, String> nameColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, LocalDate> birthdateColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, String> genderColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, String> hometownColumn;
+    @FXML private TableColumn<com.pokedex.app.Trainer, String> descriptionColumn;
 
     @FXML private Button backButton;
 
-
-    private ObservableList<com.pokedex.app.TrainerBasic> trainerData = FXCollections.observableArrayList();
+    private ObservableList<com.pokedex.app.Trainer> trainerData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -67,7 +64,7 @@ public class ViewTrainersController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            // add a label ??
+            // Add a label ??
             System.err.println("Error loading MainMenu.fxml: " + e.getMessage());
         }
     }
@@ -83,24 +80,23 @@ public class ViewTrainersController {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-
                 if (line.equals("--------------------------------------------------") || line.equals("Trainer Info:")) {
                     if (fieldIndex == fieldOrder.length) {
                         int id = Integer.parseInt(currentTrainerData[0]);
                         LocalDate birthdate = LocalDate.parse(currentTrainerData[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                        trainerData.add(new com.pokedex.app.TrainerBasic(
-                                id, // Use the int id
-                                currentTrainerData[1], // Name (still String)
-                                birthdate, // Use the LocalDate birthdate
-                                currentTrainerData[3], // Gender (still String)
-                                currentTrainerData[4], // Hometown (still String)
-                                currentTrainerData[5]  // Description (still String)
+                        trainerData.add(new com.pokedex.app.Trainer(
+                                id, // ID
+                                currentTrainerData[1], // Name
+                                birthdate, // Birthdate
+                                currentTrainerData[3], // Gender
+                                currentTrainerData[4], // Hometown
+                                currentTrainerData[5]  // Description
                         ));
                     }
                     currentTrainerData = new String[fieldOrder.length];
                     fieldIndex = 0;
-                    continue; // is using continue okay?
+                    continue;
                 }
 
                 for (int i = 0; i < fieldOrder.length; i++) {
@@ -117,7 +113,7 @@ public class ViewTrainersController {
                 int id = Integer.parseInt(currentTrainerData[0]);
                 LocalDate birthdate = LocalDate.parse(currentTrainerData[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                trainerData.add(new com.pokedex.app.TrainerBasic(
+                trainerData.add(new com.pokedex.app.Trainer(
                         id,
                         currentTrainerData[1],
                         birthdate,

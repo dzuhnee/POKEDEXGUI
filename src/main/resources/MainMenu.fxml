@@ -44,7 +44,7 @@
             <graphic>
                <ImageView fitWidth="170" fitHeight="80" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@moves.png" />
+                     <Image url="@moveBasics.png" />
                   </image>
                </ImageView>
             </graphic>

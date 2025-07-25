@@ -15,10 +15,6 @@ import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.List;
-
-
-import com.pokedex.app.Move;
 
 public class SearchMovesController {
 
@@ -26,18 +22,18 @@ public class SearchMovesController {
     private TextField searchField;
 
     @FXML
-    private TableView<Move> resultTable;
+    private TableView<com.pokedex.app.MoveBasic> resultTable;
 
     @FXML
-    private TableColumn<Move, String> colName;
+    private TableColumn<com.pokedex.app.MoveBasic, String> colName;
 
     @FXML
-    private TableColumn<Move, String> colDescription;
+    private TableColumn<com.pokedex.app.MoveBasic, String> colDescription;
 
     @FXML
-    private TableColumn<Move, String> colClassification;
+    private TableColumn<com.pokedex.app.MoveBasic, String> colClassification;
 
-    private ObservableList<Move> allMoves = FXCollections.observableArrayList();
+    private ObservableList<MoveBasic> allMoveBasics = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -45,11 +41,11 @@ public class SearchMovesController {
         colDescription.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDescription()));
         colClassification.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClassification()));
 
-        allMoves.addAll(loadMovesFromFile());
+        allMoveBasics.addAll(loadMovesFromFile());
     }
 
-    public List<Move> loadMovesFromFile() {
-        List<Move> moves = new ArrayList<>();
+    public List<com.pokedex.app.MoveBasic> loadMovesFromFile() {
+        List<com.pokedex.app.MoveBasic> moveBasics = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("moves.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -58,7 +54,7 @@ public class SearchMovesController {
                     String name = parts[0].trim();
                     String description = parts[1].trim();
                     String classification = parts[4].trim(); // use the last part
-                    moves.add(new Move(name, description, classification));
+                    moveBasics.add(new com.pokedex.app.MoveBasic(name, description, classification));
                 } else {
                     System.out.println("Skipping invalid line: " + line);
                 }
@@ -66,7 +62,7 @@ public class SearchMovesController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return moves;
+        return moveBasics;
     }
 
 
@@ -79,8 +75,8 @@ public class SearchMovesController {
             return;
         }
 
-        List<Move> filtered = allMoves.stream()
-                .filter(move -> move.getName().toLowerCase().contains(keyword))
+        List<com.pokedex.app.MoveBasic> filtered = allMoveBasics.stream()
+                .filter(moveBasic -> moveBasic.getName().toLowerCase().contains(keyword))
                 .collect(Collectors.toList());
 
         resultTable.setItems(FXCollections.observableArrayList(filtered));

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.pokedex.app.TrainerBasic;
 
 public class TrainerResultsController {
 
@@ -27,29 +26,28 @@ public class TrainerResultsController {
     private Label searchLabel;
 
     @FXML
-    private TableView<TrainerBasic> resultTable;
+    private TableView<Trainer> resultTable;
 
     @FXML
-    private TableColumn<TrainerBasic, Integer> idColumn;
+    private TableColumn<Trainer, Integer> idColumn;
 
     @FXML
-    private TableColumn<TrainerBasic, String> nameColumn;
+    private TableColumn<Trainer, String> nameColumn;
 
     @FXML
-    private TableColumn<TrainerBasic, LocalDate> birthdateColumn;
+    private TableColumn<Trainer, LocalDate> birthdateColumn;
 
     @FXML
-    private TableColumn<TrainerBasic, String> genderColumn;
+    private TableColumn<Trainer, String> genderColumn;
 
     @FXML
-    private TableColumn<TrainerBasic, String> hometownColumn;
+    private TableColumn<Trainer, String> hometownColumn;
 
     @FXML
-    private TableColumn<TrainerBasic, String> descriptionColumn;
+    private TableColumn<Trainer, String> descriptionColumn;
 
-    private final ObservableList<TrainerBasic> allTrainers = FXCollections.observableArrayList();
-
-    private ObservableList<TrainerBasic> lastSearchResults = FXCollections.observableArrayList();
+    private final ObservableList<Trainer> allTrainers = FXCollections.observableArrayList();
+    private ObservableList<Trainer> lastSearchResults = FXCollections.observableArrayList();
 
 
     @FXML
@@ -94,7 +92,7 @@ public class TrainerResultsController {
                 } else if (line.startsWith("Description: ")) {
                     description = line.substring(13);
                     if (id != 0 && name != null && birthdate != null && gender != null && hometown != null && description != null) {
-                        allTrainers.add(new TrainerBasic(id, name, birthdate, gender, hometown, description));
+                        allTrainers.add(new Trainer(id, name, birthdate, gender, hometown, description));
                     }
                     // Reset
                     id = 0;
@@ -107,27 +105,27 @@ public class TrainerResultsController {
             }
         } catch (IOException e) {
             System.err.println("Error reading trainer data: " + e.getMessage());
-            // Delete or nah?
+            // Default Trainers
             allTrainers.addAll(
-                    new TrainerBasic(1, "Ash Ketchum", LocalDate.of(1987, 5, 22), "Male", "Pallet Town", "Pokemon Trainer from Kanto"),
-                    new TrainerBasic(2, "Misty", LocalDate.of(1988, 3, 18), "Female", "Cerulean City", "Cerulean Gym Leader"),
-                    new TrainerBasic(3, "Brock", LocalDate.of(1985, 9, 15), "Male", "Pewter City", "Former Pewter Gym Leader"),
-                    new TrainerBasic(4, "Gary Oak", LocalDate.of(1987, 11, 22), "Male", "Pallet Town", "Pokemon Researcher")
+                    new Trainer(1, "Ash Ketchum", LocalDate.of(1987, 5, 22), "Male", "Pallet Town", "Pokemon Trainer from Kanto"),
+                    new Trainer(2, "Misty", LocalDate.of(1988, 3, 18), "Female", "Cerulean City", "Cerulean Gym Leader"),
+                    new Trainer(3, "Brock", LocalDate.of(1985, 9, 15), "Male", "Pewter City", "Former Pewter Gym Leader"),
+                    new Trainer(4, "Gary Oak", LocalDate.of(1987, 11, 22), "Male", "Pallet Town", "Pokemon Researcher")
             );
         }
     }
 
-    public void setResults(List<TrainerBasic> results) {
-        allTrainers.setAll(results); // replace the list with the passed results
-        resultTable.setItems(allTrainers); // show it in the table
+    public void setResults(List<Trainer> results) {
+        allTrainers.setAll(results);
+        resultTable.setItems(allTrainers);
     }
 
     public void performSearch(String keyword) {
         searchLabel.setText("Search results for: " + keyword);
 
-        ObservableList<TrainerBasic> filteredList = FXCollections.observableArrayList();
+        ObservableList<Trainer> filteredList = FXCollections.observableArrayList();
 
-        for (TrainerBasic trainer : allTrainers) {
+        for (Trainer trainer : allTrainers) {
             if (trainer.getName().toLowerCase().contains(keyword.toLowerCase()) ||
                     trainer.getGender().toLowerCase().contains(keyword.toLowerCase()) ||
                     trainer.getHometown().toLowerCase().contains(keyword.toLowerCase()) ||
@@ -146,7 +144,7 @@ public class TrainerResultsController {
 
     @FXML
     public void handleManage(ActionEvent event) {
-        TrainerBasic selectedTrainer = resultTable.getSelectionModel().getSelectedItem();
+        Trainer selectedTrainer = resultTable.getSelectionModel().getSelectedItem();
 
         if (selectedTrainer == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -161,14 +159,15 @@ public class TrainerResultsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
 
-            // to pass the selected trainer BUT WHY ARE THEY IN REEEEEDD
             ManageTrainerController manageController = loader.getController();
             manageController.setTrainer(selectedTrainer);
+
+            String currentSearch = searchLabel.getText().replace("Search results for: ", "").replace("No trainers found for: ", "");
+            manageController.setSearchKeyword(currentSearch);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -189,17 +188,10 @@ public class TrainerResultsController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
-            Parent root = loader.load();
-
-            TrainerResultsController controller = loader.getController();
-
-            controller.setResults(lastSearchResults);
-
+            Parent root = FXMLLoader.load(getClass().getResource("/TrainerTab.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

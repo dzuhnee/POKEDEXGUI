@@ -1,5 +1,7 @@
 package com.pokedex.app;
 
+import com.pokedex.app.BuyItemController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,28 +12,23 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
-import com.pokedex.app.TrainerBasic;
 import jdk.swing.interop.SwingInterOpUtils;
 import com.pokedex.app.AddPokemonToLineUpController;
-import com.pokedex.app.SwitchPokemonFromStorageController;
-import com.pokedex.app.AppState;
 
 public class ManageTrainerController {
 
-    private TrainerBasic selectedTrainer;
+    private Trainer selectedTrainer;
+    private String searchKeyword;
 
-    public void setTrainer(TrainerBasic trainer) {
+    public void setTrainer(Trainer trainer) {
         this.selectedTrainer = trainer;
     }
+    public void setSearchKeyword(String keyword) { this.searchKeyword = keyword; }
 
     // UNCOMMENT LATER
     @FXML
     public void handleBuyItem(ActionEvent event) {
-        System.out.println("Buy Item clicked!");
-        // navigateToScreen("/BuyItem.fxml", event);
+        navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
@@ -67,9 +64,6 @@ public class ManageTrainerController {
             AddPokemonToLineUpController controller = loader.getController();
             controller.setTrainerName(selectedTrainer.getName());
 
-            // ✅ Store globally so it's remembered later (e.g., Switch screen)
-            AppState.setSelectedTrainerName(selectedTrainer.getName());
-
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Add Pokémon to Lineup");
@@ -79,38 +73,11 @@ public class ManageTrainerController {
         }
     }
 
+
     @FXML
     public void handleSwitchPokemon(ActionEvent event) {
-        if (selectedTrainer == null) {
-            TrainerBasic trainerFromState = AppState.getSelectedTrainer();
-            if (trainerFromState != null) {
-                selectedTrainer = trainerFromState;
-            }
-        }
-
-        if (selectedTrainer == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Trainer Selected");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select a trainer first.");
-            alert.showAndWait();
-            return;
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SwitchPokemonFromStorage.fxml"));
-            Parent root = loader.load();
-
-            // ✅ Store globally so Switch controller can access it
-            AppState.setSelectedTrainerName(selectedTrainer.getName());
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Switch Pokemon From Storage");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Switch Pokemon clicked!");
+        // navigateToScreen("/SwitchPokemon.fxml", event);
     }
 
     @FXML
@@ -134,7 +101,12 @@ public class ManageTrainerController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/TrainerResults.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
+            Parent root = loader.load();
+
+            TrainerResultsController resultsController = loader.getController();
+            resultsController.performSearch(searchKeyword);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -152,10 +124,13 @@ public class ManageTrainerController {
             Object controller = loader.getController();
 
             // Pass trainer to all controllers that need it
-            /* UNCOMMENT ME LATER
             if (controller instanceof BuyItemController) {
-                ((BuyItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof SellItemController) {
+                BuyItemController buyController = (BuyItemController) controller;
+                buyController.setTrainer(selectedTrainer);
+                buyController.setSearchKeyword(searchKeyword);
+            }
+            /* UNCOMMENT ME LATER
+            else if (controller instanceof SellItemController) {
                 ((SellItemController) controller).setTrainer(selectedTrainer);
             } else if (controller instanceof UseItemController) {
                 ((UseItemController) controller).setTrainer(selectedTrainer);
@@ -179,7 +154,6 @@ public class ManageTrainerController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
