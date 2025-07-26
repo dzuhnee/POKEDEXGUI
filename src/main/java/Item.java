@@ -102,6 +102,7 @@ public abstract class Item {
 
     public abstract void use(Pokemon pokemon, PokemonManager manager);
 
+    // Might remove ??
     public String displayInfo() {
         StringBuilder details = new StringBuilder();
         details.append("Name: ").append(name).append("\n");

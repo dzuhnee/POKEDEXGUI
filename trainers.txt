@@ -13,7 +13,6 @@ Birthdate: 1987-05-22
 Gender: Male
 Hometown: Pallet Town
 Description: Pokemon Trainer from Kanto
-Money: 700000
 --------------------------------------------------
 Trainer Info:
 ID: 21
@@ -22,7 +21,6 @@ Birthdate: 2006-01-21
 Gender: Female
 Hometown: Cabsy
 Description: Ganda lang
-Money: 820000
 --------------------------------------------------
 Trainer Info:
 ID: 2
@@ -33,7 +31,7 @@ Hometown: Japan
 Description: Pogi
 --------------------------------------------------
 Trainer Info:
-ID: 03
+ID: 3
 Name: Harley Davidson
 Birthdate: 2006-04-03
 Gender: Male

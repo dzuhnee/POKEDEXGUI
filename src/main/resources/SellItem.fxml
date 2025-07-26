@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SellItem">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pokedex.app.SellItemController">
     <children>
         <ImageView fitHeight="400.0" fitWidth="622.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -29,22 +29,22 @@
                 <Font name="Arial Rounded MT Bold" size="12.0" />
             </font>
         </TextField>
-        <Label fx:id="trainerMoneyLabel" layoutX="419.0" layoutY="47.0" prefHeight="17.0" prefWidth="135.0" text="Current Money">
+        <Label fx:id="trainerMoneyLabel" layoutX="419.0" layoutY="47.0" prefHeight="17.0" prefWidth="135.0">
             <font>
                 <Font name="Arial Rounded MT Bold" size="12.0" />
             </font>
         </Label>
-        <Label fx:id="trainerNameLabel" layoutX="121.0" layoutY="103.0" prefHeight="17.0" prefWidth="440.0" text="Name">
+        <Label fx:id="trainerNameLabel" layoutX="121.0" layoutY="103.0" prefHeight="17.0" prefWidth="440.0">
             <font>
                 <Font name="Arial Rounded MT Bold" size="17.0" />
             </font>
         </Label>
-        <Label fx:id="feedbackLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="357.0" layoutY="135.0" prefHeight="69.0" prefWidth="219.0" text="Feedback">
+        <Label fx:id="feedbackLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="357.0" layoutY="135.0" prefHeight="69.0" prefWidth="219.0">
             <font>
                 <Font name="Arial Rounded MT Bold" size="15.0" />
             </font>
         </Label>
-        <Label fx:id="saleValueLabel" layoutX="455.0" layoutY="271.0" prefHeight="17.0" prefWidth="111.0" text="Total">
+        <Label fx:id="saleValueLabel" layoutX="455.0" layoutY="271.0" prefHeight="17.0" prefWidth="111.0">
             <font>
                 <Font name="Arial Rounded MT Bold" size="12.0" />
             </font>
@@ -62,7 +62,7 @@
             <graphic>
                 <ImageView fitHeight="33.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@buy.png" />
+                        <Image url="@sell.png" />
                     </image>
                 </ImageView>
             </graphic>

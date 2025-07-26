@@ -3,6 +3,12 @@ package com.pokedex.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.Vitamin;
+import com.pokedex.app.RareCandy;
+import com.pokedex.app.Feather;
+import com.pokedex.app.EvolutionStone;
+
 /**
  * Manages a collection of Pokémon items and provides functionality
  * for viewing, searching, and retrieving items.

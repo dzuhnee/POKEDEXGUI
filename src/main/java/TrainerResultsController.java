@@ -24,6 +24,8 @@ import com.pokedex.app.Trainer;
 import com.pokedex.app.TrainerBasic;
 import com.pokedex.app.ManageTrainerController;
 import com.pokedex.app.AppState;
+import com.pokedex.app.Item;
+import com.pokedex.app.ItemManager;
 
 public class TrainerResultsController {
 
@@ -66,8 +68,8 @@ public class TrainerResultsController {
 
         allTrainers.setAll(loadTrainersFromFile());
 
-        List<Trainer> previousResults = AppState.getLastSearchResults();
-        String lastKeyword = AppState.getLastSearchKeyword();
+        List<Trainer> previousResults = AppState.getInstance().getLastSearchResults();
+        String lastKeyword = AppState.getInstance().getLastSearchKeyword();
 
         if (previousResults != null && !previousResults.isEmpty()) {
             resultTable.setItems(FXCollections.observableArrayList(previousResults));
@@ -84,6 +86,7 @@ public class TrainerResultsController {
 
     public List<Trainer> loadTrainersFromFile() {
         List<Trainer> allTrainers = new ArrayList<>();
+        ItemManager itemManager = new ItemManager();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("trainers.txt"))) {
             String line;
@@ -93,7 +96,8 @@ public class TrainerResultsController {
             String gender = null;
             String hometown = null;
             String description = null;
-            int money = 1_000_000; // Default
+            int money = 1_000_000;
+            String[] itemsArray = null;
 
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("ID: ")) {
@@ -110,15 +114,32 @@ public class TrainerResultsController {
                     description = line.substring(13);
                 } else if (line.startsWith("Money: ")) {
                     money = Integer.parseInt(line.substring(7));
+                } else if (line.startsWith("Items: ")) {
+                    String itemsLine = line.substring(7).trim();
+                    if (!itemsLine.equalsIgnoreCase("None")) {
+                        itemsArray = itemsLine.split(",");
+                    } else {
+                        itemsArray = null;
+                    }
                 } else if (line.startsWith("-----")) {
                     if (id != 0 && name != null && birthdate != null && gender != null &&
                             hometown != null && description != null) {
 
                         Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
+
+                        if (itemsArray != null) {
+                            for (String itemName : itemsArray) {
+                                Item item = itemManager.findItem(itemName.trim());
+                                if (item != null) {
+                                    t.addItemToBag(item, 1);
+                                }
+                            }
+                        }
+
                         allTrainers.add(t);
                     }
 
-                    // Reset values for next trainer
+                    // Reset values
                     id = 0;
                     name = null;
                     birthdate = null;
@@ -126,6 +147,7 @@ public class TrainerResultsController {
                     hometown = null;
                     description = null;
                     money = 1_000_000;
+                    itemsArray = null;
                 }
             }
 
@@ -158,14 +180,14 @@ public class TrainerResultsController {
 
         resultTable.setItems(filteredList);
         lastSearchResults.setAll(filteredList);
-        AppState.setLastSearchResults(filteredList);
-        AppState.setLastSearchKeyword(keyword);
-
+        AppState.getInstance().setLastSearchResults(filteredList);
+        AppState.getInstance().setLastSearchKeyword(keyword);
 
         if (filteredList.isEmpty()) {
             searchLabel.setText("No trainers found for: " + keyword);
         }
     }
+
 
     @FXML
     public void handleManage(ActionEvent event) {
@@ -180,7 +202,7 @@ public class TrainerResultsController {
             return;
         }
 
-        AppState.setFullTrainer(selectedTrainer);
+        AppState.getInstance().setFullTrainer(selectedTrainer);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
@@ -200,6 +222,7 @@ public class TrainerResultsController {
         }
     }
 
+
     @FXML
     public void handleNewSearch(ActionEvent event) {
         try {
@@ -211,6 +234,7 @@ public class TrainerResultsController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void handleBack(ActionEvent event) {

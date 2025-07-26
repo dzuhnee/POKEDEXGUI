@@ -2,16 +2,27 @@ package com.pokedex.app;
 
 import java.util.List;
 
-import com.pokedex.app.Trainer;
 import com.pokedex.app.TrainerBasic;
+import com.pokedex.app.Trainer;
 
 public class AppState {
-    private static String selectedTrainerName;
-    private static Trainer fullTrainer; // Trainer's full info
-    private static TrainerBasic selectedTrainer;
+    // Singleton instance
+    private static AppState instance;
 
-    private static List<Trainer> lastSearchResults;
-    private static String lastSearchKeyword;
+    // Private constructor to prevent manual creation
+    private AppState() {}
+
+    // Access the ONE AppState object
+    public static AppState getInstance() {
+        if (instance == null) {
+            instance = new AppState();
+        }
+        return instance;
+    }
+
+    // Static section - for ella
+    private static String selectedTrainerName;
+    private static TrainerBasic selectedTrainer;
 
     public static void setSelectedTrainerName(String name) {
         selectedTrainerName = name;
@@ -29,29 +40,32 @@ public class AppState {
         return selectedTrainer;
     }
 
-    public static Trainer getFullTrainer() {
+    // Instance section - for kyle
+    private Trainer fullTrainer;
+    private List<Trainer> lastSearchResults;
+    private String lastSearchKeyword;
+
+    public Trainer getFullTrainer() {
         return fullTrainer;
     }
 
-    public static void setFullTrainer(Trainer trainer) {
-        fullTrainer = trainer;
+    public void setFullTrainer(Trainer trainer) {
+        this.fullTrainer = trainer;
     }
 
-    // Set and get last search results
-    public static void setLastSearchResults(List<Trainer> results) {
-        lastSearchResults = results;
-    }
-
-    public static List<Trainer> getLastSearchResults() {
+    public List<Trainer> getLastSearchResults() {
         return lastSearchResults;
     }
 
-    // Set and get last search keyword
-    public static void setLastSearchKeyword(String keyword) {
-        lastSearchKeyword = keyword;
+    public void setLastSearchResults(List<Trainer> results) {
+        this.lastSearchResults = results;
     }
 
-    public static String getLastSearchKeyword() {
+    public String getLastSearchKeyword() {
         return lastSearchKeyword;
+    }
+
+    public void setLastSearchKeyword(String keyword) {
+        this.lastSearchKeyword = keyword;
     }
 }

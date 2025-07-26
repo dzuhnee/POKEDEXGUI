@@ -15,9 +15,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import com.pokedex.app.Item;
 import com.pokedex.app.Trainer;
+import com.pokedex.app.TrainerManager;
 import com.pokedex.app.FileUtils;
 import com.pokedex.app.ManageTrainerController;
 import com.pokedex.app.ItemManager;
@@ -42,7 +46,8 @@ public class BuyItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        trainer = AppState.getFullTrainer();
+        debugPrintBag();
+        trainer = AppState.getInstance().getFullTrainer();
         if (trainer == null) {
             System.out.println("Trainer not loaded in BuyItemController");
         }
@@ -61,6 +66,44 @@ public class BuyItemController implements Initializable {
         quantityField.setText("1"); // Default
         updateTrainerInfo();        // Display trainer's name and money
     }
+
+    // FOR DEBUGGING - DELETE SOON
+    private void debugPrintBag() {
+        Trainer trainer = AppState.getInstance().getFullTrainer();
+        if (trainer == null) {
+            System.out.println("⚠ No trainer loaded.");
+            return;
+        }
+
+        List<Item> bag = trainer.getItemBag();
+        if (bag == null || bag.isEmpty()) {
+            System.out.println("Bag is empty.");
+            return;
+        }
+
+        System.out.println("Items in bag:");
+
+        List<String> countedNames = new ArrayList<>();
+
+        for (int i = 0; i < bag.size(); i++) {
+            Item current = bag.get(i);
+            String currentName = current.getName();
+
+            if (!countedNames.contains(currentName)) {
+                int count = 0;
+
+                for (int j = 0; j < bag.size(); j++) {
+                    if (bag.get(j).getName().equals(currentName)) {
+                        count++;
+                    }
+                }
+
+                System.out.println("• " + currentName + " x" + count);
+                countedNames.add(currentName);
+            }
+        }
+    }
+
 
     public void setSearchKeyword(String keyword) {
         this.searchKeyword = keyword;
@@ -127,20 +170,16 @@ public class BuyItemController implements Initializable {
 
         boolean success = trainer.processPurchase(selectedItem, quantity);
         if (success) {
-            // Save updated trainer info to file
             FileUtils.updateTrainerInFile(trainer);
+
+            Trainer updatedTrainer = TrainerManager.loadTrainerByID(trainer.getTrainerID());
+            AppState.getInstance().setFullTrainer(updatedTrainer);
+            this.trainer = updatedTrainer;
 
             showFeedback("Purchase successful!", "success");
             updateTrainerInfo();
             quantityField.setText("1");
             updateTotalCost();
-
-            // For debugging only
-            System.out.println("Trainer's updated item bag:");
-            for (Item item : trainer.getItemBag()) {
-                System.out.println("- " + item.getName());
-            }
-
         } else {
             int totalCost = selectedItem.getBuyingPrice() * quantity;
             if (totalCost > trainer.getMoney()) {
@@ -155,7 +194,6 @@ public class BuyItemController implements Initializable {
             }
         }
     }
-
 
     @FXML
     private void handleBack() {

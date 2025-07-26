@@ -42,7 +42,7 @@ public class SearchTrainerController {
 
             TrainerResultsController resultsController = loader.getController();
             resultsController.performSearch(keyword);
-            AppState.setLastSearchKeyword(keyword);
+            AppState.getInstance().setLastSearchKeyword(keyword);
 
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

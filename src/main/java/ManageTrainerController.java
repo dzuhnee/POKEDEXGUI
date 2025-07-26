@@ -22,6 +22,7 @@ import com.pokedex.app.SwitchPokemonFromStorageController;
 import com.pokedex.app.AppState;
 import com.pokedex.app.BuyItemController;
 import com.pokedex.app.TrainerResultsController;
+import com.pokedex.app.SellItemController;
 
 import com.pokedex.app.Trainer;
 import com.pokedex.app.ReleasePokemonController;
@@ -34,7 +35,7 @@ public class ManageTrainerController {
 
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
-        AppState.setFullTrainer(trainer);
+        AppState.getInstance().setFullTrainer(trainer);
     }
 
     private String searchKeyword;
@@ -48,15 +49,17 @@ public class ManageTrainerController {
     @FXML
     public void handleBuyItem(ActionEvent event) {
         if (trainer == null) {
-            trainer = AppState.getFullTrainer();
+            trainer = AppState.getInstance().getFullTrainer();
         }
         navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
     public void handleSellItem(ActionEvent event) {
-        System.out.println("Sell Item clicked");
-        // navigateToScreen("/SellItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getInstance().getFullTrainer();
+        }
+        navigateToScreen("/SellItem.fxml", event);
     }
 
     @FXML
@@ -178,7 +181,7 @@ public class ManageTrainerController {
             Parent root = loader.load();
 
             TrainerResultsController resultsController = loader.getController();
-            resultsController.setResults(List.of(AppState.getFullTrainer())); // ✅ Restore trainer as search result
+            resultsController.setResults(List.of(AppState.getInstance().getFullTrainer())); // ✅ Restore trainer as search result
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -199,17 +202,17 @@ public class ManageTrainerController {
 
             // Fallback
             if (trainer == null) {
-                trainer = AppState.getFullTrainer(); // fallback to global AppState
+                trainer = AppState.getInstance().getFullTrainer(); // fallback to global AppState
             }
 
             // Pass trainer to all controllers that need it
             if (controller instanceof BuyItemController) {
                 ((BuyItemController) controller).setTrainer(trainer);
+            } else if (controller instanceof SellItemController) {
+                AppState.getInstance().setFullTrainer(trainer);
             }
             /* UNCOMMENT ME LATER
-            else if (controller instanceof SellItemController) {
-                ((SellItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof UseItemController) {
+            else if (controller instanceof UseItemController) {
                 ((UseItemController) controller).setTrainer(selectedTrainer);
             } else if (controller instanceof GiveItemController) {
                 ((GiveItemController) controller).setTrainer(selectedTrainer);

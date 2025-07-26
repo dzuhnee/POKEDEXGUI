@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pokedex.app.Trainer;
+import com.pokedex.app.FileUtils;
+import com.pokedex.app.Item;
+import com.pokedex.app.ItemManager;
+
 
 // This class allows the trainers to be accessed and modified globally -- will edit the other controllers soon <3
 public class TrainerManager {
@@ -85,5 +89,72 @@ public class TrainerManager {
                     "Male", "Pallet Town", "Pokemon Researcher", 1_000_000));
         }
     }
+
+    public static Trainer loadTrainerByID(int id) {
+        List<String> lines = FileUtils.readFile("trainers.txt");
+
+        int tempID = -1;
+        String name = "";
+        LocalDate birthdate = null;
+        String gender = "";
+        String hometown = "";
+        String description = "";
+        int money = 0;
+
+        Trainer trainer = null; // initialize here so we can populate items
+
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i).trim();
+
+            if (line.startsWith("ID:")) {
+                tempID = Integer.parseInt(line.substring(3).trim());
+            } else if (line.startsWith("Name:")) {
+                name = line.substring(5).trim();
+            } else if (line.startsWith("Birthdate:")) {
+                birthdate = LocalDate.parse(line.substring(10).trim());
+            } else if (line.startsWith("Gender:")) {
+                gender = line.substring(7).trim();
+            } else if (line.startsWith("Hometown:")) {
+                hometown = line.substring(9).trim();
+            } else if (line.startsWith("Description:")) {
+                description = line.substring(12).trim();
+            } else if (line.startsWith("Money:")) {
+                money = Integer.parseInt(line.substring(6).trim());
+            } else if (line.startsWith("Items:")) {
+                // create the trainer object here so we can add items to it
+                trainer = new Trainer(tempID, name, birthdate, gender, hometown, description, money);
+
+                String itemsLine = line.substring(6).trim();
+                if (!itemsLine.equalsIgnoreCase("None")) {
+                    String[] itemNames = itemsLine.split(",");
+                    ItemManager im = new ItemManager();
+                    for (String itemName : itemNames) {
+                        Item item = im.findItem(itemName.trim());
+                        if (item != null) {
+                            trainer.addItemToBag(item, 1);
+                        }
+                    }
+                }
+            } else if (line.startsWith("--------------------------------------------------")) {
+                if (trainer != null && trainer.getTrainerID() == id) {
+                    return trainer;
+                }
+
+                // Reset all fields for next trainer
+                tempID = -1;
+                name = "";
+                birthdate = null;
+                gender = "";
+                hometown = "";
+                description = "";
+                money = 0;
+                trainer = null;
+            }
+        }
+
+        return null; // not found
+    }
+
+
 
 }
