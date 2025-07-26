@@ -20,7 +20,7 @@ public class TrainerBasic {
         this.description = description;
     }
 
-    // ✅ Minimal constructor for name-only use
+    // Minimal constructor for name-only use
     public TrainerBasic(String name) {
         this.name = name;
     }

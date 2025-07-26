@@ -5,4 +5,3 @@ blair -> 2,Ivysaur
 ella -> 2,Ivysaur
 ella -> 3,Venusaur
 Ash Ketchum -> 1,Bulbasaur
-Ash Ketchum -> 3,Venusaur
