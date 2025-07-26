@@ -43,14 +43,18 @@ public class ManageTrainerController {
     // UNCOMMENT LATER
     @FXML
     public void handleBuyItem(ActionEvent event) {
-        System.out.println("Buy Item clicked!");
-        // navigateToScreen("/BuyItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getInstance().getFullTrainer();
+        }
+        navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
     public void handleSellItem(ActionEvent event) {
-        System.out.println("Sell Item clicked");
-        // navigateToScreen("/SellItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getInstance().getFullTrainer();
+        }
+        navigateToScreen("/SellItem.fxml", event);
     }
 
     @FXML
@@ -80,7 +84,7 @@ public class ManageTrainerController {
             AddPokemonToLineUpController controller = loader.getController();
             controller.setTrainerName(trainer.getName());
 
-            // ✅ Store globally so it's remembered later (e.g., Switch screen)
+            // Store globally so it's remembered later (e.g., Switch screen)
             AppState.setSelectedTrainerName(trainer.getName());
 
             Stage stage = new Stage();
