@@ -21,6 +21,7 @@ import com.pokedex.app.AppState;
 
 import com.pokedex.app.Trainer;
 import com.pokedex.app.ReleasePokemonController;
+import com.pokedex.app.TeachMoveController;
 
 
 
@@ -150,12 +151,30 @@ public class ManageTrainerController {
         }
     }
 
-
-
     @FXML
     public void handleTeachMove(ActionEvent event) {
-        System.out.println("Teach Move clicked!");
-        // navigateToScreen("/TeachMove.fxml", event);
+        if (trainer == null) {
+            System.out.println("No trainer selected!");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TeachMove.fxml"));
+            Parent root = loader.load();
+
+            // Pass selected trainer
+            TeachMoveController controller = loader.getController();
+            controller.setTrainerName(trainer.getName()); // this is where the trainer is passed
+            controller.setTrainerId(trainer.getTrainerID());
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
