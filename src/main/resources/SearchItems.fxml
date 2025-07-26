@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pokedex.app.SearchItemsController">
+   <children>
+      <Group>
+         <children>
+            <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="false">
+               <image>
+                  <Image url="@searchitemsbg.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+
+      <VBox alignment="CENTER" spacing="10.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="95.0" />
+         </padding>
+
+         <TextField fx:id="searchField" promptText="Enter keyword to search..." />
+         <Button onAction="#handleSearch" text="Search" />
+
+         <TableView fx:id="tableView" prefHeight="400.0" prefWidth="700.0" visible="false">
+            <columns>
+               <TableColumn fx:id="colName" prefWidth="100" text="Name" />
+               <TableColumn fx:id="colCategory" prefWidth="100" text="Category" />
+               <TableColumn fx:id="colDescription" prefWidth="210.0" text="Description" />
+               <TableColumn fx:id="colEffect" prefWidth="200.0" text="Effect" />
+               <TableColumn fx:id="colBuyPrice" prefWidth="75" text="Buy Price" />
+               <TableColumn fx:id="colSellPrice" prefWidth="75" text="Sell Price" />
+            </columns>
+         </TableView>
+
+         <Button onAction="#handleBack" text="Back" />
+      </VBox>
+   </children>
+</StackPane>

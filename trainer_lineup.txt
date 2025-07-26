@@ -1,0 +1,7 @@
+chas -> 1,Bulbasaur
+Kyle -> 1,Bulbasaur
+Riki -> 1,Bulbasaur
+blair -> 2,Ivysaur
+ella -> 2,Ivysaur
+ella -> 3,Venusaur
+Ash Ketchum -> 1,Bulbasaur

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.pokedex.app.ReleasePokemonController"
+           prefHeight="400.0" prefWidth="600.0">
+
+   <children>
+
+      <!-- Background Image -->
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@releasepokemonbg.jpg"/>
+         </image>
+      </ImageView>
+
+      <!-- Foreground Layout shifted down with VBox -->
+      <VBox alignment="TOP_CENTER">
+         <padding>
+            <Insets top="60"/> <!-- Shift everything down -->
+         </padding>
+
+         <BorderPane maxWidth="580">
+            <top>
+               <Label fx:id="trainerLabel" text="Trainer: " style="-fx-font-size: 16px; -fx-text-fill: white;">
+                  <BorderPane.margin>
+                     <Insets top="10" left="235" right="15" bottom="10"/>
+                  </BorderPane.margin>
+               </Label>
+            </top>
+
+            <center>
+               <VBox alignment="CENTER" spacing="10">
+                  <ListView fx:id="pokemonListView" prefHeight="200.0" prefWidth="300.0"/>
+                  <Button fx:id="releaseButton" text="Release Pokémon" onAction="#releasePokemon"/>
+                  <Label fx:id="statusLabel" text="" style="-fx-text-fill: yellow;"/>
+               </VBox>
+            </center>
+
+            <bottom>
+               <HBox alignment="CENTER">
+                  <padding>
+                     <Insets top="10" right="10" bottom="10" left="10"/>
+                  </padding>
+                  <Button text="Back" onAction="#handleBack"/>
+               </HBox>
+            </bottom>
+         </BorderPane>
+      </VBox>
+
+   </children>
+</StackPane>
