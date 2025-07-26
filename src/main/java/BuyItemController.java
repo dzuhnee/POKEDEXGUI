@@ -16,10 +16,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.pokedex.app.Trainer;
 import com.pokedex.app.Item;
-import com.pokedex.app.ItemManager;
+import com.pokedex.app.Trainer;
+import com.pokedex.app.FileUtils;
 import com.pokedex.app.ManageTrainerController;
+import com.pokedex.app.ItemManager;
+import com.pokedex.app.AppState;
 
 public class BuyItemController implements Initializable {
 
@@ -40,29 +42,24 @@ public class BuyItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        trainer = AppState.getFullTrainer();
+        if (trainer == null) {
+            System.out.println("Trainer not loaded in BuyItemController");
+        }
+
         colItemName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colItemDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colItemPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
 
         initializeShopItems();
-
         shopTable.setItems(shopItems);
 
-        quantityField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateTotalCost();
-        });
-
-        shopTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateTotalCost();
-        });
+        quantityField.textProperty().addListener((observable, oldValue, newValue) -> updateTotalCost());
+        shopTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateTotalCost());
 
         feedbackLabel.setText("");
-        quantityField.setText("1");      // Default value
-    }
-
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
-        updateTrainerInfo();
+        quantityField.setText("1"); // Default
+        updateTrainerInfo();        // Display trainer's name and money
     }
 
     public void setSearchKeyword(String keyword) {
@@ -71,10 +68,12 @@ public class BuyItemController implements Initializable {
 
     private void initializeShopItems() {
         shopItems = FXCollections.observableArrayList();
+        shopItems.addAll(new ItemManager().getAllItems());
+    }
 
-        // Use existing items from ItemManager
-        ItemManager itemManager = new ItemManager();
-        shopItems.addAll(itemManager.getAllItems());
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
+        updateTrainerInfo();
     }
 
     private void updateTrainerInfo() {
@@ -108,14 +107,12 @@ public class BuyItemController implements Initializable {
         feedbackLabel.setText("");
         feedbackLabel.setStyle("-fx-background-color: transparent;");
 
-        // Validate selection
         Item selectedItem = shopTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             showFeedback("Please select an item to buy.", "error");
             return;
         }
 
-        // Validate quantity
         int quantity;
         try {
             quantity = Integer.parseInt(quantityField.getText());
@@ -128,15 +125,23 @@ public class BuyItemController implements Initializable {
             return;
         }
 
-        // Attempt purchase
         boolean success = trainer.processPurchase(selectedItem, quantity);
         if (success) {
+            // Save updated trainer info to file
+            FileUtils.updateTrainerInFile(trainer);
+
             showFeedback("Purchase successful!", "success");
             updateTrainerInfo();
             quantityField.setText("1");
             updateTotalCost();
+
+            // For debugging only
+            System.out.println("Trainer's updated item bag:");
+            for (Item item : trainer.getItemBag()) {
+                System.out.println("- " + item.getName());
+            }
+
         } else {
-            // Determine why purchase failed
             int totalCost = selectedItem.getBuyingPrice() * quantity;
             if (totalCost > trainer.getMoney()) {
                 showFeedback("Insufficient funds!", "error");
@@ -151,6 +156,7 @@ public class BuyItemController implements Initializable {
         }
     }
 
+
     @FXML
     private void handleBack() {
         try {
@@ -158,8 +164,8 @@ public class BuyItemController implements Initializable {
             Parent root = loader.load();
 
             ManageTrainerController manageController = loader.getController();
-            manageController.setTrainer(trainer); // To pass the trainer back
-            manageController.setSearchKeyword(searchKeyword); // To pass the search keyword back
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
 
             Stage stage = (Stage) trainerMoneyLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -170,18 +176,16 @@ public class BuyItemController implements Initializable {
         }
     }
 
-
     private void showFeedback(String message, String type) {
         feedbackLabel.setText(message);
 
-        // Style the feedback label based on type
         if (type.equals("success")) {
-            feedbackLabel.setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; " +
-                    "-fx-padding: 5px; -fx-border-color: #c3e6cb; -fx-border-radius: 3px; " +
+            feedbackLabel.setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724;" +
+                    "-fx-padding: 5px; -fx-border-color: #c3e6cb; -fx-border-radius: 3px;" +
                     "-fx-background-radius: 3px;");
         } else if (type.equals("error")) {
-            feedbackLabel.setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24; " +
-                    "-fx-padding: 5px; -fx-border-color: #f5c6cb; -fx-border-radius: 3px; " +
+            feedbackLabel.setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #721c24;" +
+                    "-fx-padding: 5px; -fx-border-color: #f5c6cb; -fx-border-radius: 3px;" +
                     "-fx-background-radius: 3px;");
         }
     }

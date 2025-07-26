@@ -74,7 +74,7 @@ public class AddTrainerController {
             return;
         }
 
-        // Check if trainerId is a valid number
+        // Check if trainerId is valid
         try {
             Integer.parseInt(trainerId);
         } catch (NumberFormatException e) {
@@ -99,8 +99,6 @@ public class AddTrainerController {
 
         // Save to file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("trainers.txt", true))) {
-            writer.write("Trainer Info:");
-            writer.newLine();
             writer.write("ID: " + trainerId);
             writer.newLine();
             writer.write("Name: " + name);
@@ -113,8 +111,7 @@ public class AddTrainerController {
             writer.newLine();
             writer.write("Description: " + description);
             writer.newLine();
-            writer.write("--------------------------------------------------");
-            writer.newLine();
+            // Removed the -----
         } catch (IOException e) {
             System.err.println("Error saving trainer data: " + e.getMessage());
         }

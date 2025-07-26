@@ -26,14 +26,14 @@ public class Trainer {
     private final int MAX_UNIQUE_TYPES = 10;
 
     // Constructor
-    public Trainer(int trainerId, String name, LocalDate birthdate, String sex, String hometown, String description) {
+    public Trainer(int trainerId, String name, LocalDate birthdate, String sex, String hometown, String description, int money) {
         this.trainerID = trainerId;
         this.name = name;
         this.birthdate = birthdate;
         this.sex = sex;
         this.hometown = hometown;
         this.description = description;
-        this.money = 1000000;
+        this.money = money;
 
         this.lineup = new ArrayList<>();
         this.storage = new ArrayList<>();
@@ -81,7 +81,10 @@ public class Trainer {
         return new ArrayList<>(itemBag);
     }
 
-    // Setter for money
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public void addMoney(int amount) {
         if (amount > 0) {
             this.money += amount;

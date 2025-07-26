@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import com.pokedex.app.TrainerResultsController;
+import com.pokedex.app.AppState;
 
 public class SearchTrainerController {
 
@@ -41,6 +42,8 @@ public class SearchTrainerController {
 
             TrainerResultsController resultsController = loader.getController();
             resultsController.performSearch(keyword);
+            AppState.setLastSearchKeyword(keyword);
+
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

@@ -75,27 +75,36 @@ public class ViewTrainersController {
         String[] fieldOrder = {"ID", "Name", "Birthdate", "Gender", "Hometown", "Description"};
         String[] currentTrainerData = new String[fieldOrder.length];
         int fieldIndex = 0;
+        int money = 1_000_000;  // Default if missing
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.equals("--------------------------------------------------") || line.equals("Trainer Info:")) {
+
+                if (line.equals("Trainer Info:")) {
+                    continue;
+                }
+
+                if (line.equals("--------------------------------------------------")) {
                     if (fieldIndex == fieldOrder.length) {
                         int id = Integer.parseInt(currentTrainerData[0]);
                         LocalDate birthdate = LocalDate.parse(currentTrainerData[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
                         trainerData.add(new com.pokedex.app.Trainer(
-                                id, // ID
-                                currentTrainerData[1], // Name
-                                birthdate, // Birthdate
-                                currentTrainerData[3], // Gender
-                                currentTrainerData[4], // Hometown
-                                currentTrainerData[5]  // Description
+                                id,
+                                currentTrainerData[1],
+                                birthdate,
+                                currentTrainerData[3],
+                                currentTrainerData[4],
+                                currentTrainerData[5],
+                                money
                         ));
                     }
+
                     currentTrainerData = new String[fieldOrder.length];
                     fieldIndex = 0;
+                    money = 1_000_000; // Reset for next trainer
                     continue;
                 }
 
@@ -105,6 +114,14 @@ public class ViewTrainersController {
                         currentTrainerData[i] = line.substring(prefix.length()).trim();
                         fieldIndex++;
                         break;
+                    }
+                }
+
+                if (line.startsWith("Money: ")) {
+                    try {
+                        money = Integer.parseInt(line.substring(7).trim());
+                    } catch (NumberFormatException e) {
+                        money = 1_000_000;
                     }
                 }
             }
@@ -119,11 +136,14 @@ public class ViewTrainersController {
                         birthdate,
                         currentTrainerData[3],
                         currentTrainerData[4],
-                        currentTrainerData[5]
+                        currentTrainerData[5],
+                        money
                 ));
             }
         } catch (IOException e) {
             System.err.println("Error reading trainer data from " + filename + ": " + e.getMessage());
         }
     }
+
+
 }

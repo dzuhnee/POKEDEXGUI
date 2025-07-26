@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pokedex.app.Trainer;
+
 // This class allows the trainers to be accessed and modified globally -- will edit the other controllers soon <3
 public class TrainerManager {
 
@@ -64,7 +66,6 @@ public class TrainerManager {
                 matches.add(t);
             }
         }
-
         return matches;
     }
 
@@ -72,16 +73,17 @@ public class TrainerManager {
     public static void populateInitialTrainers() {
         if (allTrainers.isEmpty()) {
             addTrainer(new Trainer(1, "Ash Ketchum", LocalDate.of(1987, 5, 22),
-                    "Male", "Pallet Town", "Pokemon Trainer from Kanto"));
+                    "Male", "Pallet Town", "Pokemon Trainer from Kanto", 1_000_000));
 
             addTrainer(new Trainer(2, "Misty", LocalDate.of(1988, 3, 18),
-                    "Female", "Cerulean City", "Cerulean Gym Leader"));
+                    "Female", "Cerulean City", "Cerulean Gym Leader", 1_000_000));
 
             addTrainer(new Trainer(3, "Brock", LocalDate.of(1985, 9, 15),
-                    "Male", "Pewter City", "Former Pewter Gym Leader"));
+                    "Male", "Pewter City", "Former Pewter Gym Leader", 1_000_000));
 
             addTrainer(new Trainer(4, "Gary Oak", LocalDate.of(1987, 11, 22),
-                    "Male", "Pallet Town", "Pokemon Researcher"));
+                    "Male", "Pallet Town", "Pokemon Researcher", 1_000_000));
         }
     }
+
 }

@@ -13,11 +13,15 @@ import java.io.IOException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import java.util.List;
+
 import com.pokedex.app.TrainerBasic;
 import jdk.swing.interop.SwingInterOpUtils;
 import com.pokedex.app.AddPokemonToLineUpController;
 import com.pokedex.app.SwitchPokemonFromStorageController;
 import com.pokedex.app.AppState;
+import com.pokedex.app.BuyItemController;
+import com.pokedex.app.TrainerResultsController;
 
 import com.pokedex.app.Trainer;
 import com.pokedex.app.ReleasePokemonController;
@@ -30,6 +34,7 @@ public class ManageTrainerController {
 
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
+        AppState.setFullTrainer(trainer);
     }
 
     private String searchKeyword;
@@ -42,8 +47,10 @@ public class ManageTrainerController {
     // UNCOMMENT LATER
     @FXML
     public void handleBuyItem(ActionEvent event) {
-        System.out.println("Buy Item clicked!");
-        // navigateToScreen("/BuyItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getFullTrainer();
+        }
+        navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
@@ -167,7 +174,12 @@ public class ManageTrainerController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/TrainerResults.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrainerResults.fxml"));
+            Parent root = loader.load();
+
+            TrainerResultsController resultsController = loader.getController();
+            resultsController.setResults(List.of(AppState.getFullTrainer())); // ✅ Restore trainer as search result
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -175,6 +187,7 @@ public class ManageTrainerController {
             e.printStackTrace();
         }
     }
+
 
     // Helper method for the handle methods - navigate to screens and pass trainer data
     private void navigateToScreen(String fxmlPath, ActionEvent event) {
@@ -184,11 +197,17 @@ public class ManageTrainerController {
 
             Object controller = loader.getController();
 
+            // Fallback
+            if (trainer == null) {
+                trainer = AppState.getFullTrainer(); // fallback to global AppState
+            }
+
             // Pass trainer to all controllers that need it
-            /* UNCOMMENT ME LATER
             if (controller instanceof BuyItemController) {
-                ((BuyItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof SellItemController) {
+                ((BuyItemController) controller).setTrainer(trainer);
+            }
+            /* UNCOMMENT ME LATER
+            else if (controller instanceof SellItemController) {
                 ((SellItemController) controller).setTrainer(selectedTrainer);
             } else if (controller instanceof UseItemController) {
                 ((UseItemController) controller).setTrainer(selectedTrainer);

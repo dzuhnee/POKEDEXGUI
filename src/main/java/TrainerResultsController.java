@@ -18,10 +18,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.pokedex.app.Trainer;
 import com.pokedex.app.TrainerBasic;
 import com.pokedex.app.ManageTrainerController;
+import com.pokedex.app.AppState;
 
 public class TrainerResultsController {
 
@@ -62,12 +64,27 @@ public class TrainerResultsController {
         hometownColumn.setCellValueFactory(new PropertyValueFactory<>("hometown"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        loadTrainersFromFile();
+        allTrainers.setAll(loadTrainersFromFile());
 
-        resultTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);     // To select a trainer to manage
+        List<Trainer> previousResults = AppState.getLastSearchResults();
+        String lastKeyword = AppState.getLastSearchKeyword();
+
+        if (previousResults != null && !previousResults.isEmpty()) {
+            resultTable.setItems(FXCollections.observableArrayList(previousResults));
+            searchLabel.setText("Search results for: " + lastKeyword);
+        } else {
+            // Fallback
+            resultTable.setItems(allTrainers);
+            searchLabel.setText("All trainers");
+        }
+
+        resultTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
-    private void loadTrainersFromFile() {
+
+    public List<Trainer> loadTrainersFromFile() {
+        List<Trainer> allTrainers = new ArrayList<>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader("trainers.txt"))) {
             String line;
             int id = 0;
@@ -76,47 +93,49 @@ public class TrainerResultsController {
             String gender = null;
             String hometown = null;
             String description = null;
+            int money = 1_000_000; // Default
 
             while ((line = reader.readLine()) != null) {
-                line = line.trim();
-
                 if (line.startsWith("ID: ")) {
                     id = Integer.parseInt(line.substring(4));
                 } else if (line.startsWith("Name: ")) {
                     name = line.substring(6);
                 } else if (line.startsWith("Birthdate: ")) {
-                    String dateStr = line.substring(11);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    birthdate = LocalDate.parse(dateStr, formatter);
+                    birthdate = LocalDate.parse(line.substring(11));
                 } else if (line.startsWith("Gender: ")) {
                     gender = line.substring(8);
                 } else if (line.startsWith("Hometown: ")) {
                     hometown = line.substring(10);
                 } else if (line.startsWith("Description: ")) {
                     description = line.substring(13);
-                    if (id != 0 && name != null && birthdate != null && gender != null && hometown != null && description != null) {
-                        allTrainers.add(new Trainer(id, name, birthdate, gender, hometown, description));
+                } else if (line.startsWith("Money: ")) {
+                    money = Integer.parseInt(line.substring(7));
+                } else if (line.startsWith("-----")) {
+                    if (id != 0 && name != null && birthdate != null && gender != null &&
+                            hometown != null && description != null) {
+
+                        Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
+                        allTrainers.add(t);
                     }
-                    // Reset
+
+                    // Reset values for next trainer
                     id = 0;
                     name = null;
                     birthdate = null;
                     gender = null;
                     hometown = null;
                     description = null;
+                    money = 1_000_000;
                 }
             }
+
         } catch (IOException e) {
-            System.err.println("Error reading trainer data: " + e.getMessage());
-            // Default Trainers
-            allTrainers.addAll(
-                    new Trainer(1, "Ash Ketchum", LocalDate.of(1987, 5, 22), "Male", "Pallet Town", "Pokemon Trainer from Kanto"),
-                    new Trainer(2, "Misty", LocalDate.of(1988, 3, 18), "Female", "Cerulean City", "Cerulean Gym Leader"),
-                    new Trainer(3, "Brock", LocalDate.of(1985, 9, 15), "Male", "Pewter City", "Former Pewter Gym Leader"),
-                    new Trainer(4, "Gary Oak", LocalDate.of(1987, 11, 22), "Male", "Pallet Town", "Pokemon Researcher")
-            );
+            System.err.println("Error reading trainer file: " + e.getMessage());
         }
+
+        return allTrainers;
     }
+
 
     public void setResults(List<Trainer> results) {
         allTrainers.setAll(results);
@@ -139,6 +158,9 @@ public class TrainerResultsController {
 
         resultTable.setItems(filteredList);
         lastSearchResults.setAll(filteredList);
+        AppState.setLastSearchResults(filteredList);
+        AppState.setLastSearchKeyword(keyword);
+
 
         if (filteredList.isEmpty()) {
             searchLabel.setText("No trainers found for: " + keyword);
@@ -157,6 +179,8 @@ public class TrainerResultsController {
             alert.showAndWait();
             return;
         }
+
+        AppState.setFullTrainer(selectedTrainer);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
