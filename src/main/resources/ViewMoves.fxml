@@ -26,11 +26,13 @@
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
 
             <!-- TableView -->
-            <TableView fx:id="movesTable" layoutX="28.0" layoutY="74.0" prefHeight="246.0" prefWidth="549.0">
+            <TableView fx:id="movesTable" layoutX="12.0" layoutY="74.0" prefHeight="250.0" prefWidth="579.0">
                <columns>
-                  <TableColumn fx:id="nameColumn" prefWidth="100.0" text="Move Name" />
-                  <TableColumn fx:id="descriptionColumn" prefWidth="300.0" text="Description" />
-                  <TableColumn fx:id="classificationColumn" prefWidth="150.0" text="Classification" />
+                  <TableColumn fx:id="nameColumn" text="Move Name" />
+                  <TableColumn fx:id="descriptionColumn" prefWidth="230.0" text="Description" />
+                  <TableColumn fx:id="type1Column" prefWidth="65.0" text="Type 1" />
+                  <TableColumn fx:id="type2Column" prefWidth="65.0" text="Type 2" />
+                  <TableColumn fx:id="classificationColumn" prefWidth="140.0" text="Classification" />
                </columns>
             </TableView>
 

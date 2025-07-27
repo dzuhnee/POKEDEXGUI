@@ -15,15 +15,6 @@ public class MoveBasic {
         this.classification = classification;
     }
 
-    // ✅ ADD THIS CONSTRUCTOR:
-    public MoveBasic(String name, String description, String classification) {
-        this.name = name;
-        this.description = description;
-        this.classification = classification;
-        this.type1 = "";
-        this.type2 = "";
-    }
-
     public String getName() {
         return name;
     }
@@ -34,5 +25,13 @@ public class MoveBasic {
 
     public String getClassification() {
         return classification;
+    }
+
+    public String getType1() {
+        return type1;
+    }
+
+    public String getType2() {
+        return type2;
     }
 }

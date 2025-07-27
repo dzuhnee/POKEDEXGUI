@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
+import  com.pokedex.app.MoveBasic;
+
 public class SearchMovesController {
 
     @FXML
@@ -30,6 +32,9 @@ public class SearchMovesController {
     @FXML
     private TableColumn<com.pokedex.app.MoveBasic, String> colDescription;
 
+    @FXML private TableColumn<MoveBasic, String> type1Column;
+    @FXML private TableColumn<MoveBasic, String> type2Column;
+
     @FXML
     private TableColumn<com.pokedex.app.MoveBasic, String> colClassification;
 
@@ -39,7 +44,10 @@ public class SearchMovesController {
     public void initialize() {
         colName.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
         colDescription.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDescription()));
+        type1Column.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getType1()));
+        type2Column.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getType2()));
         colClassification.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClassification()));
+
 
         allMoveBasics.addAll(loadMovesFromFile());
     }
@@ -53,8 +61,11 @@ public class SearchMovesController {
                 if (parts.length >= 5) {
                     String name = parts[0].trim();
                     String description = parts[1].trim();
-                    String classification = parts[4].trim(); // use the last part
-                    moveBasics.add(new com.pokedex.app.MoveBasic(name, description, classification));
+                    String type1 = parts[2].trim();
+                    String type2 = parts[3].trim();
+                    String classification = parts[4].trim();
+
+                    moveBasics.add(new MoveBasic(name, description, type1, type2, classification));
                 } else {
                     System.out.println("Skipping invalid line: " + line);
                 }
@@ -64,8 +75,7 @@ public class SearchMovesController {
         }
         return moveBasics;
     }
-
-
+    
     @FXML
     public void handleSearch(ActionEvent event) {
         String keyword = searchField.getText().trim().toLowerCase();

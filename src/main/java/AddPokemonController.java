@@ -24,7 +24,7 @@ public class AddPokemonController {
     @FXML private TextField baseLevelField;
     @FXML private TextField evolvesFromField;
     @FXML private TextField evolvesToField;
-    @FXML private TextField evolutionLevelField;  // ✅ NEW FIELD
+    @FXML private TextField evolutionLevelField;
     @FXML private TextField hpField;
     @FXML private TextField atkField;
     @FXML private TextField defField;
@@ -58,8 +58,15 @@ public class AddPokemonController {
         }
 
         int pokedexNumber = Integer.parseInt(pokedexNumberField.getText());
+        int evolutionLevel = Integer.parseInt(evolutionLevelField.getText());
+
         if (pokedexNumber < 1 || pokedexNumber > 1010) {
             showAlert("Pokedex number must be between 1 and 1010.");
+            return;
+        }
+
+        if (evolutionLevel < 2) {
+            showAlert("Evolution level must be at least 2.");
             return;
         }
 
@@ -68,7 +75,12 @@ public class AddPokemonController {
             return;
         }
 
-        // ✅ Save evolution level as well
+        if (evolvesFromField.getText().trim().equalsIgnoreCase(evolvesToField.getText().trim())) {
+            showAlert("A Pokémon cannot evolve from and to the same Pokémon!");
+            return;
+        }
+
+        // Save data
         String data = String.join(",",
                 pokedexNumberField.getText(),
                 pokemonNameField.getText(),

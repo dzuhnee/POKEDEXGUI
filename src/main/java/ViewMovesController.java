@@ -17,11 +17,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import com.pokedex.app.MoveBasic;
+
 public class ViewMovesController {
 
     @FXML private TableView<MoveBasic> movesTable;
     @FXML private TableColumn<MoveBasic, String> nameColumn;
     @FXML private TableColumn<MoveBasic, String> descriptionColumn;
+    @FXML private TableColumn<MoveBasic, String> type1Column;
+    @FXML private TableColumn<MoveBasic, String> type2Column;
     @FXML private TableColumn<MoveBasic, String> classificationColumn;
     @FXML private Button backButton;
 
@@ -30,25 +34,30 @@ public class ViewMovesController {
         // Setup table columns
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        type1Column.setCellValueFactory(new PropertyValueFactory<>("type1"));
+        type2Column.setCellValueFactory(new PropertyValueFactory<>("type2"));
         classificationColumn.setCellValueFactory(new PropertyValueFactory<>("classification"));
+
 
         List<MoveBasic> moveBasicList = new ArrayList<>();
 
         // Add default moves first
-        moveBasicList.add(new MoveBasic("Tackle", "A basic physical attack", "TM (Technical Machine)"));
-        moveBasicList.add(new MoveBasic("Defend", "Brace to reduce damage", "HM (Hidden Machine"));
+        moveBasicList.add(new MoveBasic("Tackle", "A basic physical attack", "Normal", "Physical", "TM (Technical Machine)"));
+        moveBasicList.add(new MoveBasic("Defend", "Raises the user's Defense stat", "Normal", "Status", "HM (Hidden Machine)"));
+
 
         // Then try to load moves from file
         try {
             List<String> lines = Files.readAllLines(Paths.get("moves.txt"));
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length >= 3) {
+                if (parts.length >= 5) {
                     String name = parts[0].trim();
                     String description = parts[1].trim();
-                    String classification = parts[parts.length - 1].trim();
-
-                    moveBasicList.add(new MoveBasic(name, description, classification));
+                    String type1 = parts[2].trim();
+                    String type2 = parts[3].trim();
+                    String classification = parts[4].trim();
+                    moveBasicList.add(new MoveBasic(name, description, type1, type2, classification));
                 }
             }
         } catch (IOException e) {
@@ -57,8 +66,6 @@ public class ViewMovesController {
 
         movesTable.getItems().addAll(moveBasicList);
     }
-
-
 
     @FXML
     public void handleBackButton(ActionEvent event) {
