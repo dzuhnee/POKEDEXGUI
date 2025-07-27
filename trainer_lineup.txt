@@ -8,8 +8,18 @@ Ash Ketchum -> 1,Bulbasaur
 ella -> 13,Pidgey
 Kyle -> 29,Abra
 Kyle -> 28,Vileplume
-Byron -> 28,Vileplume
 Byron -> 5,Charmeleon
 Byron -> 7,Squirtle
 Byron -> 12,Butterfree
 Byron -> 17,Raticate
+Byron -> 1,Bulbasaur
+Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 3,Venusaur
+Ash Ketchum -> 4,Charmander
+chas -> 3,Venusaur
+chas -> 2,Ivysaur
+chas -> 4,Charmander
+chas -> 5,Charmeleon
+chas -> 6,Charizard
