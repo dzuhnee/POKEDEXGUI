@@ -24,11 +24,18 @@
       <ComboBox fx:id="pokemonComboBox" layoutX="288.0" layoutY="122.0" prefWidth="200.0" />
 
       <!-- Move Selector -->
-      <Label layoutX="133.0" layoutY="179.0" text="Select Move:" />
-      <ComboBox fx:id="moveComboBox" layoutX="288.0" layoutY="175.0" prefWidth="200.0" />
+      <Label layoutX="134.0" layoutY="167.0" text="Select Move:" />
+      <ComboBox fx:id="moveComboBox" layoutX="288.0" layoutY="163.0" prefWidth="200.0" />
+
+      <!-- Forget Move -->
+      <Label layoutX="133.0" layoutY="206.0" text="Forget Move:" />
+      <ComboBox fx:id="forgetMoveComboBox" layoutX="288.0" layoutY="202.0" prefWidth="200.0" />
+
+      <Button fx:id="forgetButton" layoutX="402.0" layoutY="238.0" mnemonicParsing="false" text="Forget Move" />
+
 
       <!-- Teach Button -->
-      <Button fx:id="teachButton" contentDisplay="GRAPHIC_ONLY" layoutX="227.0" layoutY="231.0" mnemonicParsing="false" style="-fx-background-color: transparent;;" text="Teach Move">
+      <Button fx:id="teachButton" contentDisplay="GRAPHIC_ONLY" layoutX="227.0" layoutY="257.0" mnemonicParsing="false" style="-fx-background-color: transparent;;" text="Teach Move">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: transparent; -fx-background-color: transparent;">
                <image>
@@ -38,7 +45,7 @@
          </graphic></Button>
 
       <!-- Back Button -->
-      <Button fx:id="backButton" contentDisplay="GRAPHIC_ONLY" layoutX="233.0" layoutY="256.0" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: transparent;;">
+      <Button fx:id="backButton" contentDisplay="GRAPHIC_ONLY" layoutX="233.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: transparent;;">
          <graphic>
             <ImageView fitHeight="94.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true">
                <image>

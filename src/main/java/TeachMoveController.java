@@ -21,14 +21,16 @@ public class TeachMoveController {
 
     @FXML private ComboBox<String> pokemonComboBox;
     @FXML private ComboBox<String> moveComboBox;
+    @FXML private ComboBox<String> forgetMoveComboBox;
     @FXML private Button teachButton;
+    @FXML private Button forgetButton;
     @FXML private Label trainerLabel;
+
     private String trainerName;
-    private Map<String, String> pokedexMap = new HashMap<>(); // displayName → line
+    private Map<String, String> pokedexMap = new HashMap<>();
     private List<String> moveList = new ArrayList<>();
     private int selectedTrainerId = -1;
 
-    // Call this from ManageTrainer screen before loading this scene
     public void setTrainerId(int trainerId) {
         this.selectedTrainerId = trainerId;
         loadPokemonForTrainer();
@@ -38,8 +40,10 @@ public class TeachMoveController {
     public void initialize() {
         loadMoves();
         moveComboBox.setItems(FXCollections.observableArrayList(moveList));
-
         teachButton.setOnAction(this::handleTeachMove);
+        forgetButton.setOnAction(this::handleForgetMove);
+
+        pokemonComboBox.setOnAction(e -> updateForgetMoves());
     }
 
     private void loadPokemonForTrainer() {
@@ -67,7 +71,7 @@ public class TeachMoveController {
                 if (splitNameAndData.length != 2) continue;
 
                 String trainerNamePart = splitNameAndData[0].trim();
-                String dataPart = splitNameAndData[1].trim(); // "1,Bulbasaur"
+                String dataPart = splitNameAndData[1].trim();
 
                 String[] parts = dataPart.split(",");
                 if (parts.length < 2) continue;
@@ -97,25 +101,19 @@ public class TeachMoveController {
                 String[] parts = line.split(",");
                 if (parts.length >= 5) {
                     String name = parts[0].trim();
-                    String type = parts[2].trim();         // elemental type like Fire
-                    String category = parts[3].trim();     // Physical, Special, Status
-                    String classification = parts[4].trim(); // TM or HM (full string)
-
-                    // Optional: clean classification to just "TM" or "HM"
+                    String type = parts[2].trim();
+                    String category = parts[3].trim();
+                    String classification = parts[4].trim();
                     String shortClass = classification.contains("TM") ? "TM" : "HM";
 
-                    // 👇 Show both type + category
                     String displayName = name + " (" + type + " / " + category + ") - " + shortClass;
                     moveList.add(displayName);
-                } else {
-                    System.out.println("Skipping invalid move line: " + line);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     public void setTrainerName(String name) {
         this.trainerName = name;
@@ -145,15 +143,10 @@ public class TeachMoveController {
             return;
         }
 
-        // Extract just the Pokémon name
         String pokemonName = selectedPokemon.split(" ")[0].trim();
-
-        // Extract just the move name
         String moveName = selectedMove.split(" \\(")[0].trim();
 
-        // Get Pokémon types
-        String type1 = null;
-        String type2 = null;
+        String type1 = null, type2 = null;
         try (BufferedReader br = new BufferedReader(new FileReader("pokemon_data.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -165,7 +158,6 @@ public class TeachMoveController {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
             showAlert("File Error", "Could not read pokemon file.");
             return;
         }
@@ -175,39 +167,163 @@ public class TeachMoveController {
             return;
         }
 
-        // Get move's elemental type (column 2 in moves.txt)
         String moveType = null;
+        boolean isHM = false;
         try (BufferedReader br = new BufferedReader(new FileReader("moves.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 5 && parts[0].trim().equalsIgnoreCase(moveName)) {
-                    moveType = parts[2].trim();  // ✅ Correct column for move type
+                    moveType = parts[2].trim();
+                    isHM = parts[4].toUpperCase().contains("HM");
                     break;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
             showAlert("File Error", "Could not read moves file.");
             return;
         }
 
-        if (moveType == null) {
-            showAlert("Move Not Found", "Could not find type for move " + moveName);
-            return;
-        }
-
-        // ✅ Check for match
         if (!moveType.equalsIgnoreCase(type1) && !moveType.equalsIgnoreCase(type2)) {
             showAlert("Invalid Type Match", pokemonName + " (" + type1 + "/" + type2 + ") can't learn " + moveName + " (" + moveType + ").");
             return;
         }
 
-        // ✅ Success!
-        System.out.println("Teaching move " + moveName + " to " + pokemonName);
+        Map<String, List<String>> pokemonMovesMap = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("pokemon_moves.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    String[] moves = parts[1].split(",");
+                    List<String> moveList = new ArrayList<>();
+                    for (String move : moves) moveList.add(move.trim());
+                    pokemonMovesMap.put(name, moveList);
+                }
+            }
+        } catch (IOException ignored) {}
+
+        List<String> currentMoves = pokemonMovesMap.getOrDefault(pokemonName, new ArrayList<>());
+        if (currentMoves.contains(moveName)) {
+            showAlert("Already Knows Move", pokemonName + " already knows " + moveName);
+            return;
+        }
+
+        if (currentMoves.size() >= 4 && !isHM) {
+            showAlert("Too Many Moves", pokemonName + " already knows 4 moves. Please forget one first.");
+            return;
+        }
+
+        currentMoves.add(moveName);
+        pokemonMovesMap.put(pokemonName, currentMoves);
+
+        try (java.io.PrintWriter writer = new java.io.PrintWriter("pokemon_moves.txt")) {
+            for (Map.Entry<String, List<String>> entry : pokemonMovesMap.entrySet()) {
+                writer.println(entry.getKey() + ": " + String.join(", ", entry.getValue()));
+            }
+        } catch (IOException e) {
+            showAlert("Save Error", "Failed to save move to file.");
+            return;
+        }
+
+        updateForgetMoves();
         showAlert("Success", pokemonName + " has successfully learned " + moveName + "!");
     }
 
+    private void handleForgetMove(ActionEvent event) {
+        String selectedPokemon = pokemonComboBox.getValue();
+        String selectedMove = forgetMoveComboBox.getValue();
+
+        if (selectedPokemon == null || selectedMove == null) {
+            showAlert("Incomplete Selection", "Please select a Pokémon and a move to forget.");
+            return;
+        }
+
+        String pokemonName = selectedPokemon.split(" ")[0].trim();
+
+        boolean isHM = false;
+        try (BufferedReader br = new BufferedReader(new FileReader("moves.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 5 && parts[0].trim().equalsIgnoreCase(selectedMove)) {
+                    isHM = parts[4].toUpperCase().contains("HM");
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            showAlert("File Error", "Could not read moves.txt.");
+            return;
+        }
+
+        if (isHM) {
+            showAlert("HM Restriction", "HM moves cannot be forgotten.");
+            return;
+        }
+
+        Map<String, List<String>> pokemonMovesMap = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("pokemon_moves.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    List<String> moves = new ArrayList<>();
+                    for (String move : parts[1].split(",")) {
+                        moves.add(move.trim());
+                    }
+                    pokemonMovesMap.put(name, moves);
+                }
+            }
+        } catch (IOException e) {
+            showAlert("File Error", "Could not read pokemon_moves.txt.");
+            return;
+        }
+
+        List<String> currentMoves = pokemonMovesMap.getOrDefault(pokemonName, new ArrayList<>());
+        if (!currentMoves.remove(selectedMove)) {
+            showAlert("Move Not Found", selectedMove + " not found for " + pokemonName);
+            return;
+        }
+
+        try (java.io.PrintWriter writer = new java.io.PrintWriter("pokemon_moves.txt")) {
+            for (Map.Entry<String, List<String>> entry : pokemonMovesMap.entrySet()) {
+                writer.println(entry.getKey() + ": " + String.join(", ", entry.getValue()));
+            }
+        } catch (IOException e) {
+            showAlert("Save Error", "Failed to update move list.");
+            return;
+        }
+
+        updateForgetMoves();
+        showAlert("Move Forgotten", pokemonName + " forgot " + selectedMove + ".");
+    }
+
+    private void updateForgetMoves() {
+        String selected = pokemonComboBox.getValue();
+        if (selected == null) return;
+
+        String pokemonName = selected.split(" ")[0].trim();
+
+        List<String> moveSet = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("pokemon_moves.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2 && parts[0].trim().equalsIgnoreCase(pokemonName)) {
+                    for (String move : parts[1].split(",")) {
+                        moveSet.add(move.trim());
+                    }
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        forgetMoveComboBox.setItems(FXCollections.observableArrayList(moveSet));
+    }
 
     private void showAlert(String title, String content) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
