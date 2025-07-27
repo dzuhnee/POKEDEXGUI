@@ -42,16 +42,13 @@ public class TrainerResultsController {
     private TableColumn<Trainer, String> nameColumn;
 
     @FXML
-    private TableColumn<Trainer, LocalDate> birthdateColumn;
+    private TableColumn<Trainer, Integer> moneyColumn;
 
     @FXML
-    private TableColumn<Trainer, String> genderColumn;
+    private TableColumn<Trainer, String> pokeLineupColumn;
 
     @FXML
-    private TableColumn<Trainer, String> hometownColumn;
-
-    @FXML
-    private TableColumn<Trainer, String> descriptionColumn;
+    private TableColumn<Trainer, String> itemInventoryColumn;
 
     private final ObservableList<Trainer> allTrainers = FXCollections.observableArrayList();
     private ObservableList<Trainer> lastSearchResults = FXCollections.observableArrayList();
@@ -61,10 +58,9 @@ public class TrainerResultsController {
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("trainerID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        birthdateColumn.setCellValueFactory(new PropertyValueFactory<>("birthdate"));
-        genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        hometownColumn.setCellValueFactory(new PropertyValueFactory<>("hometown"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        moneyColumn.setCellValueFactory(new PropertyValueFactory<>("money"));
+        pokeLineupColumn.setCellValueFactory(new PropertyValueFactory<>("pokemonLineupDisplay"));
+        itemInventoryColumn.setCellValueFactory(new PropertyValueFactory<>("itemInventoryDisplay"));
 
         allTrainers.setAll(loadTrainersFromFile());
 
@@ -98,6 +94,7 @@ public class TrainerResultsController {
             String description = null;
             int money = 1_000_000;
             String[] itemsArray = null;
+            String[] pokemonArray = null; // Add this for Pokemon lineup
 
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("ID: ")) {
@@ -121,18 +118,45 @@ public class TrainerResultsController {
                     } else {
                         itemsArray = null;
                     }
-                } else if (line.startsWith("-----")) {
+                } else if (line.startsWith("Pokemon Lineup: ")) { // Add this for Pokemon lineup
+                    String pokemonLine = line.substring(16).trim();
+                    if (!pokemonLine.equalsIgnoreCase("None") && !pokemonLine.isEmpty()) {
+                        pokemonArray = pokemonLine.split(",");
+                    } else {
+                        pokemonArray = null;
+                    }
+                } else if (line.startsWith("Held Item:")) {
+                    // Skip held item line for now
+                    continue;
+                } else if (line.startsWith("Pokemon Storage:")) {
+                    // Skip pokemon storage line for now
+                    continue;
+                } else if (line.startsWith("--------------------------------------------------")) {
                     if (id != 0 && name != null && birthdate != null && gender != null &&
                             hometown != null && description != null) {
 
                         Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
 
+                        // Add items to trainer
                         if (itemsArray != null) {
                             for (String itemName : itemsArray) {
                                 Item item = itemManager.findItem(itemName.trim());
                                 if (item != null) {
                                     t.addItemToBag(item, 1);
                                 }
+                            }
+                        }
+
+                        // Add Pokemon to trainer lineup
+                        if (pokemonArray != null) {
+                            for (String pokemonName : pokemonArray) {
+                                // You'll need to create Pokemon objects based on the names
+                                // This assumes you have a way to create Pokemon from names
+                                // For now, this is a placeholder - you'll need to implement Pokemon creation
+                                // Pokemon pokemon = pokemonManager.createPokemon(pokemonName.trim());
+                                // if (pokemon != null) {
+                                //     t.addPokemonToLineup(pokemon);
+                                // }
                             }
                         }
 
@@ -148,6 +172,7 @@ public class TrainerResultsController {
                     description = null;
                     money = 1_000_000;
                     itemsArray = null;
+                    pokemonArray = null;
                 }
             }
 

@@ -19,9 +19,9 @@
           <TableColumn fx:id="idColumn" prefWidth="42.666688323020935" text="ID" />
           <TableColumn fx:id="nameColumn" prefWidth="107.99997329711914" text="Name" />
             <TableColumn fx:id="birthdateColumn" prefWidth="75.0" text="Birthdate" />
-            <TableColumn fx:id="genderColumn" prefWidth="75.0" text="Gender" />
-            <TableColumn fx:id="hometownColumn" prefWidth="107.99993896484375" text="Hometown" />
-            <TableColumn fx:id="descriptionColumn" prefWidth="130.66665649414062" text="Description" />
+            <TableColumn fx:id="genderColumn" prefWidth="54.00006103515625" text="Gender" />
+            <TableColumn fx:id="hometownColumn" prefWidth="85.33331298828125" text="Hometown" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="175.33331298828125" text="Description" />
         </columns>
       </TableView>
        <Button fx:id="backButton" contentDisplay="GRAPHIC_ONLY" layoutX="274.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="62.0" prefWidth="166.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

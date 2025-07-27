@@ -36,11 +36,10 @@
       <TableView fx:id="resultTable" layoutX="19.0" layoutY="115.0" prefHeight="165.0" prefWidth="556.0">
         <columns>
           <TableColumn fx:id="idColumn" prefWidth="41.33331298828125" text="ID" />
-          <TableColumn fx:id="nameColumn" prefWidth="115.99996948242188" text="Name" />
-            <TableColumn fx:id="birthdateColumn" prefWidth="81.333251953125" text="Birthdate" />
-            <TableColumn fx:id="genderColumn" prefWidth="81.3333740234375" text="Gender" />
-            <TableColumn fx:id="hometownColumn" prefWidth="92.66668701171875" text="Hometown" />
-            <TableColumn fx:id="descriptionColumn" prefWidth="145.33331298828125" text="Description" />
+          <TableColumn fx:id="nameColumn" prefWidth="103.3333740234375" text="Name" />
+            <TableColumn fx:id="moneyColumn" prefWidth="93.99996948242188" text="Money" />
+            <TableColumn fx:id="pokeLineupColumn" prefWidth="157.3333740234375" text="Active Pokemon Lineup" />
+            <TableColumn fx:id="itemInventoryColumn" prefWidth="158.6666259765625" text="Item Inventory" />
         </columns>
       </TableView>
       <Button contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="462.0" layoutY="352.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleNewSearch" prefHeight="25.0" prefWidth="105.0" AnchorPane.bottomAnchor="22.666666666666686">

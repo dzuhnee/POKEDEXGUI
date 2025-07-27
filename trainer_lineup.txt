@@ -5,3 +5,15 @@ blair -> 2,Ivysaur
 ella -> 2,Ivysaur
 ella -> 3,Venusaur
 Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 4,Charmander
+Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 1,Bulbasaur
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 3,Venusaur
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 4,Charmander
+Ash Ketchum -> 2,Ivysaur
+Ash Ketchum -> 2,Ivysaur

@@ -3,6 +3,8 @@ package com.pokedex.app;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 public class AddTrainerController {
 
@@ -97,31 +100,44 @@ public class AddTrainerController {
             return;
         }
 
-        // Save to file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("trainers.txt", true))) {
-            writer.write("ID: " + trainerId);
-            writer.newLine();
-            writer.write("Name: " + name);
-            writer.newLine();
-            writer.write("Birthdate: " + birthdate);
-            writer.newLine();
-            writer.write("Gender: " + gender);
-            writer.newLine();
-            writer.write("Hometown: " + hometown);
-            writer.newLine();
-            writer.write("Description: " + description);
-            writer.newLine();
-            // Removed the -----
-        } catch (IOException e) {
-            System.err.println("Error saving trainer data: " + e.getMessage());
-        }
+        // Add confirmation dialog before saving
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Save");
+        confirmAlert.setHeaderText("Save Trainer Information");
+        confirmAlert.setContentText("Are you sure you want to save this trainer?");
 
-        trainerIdField.clear();
-        nameField.clear();
-        birthdateField.clear();
-        genderField.clear();
-        hometownField.clear();
-        descriptionField.clear();
-        feedbackLabel.setText("Trainer info saved successfully!");
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Save to file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("trainers.txt", true))) {
+                writer.write("ID: " + trainerId);
+                writer.newLine();
+                writer.write("Name: " + name);
+                writer.newLine();
+                writer.write("Birthdate: " + birthdate);
+                writer.newLine();
+                writer.write("Gender: " + gender);
+                writer.newLine();
+                writer.write("Hometown: " + hometown);
+                writer.newLine();
+                writer.write("Description: " + description);
+                writer.newLine();
+                // Removed the -----
+            } catch (IOException e) {
+                System.err.println("Error saving trainer data: " + e.getMessage());
+                feedbackLabel.setText("Error saving trainer data!");
+                return;
+            }
+
+            trainerIdField.clear();
+            nameField.clear();
+            birthdateField.clear();
+            genderField.clear();
+            hometownField.clear();
+            descriptionField.clear();
+            feedbackLabel.setText("Trainer info saved successfully!");
+        } else {
+            feedbackLabel.setText("Save cancelled.");
+        }
     }
 }

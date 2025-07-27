@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pokedex.app.AddTrainerController">
     <children>
@@ -64,13 +65,10 @@
                 </GridPane>
 
                 <!-- Feedback Label -->
-                <Label fx:id="feedbackLabel"
-                       layoutX="160.0"
-                       layoutY="340.0"
-                       prefWidth="300.0"
-                       text=""
-                       textFill="white"
-                       style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                <Label fx:id="feedbackLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="137.0" layoutY="336.0" prefHeight="20.0" prefWidth="327.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="" textFill="white">
+               <font>
+                  <Font size="11.0" />
+               </font></Label>
 
                 <!-- Save Button -->
                 <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" layoutX="463.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="100.0" prefWidth="120.0" style="-fx-padding: 0; -fx-border-color: transparent;; -fx-background-color: transparent;;">

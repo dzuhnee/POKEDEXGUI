@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.PokemonManager;
+import com.pokedex.app.Move;
+
 /**
  * This class represents a Pokémon with identifying information, types,
  * evolution details,

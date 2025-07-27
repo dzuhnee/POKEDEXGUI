@@ -13,8 +13,8 @@ Birthdate: 1987-05-22
 Gender: Male
 Hometown: Pallet Town
 Description: Pokemon Trainer from Kanto
-Money: 995000
-Items: None
+Money: 994100
+Items: Swift Feather,Swift Feather,Swift Feather
 --------------------------------------------------
 Trainer Info:
 ID: 21
@@ -56,3 +56,9 @@ Gender: female
 Hometown: nyc
 Description: wtf
 --------------------------------------------------
+ID: 124
+Name: Bob
+Birthdate: 2025-07-27
+Gender: Male
+Hometown: Manila
+Description: bob bob bob

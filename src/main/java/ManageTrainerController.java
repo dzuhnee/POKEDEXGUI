@@ -22,6 +22,9 @@ import com.pokedex.app.AppState;
 import com.pokedex.app.Trainer;
 import com.pokedex.app.ReleasePokemonController;
 import com.pokedex.app.TeachMoveController;
+import com.pokedex.app.BuyItemController;
+import com.pokedex.app.SellItemController;
+import com.pokedex.app.GiveItemController;
 
 
 
@@ -65,8 +68,10 @@ public class ManageTrainerController {
 
     @FXML
     public void handleGiveItem(ActionEvent event) {
-        System.out.println("Give Item clicked!");
-        // navigateToScreen("/GiveItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getInstance().getFullTrainer();
+        }
+        navigateToScreen("/GiveItem.fxml", event);
     }
 
     @FXML
@@ -199,38 +204,13 @@ public class ManageTrainerController {
         }
     }
 
-    // Helper method for the handle methods - navigate to screens and pass trainer data
+
     private void navigateToScreen(String fxmlPath, ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
             Object controller = loader.getController();
-
-            // Pass trainer to all controllers that need it
-            /* UNCOMMENT ME LATER
-            if (controller instanceof BuyItemController) {
-                ((BuyItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof SellItemController) {
-                ((SellItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof UseItemController) {
-                ((UseItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof GiveItemController) {
-                ((GiveItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof RemoveItemController) {
-                ((RemoveItemController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof AddPokemonController) {
-                ((AddPokemonController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof SwitchPokemonController) {
-                ((SwitchPokemonController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof ReleasePokemonController) {
-                ((ReleasePokemonController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof TeachMoveController) {
-                ((TeachMoveController) controller).setTrainer(selectedTrainer);
-            } else if (controller instanceof ViewProfileController) {
-                ((ViewProfileController) controller).setTrainer(selectedTrainer);
-            }
-            */
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

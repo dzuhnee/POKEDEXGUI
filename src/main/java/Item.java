@@ -81,7 +81,7 @@ public abstract class Item {
      * @return the selling price of the item
      */
     public int getSellingPrice() {
-        return sellingPrice;
+        return buyingPrice / 2;
     }
 
     /**

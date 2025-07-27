@@ -281,4 +281,51 @@ public class Trainer {
         return sb.toString();
     }
 
+    public String getPokemonLineupDisplay() {
+        if (lineup == null || lineup.isEmpty()) {
+            return "None";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < lineup.size(); i++) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(lineup.get(i).getName()); // Assuming Pokemon has getName() method
+        }
+        return sb.toString();
+    }
+
+    public String getItemInventoryDisplay() {
+        if (itemBag == null || itemBag.isEmpty()) {
+            return "None";
+        }
+
+        // Count quantities of each unique item
+        List<String> uniqueItems = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
+
+        for (Item item : itemBag) {
+            String itemName = item.getName();
+            int index = uniqueItems.indexOf(itemName);
+
+            if (index == -1) {
+                uniqueItems.add(itemName);
+                quantities.add(1);
+            } else {
+                quantities.set(index, quantities.get(index) + 1);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < uniqueItems.size(); i++) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(uniqueItems.get(i)).append(" x").append(quantities.get(i));
+        }
+
+        return sb.toString();
+    }
+
 }
