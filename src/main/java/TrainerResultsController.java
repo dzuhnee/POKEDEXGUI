@@ -176,6 +176,24 @@ public class TrainerResultsController {
                 }
             }
 
+            // Add the last trainer if file doesn't end with "-----"
+            if (id != 0 && name != null && birthdate != null && gender != null &&
+                    hometown != null && description != null) {
+
+                Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
+
+                if (itemsArray != null) {
+                    for (String itemName : itemsArray) {
+                        Item item = itemManager.findItem(itemName.trim());
+                        if (item != null) {
+                            t.addItemToBag(item, 1);
+                        }
+                    }
+                }
+
+                allTrainers.add(t);
+            }
+
         } catch (IOException e) {
             System.err.println("Error reading trainer file: " + e.getMessage());
         }
