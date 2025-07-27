@@ -8,3 +8,9 @@ Ash Ketchum -> 1,Bulbasaur
 ella -> 13,Pidgey
 Kyle -> 29,Abra
 Kyle -> 28,Vileplume
+Kyle -> 1,Bulbasaur
+Kyle -> 5,Charmeleon
+Kyle -> 3,Venusaur
+Kyle -> 1,Bulbasaur
+Kyle -> 4,Charmander
+Kyle -> 3,Venusaur

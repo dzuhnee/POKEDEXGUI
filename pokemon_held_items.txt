@@ -1,0 +1,7 @@
+21:Bulbasaur:HP Up
+21:Abra:Iron
+21:Vileplume:Iron
+21:Charmeleon:HP Up
+21:Venusaur:Health Feather
+21:Venusaur:Clever Feather
+21:Charmander:Health Feather

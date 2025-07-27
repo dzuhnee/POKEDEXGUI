@@ -26,6 +26,8 @@ import com.pokedex.app.ManageTrainerController;
 import com.pokedex.app.AppState;
 import com.pokedex.app.Item;
 import com.pokedex.app.ItemManager;
+import com.pokedex.app.FileUtils;
+import com.pokedex.app.Pokemon;
 
 public class TrainerResultsController {
 
@@ -93,8 +95,6 @@ public class TrainerResultsController {
             String hometown = null;
             String description = null;
             int money = 1_000_000;
-            String[] itemsArray = null;
-            String[] pokemonArray = null; // Add this for Pokemon lineup
 
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("ID: ")) {
@@ -111,59 +111,26 @@ public class TrainerResultsController {
                     description = line.substring(13);
                 } else if (line.startsWith("Money: ")) {
                     money = Integer.parseInt(line.substring(7));
-                } else if (line.startsWith("Items: ")) {
-                    String itemsLine = line.substring(7).trim();
-                    if (!itemsLine.equalsIgnoreCase("None")) {
-                        itemsArray = itemsLine.split(",");
-                    } else {
-                        itemsArray = null;
-                    }
-                } else if (line.startsWith("Pokemon Lineup: ")) { // Add this for Pokemon lineup
-                    String pokemonLine = line.substring(16).trim();
-                    if (!pokemonLine.equalsIgnoreCase("None") && !pokemonLine.isEmpty()) {
-                        pokemonArray = pokemonLine.split(",");
-                    } else {
-                        pokemonArray = null;
-                    }
-                } else if (line.startsWith("Held Item:")) {
-                    // Skip held item line for now
-                    continue;
-                } else if (line.startsWith("Pokemon Storage:")) {
-                    // Skip pokemon storage line for now
-                    continue;
                 } else if (line.startsWith("--------------------------------------------------")) {
                     if (id != 0 && name != null && birthdate != null && gender != null &&
                             hometown != null && description != null) {
 
                         Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
 
-                        // Add items to trainer
-                        if (itemsArray != null) {
-                            for (String itemName : itemsArray) {
-                                Item item = itemManager.findItem(itemName.trim());
-                                if (item != null) {
-                                    t.addItemToBag(item, 1);
-                                }
-                            }
+                        // Load items from trainer_items.txt
+                        List<Item> itemBag = FileUtils.loadTrainerItems(id);
+                        for (Item item : itemBag) {
+                            t.addItemToBag(item, 1);
                         }
 
-                        // Add Pokemon to trainer lineup
-                        if (pokemonArray != null) {
-                            for (String pokemonName : pokemonArray) {
-                                // You'll need to create Pokemon objects based on the names
-                                // This assumes you have a way to create Pokemon from names
-                                // For now, this is a placeholder - you'll need to implement Pokemon creation
-                                // Pokemon pokemon = pokemonManager.createPokemon(pokemonName.trim());
-                                // if (pokemon != null) {
-                                //     t.addPokemonToLineup(pokemon);
-                                // }
-                            }
-                        }
+                        // Load Pokémon from pokemon_held_items.txt
+                        List<Pokemon> lineup = FileUtils.loadTrainerPokemon(id);
+                        t.setLineup(lineup);
 
                         allTrainers.add(t);
                     }
 
-                    // Reset values
+                    // Reset for next trainer
                     id = 0;
                     name = null;
                     birthdate = null;
@@ -171,25 +138,22 @@ public class TrainerResultsController {
                     hometown = null;
                     description = null;
                     money = 1_000_000;
-                    itemsArray = null;
-                    pokemonArray = null;
                 }
             }
 
-            // Add the last trainer if file doesn't end with "-----"
+            // Catch last trainer if file doesn’t end with delimiter
             if (id != 0 && name != null && birthdate != null && gender != null &&
                     hometown != null && description != null) {
 
                 Trainer t = new Trainer(id, name, birthdate, gender, hometown, description, money);
 
-                if (itemsArray != null) {
-                    for (String itemName : itemsArray) {
-                        Item item = itemManager.findItem(itemName.trim());
-                        if (item != null) {
-                            t.addItemToBag(item, 1);
-                        }
-                    }
+                List<Item> itemBag = FileUtils.loadTrainerItems(id);
+                for (Item item : itemBag) {
+                    t.addItemToBag(item, 1);
                 }
+
+                List<Pokemon> lineup = FileUtils.loadTrainerPokemon(id);
+                t.setLineup(lineup);
 
                 allTrainers.add(t);
             }
@@ -200,6 +164,8 @@ public class TrainerResultsController {
 
         return allTrainers;
     }
+
+
 
 
     public void setResults(List<Trainer> results) {

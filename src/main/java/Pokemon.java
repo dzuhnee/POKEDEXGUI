@@ -207,6 +207,11 @@ public class Pokemon {
         return heldItem;
     }
 
+    public String getHeldItemName() {
+        return (heldItem == null) ? "None" : heldItem.getName();
+    }
+
+
     public void setHeldItem(Item item) {
         this.heldItem = item;
     }

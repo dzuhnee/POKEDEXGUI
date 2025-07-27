@@ -81,6 +81,13 @@ public class Trainer {
         return new ArrayList<>(itemBag);
     }
 
+    public void setItemBag(List<Item> items) {
+        this.itemBag.clear();
+        if (items != null) {
+            this.itemBag.addAll(items);
+        }
+    }
+
     public void setMoney(int money) {
         this.money = money;
     }
@@ -326,6 +333,10 @@ public class Trainer {
         }
 
         return sb.toString();
+    }
+
+    public void setLineup(List<Pokemon> lineup) {
+        this.lineup = lineup;
     }
 
 }

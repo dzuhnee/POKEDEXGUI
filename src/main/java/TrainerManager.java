@@ -11,12 +11,11 @@ import com.pokedex.app.Trainer;
 import com.pokedex.app.FileUtils;
 import com.pokedex.app.Item;
 import com.pokedex.app.ItemManager;
+import com.pokedex.app.AppState;
+import com.pokedex.app.Pokemon;
 
-
-// This class allows the trainers to be accessed and modified globally -- will edit the other controllers soon <3
 public class TrainerManager {
 
-    // Shared trainer list
     private static ObservableList<Trainer> allTrainers = FXCollections.observableArrayList();
 
     public static ObservableList<Trainer> getAllTrainers() {
@@ -49,12 +48,10 @@ public class TrainerManager {
         return null;
     }
 
-    // Do we need to clear?
     public static void clearAll() {
         allTrainers.clear();
     }
 
-    // Search for trainers based on any keyword
     public static List<Trainer> searchTrainers(String keyword) {
         List<Trainer> matches = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();
@@ -66,14 +63,12 @@ public class TrainerManager {
                     String.valueOf(t.getTrainerID()).contains(lowerKeyword) ||
                     t.getDescription().toLowerCase().contains(lowerKeyword) ||
                     t.getHometown().toLowerCase().contains(lowerKeyword)) {
-
                 matches.add(t);
             }
         }
         return matches;
     }
 
-    // Preload trainers on app start
     public static void populateInitialTrainers() {
         if (allTrainers.isEmpty()) {
             addTrainer(new Trainer(1, "Ash Ketchum", LocalDate.of(1987, 5, 22),
@@ -90,71 +85,30 @@ public class TrainerManager {
         }
     }
 
-    public static Trainer loadTrainerByID(int id) {
-        List<String> lines = FileUtils.readFile("trainers.txt");
-
-        int tempID = -1;
-        String name = "";
-        LocalDate birthdate = null;
-        String gender = "";
-        String hometown = "";
-        String description = "";
-        int money = 0;
-
-        Trainer trainer = null; // initialize here so we can populate items
-
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i).trim();
-
-            if (line.startsWith("ID:")) {
-                tempID = Integer.parseInt(line.substring(3).trim());
-            } else if (line.startsWith("Name:")) {
-                name = line.substring(5).trim();
-            } else if (line.startsWith("Birthdate:")) {
-                birthdate = LocalDate.parse(line.substring(10).trim());
-            } else if (line.startsWith("Gender:")) {
-                gender = line.substring(7).trim();
-            } else if (line.startsWith("Hometown:")) {
-                hometown = line.substring(9).trim();
-            } else if (line.startsWith("Description:")) {
-                description = line.substring(12).trim();
-            } else if (line.startsWith("Money:")) {
-                money = Integer.parseInt(line.substring(6).trim());
-            } else if (line.startsWith("Items:")) {
-                // create the trainer object here so we can add items to it
-                trainer = new Trainer(tempID, name, birthdate, gender, hometown, description, money);
-
-                String itemsLine = line.substring(6).trim();
-                if (!itemsLine.equalsIgnoreCase("None")) {
-                    String[] itemNames = itemsLine.split(",");
-                    ItemManager im = new ItemManager();
-                    for (String itemName : itemNames) {
-                        Item item = im.findItem(itemName.trim());
-                        if (item != null) {
-                            trainer.addItemToBag(item, 1);
-                        }
-                    }
-                }
-            } else if (line.startsWith("--------------------------------------------------")) {
-                if (trainer != null && trainer.getTrainerID() == id) {
-                    return trainer;
-                }
-
-                // Reset all fields for next trainer
-                tempID = -1;
-                name = "";
-                birthdate = null;
-                gender = "";
-                hometown = "";
-                description = "";
-                money = 0;
-                trainer = null;
-            }
+    public static void reloadTrainerIntoAppState(int id) {
+        Trainer reloaded = loadTrainerByID(id);
+        if (reloaded != null) {
+            AppState.getInstance().setFullTrainer(reloaded);
         }
-
-        return null; // not found
     }
 
+    public static Trainer loadTrainerByID(int id) {
+        Trainer trainer = null;
+        // load base trainer info first (name, ID, etc)
+        trainer = FileUtils.loadTrainerBasicInfo(id);
 
+        if (trainer != null) {
+            // load Pokémon
+            List<Pokemon> pokemonList = FileUtils.loadTrainerPokemon(id);
+            trainer.setLineup(pokemonList);
+
+
+            // load items from trainer_items.txt
+            List<Item> items = FileUtils.loadTrainerItems(id);
+            trainer.setItemBag(items);
+        }
+
+        return trainer;
+    }
 
 }
