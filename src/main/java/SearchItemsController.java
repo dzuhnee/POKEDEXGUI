@@ -18,6 +18,8 @@ import javafx.event.ActionEvent;
 
 import javafx.stage.Stage;
 
+import com.pokedex.app.ItemBasic;
+
 public class SearchItemsController implements Initializable {
 
     @FXML private TableView<ItemBasic> tableView;
@@ -54,7 +56,31 @@ public class SearchItemsController implements Initializable {
         colBuyPrice.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getBuyingPrice()).asObject());
         colSellPrice.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
 
+        enableTextWrap(colDescription);
+        enableTextWrap(colEffect);
+
         tableView.setItems(filteredData);
+    }
+
+    private void enableTextWrap(TableColumn<ItemBasic, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<ItemBasic, String> cell = new TableCell<>() {
+                private final javafx.scene.text.Text text = new javafx.scene.text.Text();
+
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty().subtract(10));
+                    setGraphic(text);
+                    setPrefHeight(Control.USE_COMPUTED_SIZE);
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            };
+            return cell;
+        });
     }
 
     @FXML

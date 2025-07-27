@@ -3,6 +3,7 @@ package com.pokedex.app;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
 import java.io.IOException;
+
+import com.pokedex.app.ItemBasic;
 
 public class ViewItemsController {
 
@@ -36,8 +39,29 @@ public class ViewItemsController {
         colBuyPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
         colSellPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
 
+        enableTextWrap(colDescription);
+        enableTextWrap(colEffect);
+
         populateItems();
         tableView.setItems(itemBasicList);
+    }
+
+    private void enableTextWrap(TableColumn<ItemBasic, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<ItemBasic, String> cell = new TableCell<>() {
+                private final javafx.scene.text.Text text = new javafx.scene.text.Text();
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            };
+            return cell;
+        });
     }
 
     private void populateItems() {

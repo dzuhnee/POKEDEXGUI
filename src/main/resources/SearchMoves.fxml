@@ -26,7 +26,7 @@
             <Insets bottom="20" left="20" right="20" top="85" />
          </padding>
 
-         <TextField fx:id="searchField" promptText="Enter moveBasic name with keyword" />
+         <TextField fx:id="searchField" promptText="Enter move name with keyword" />
 
          <Button onAction="#handleSearch" text="Search" />
 
@@ -42,12 +42,23 @@
                      <PropertyValueFactory property="description" />
                   </cellValueFactory>
                </TableColumn>
+               <TableColumn fx:id="type1Column" minWidth="100.0" text="Type 1">
+                  <cellValueFactory>
+                     <PropertyValueFactory property="type1" />
+                  </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="type2Column" minWidth="100.0" text="Type 2">
+                  <cellValueFactory>
+                     <PropertyValueFactory property="type2" />
+                  </cellValueFactory>
+               </TableColumn>
                <TableColumn fx:id="colClassification" minWidth="165.0" text="Classification">
                   <cellValueFactory>
                      <PropertyValueFactory property="classification" />
                   </cellValueFactory>
                </TableColumn>
             </columns>
+
          </TableView>
 
          <Button onAction="#handleBack" text="Back" />
