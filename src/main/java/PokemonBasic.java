@@ -7,6 +7,7 @@ public class PokemonBasic {
     private int attack;
     private int defense;
     private int speed;
+    private String moves = ""; // ✅ Added
 
     public PokemonBasic(int dexNumber, String name, int hp, int attack, int defense, int speed) {
         this.dexNumber = dexNumber;
@@ -15,6 +16,15 @@ public class PokemonBasic {
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+    }
+
+    // ✅ Getter/Setter for moves
+    public String getMoves() {
+        return moves;
+    }
+
+    public void setMoves(String moves) {
+        this.moves = moves;
     }
 
     public int getDexNumber() {

@@ -74,6 +74,35 @@ public class AddPokemonToLineUpController {
         String trimmedLine = tokens[0] + "," + tokens[1];  // Only ID and name
         String assignment = trainerName + " -> " + trimmedLine;
 
+        // Check if trainer already has 6 Pokémon OR if this specific assignment already exists
+        int count = 0;
+        boolean isDuplicate = false;
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("trainer_lineup.txt"));
+            for (String line : lines) {
+                if (line.startsWith(trainerName + " ->")) {
+                    count++;
+                    if (line.equals(assignment)) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Read Error", "Failed to read trainer_lineup.txt.");
+            return;
+        }
+
+        if (isDuplicate) {
+            showAlert(Alert.AlertType.WARNING, "Duplicate", "This Pokémon is already assigned to " + trainerName + ".");
+            return;
+        }
+
+        if (count >= 6) {
+            showAlert(Alert.AlertType.WARNING, "Limit Reached", trainerName + " already has 6 Pokémon in their lineup.");
+            return;
+        }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("trainer_lineup.txt", true))) {
             writer.write(assignment);
             writer.newLine();
@@ -85,7 +114,6 @@ public class AddPokemonToLineUpController {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Assigned Pokémon to " + trainerName + "!");
         pokemonListView.getSelectionModel().clearSelection();
     }
-
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);

@@ -28,6 +28,8 @@ public class SearchPokemonController {
     @FXML private TableColumn<PokemonBasic, Integer> colAttack;
     @FXML private TableColumn<PokemonBasic, Integer> colDefense;
     @FXML private TableColumn<PokemonBasic, Integer> colSpeed;
+    @FXML private TableColumn<PokemonBasic, String> colMoves;
+
 
     private final ObservableList<PokemonBasic> allPokemon = FXCollections.observableArrayList();
     private final Map<PokemonBasic, List<String>> typeMap = new HashMap<>();
@@ -40,6 +42,7 @@ public class SearchPokemonController {
         colAttack.setCellValueFactory(new PropertyValueFactory<>("attack"));
         colDefense.setCellValueFactory(new PropertyValueFactory<>("defense"));
         colSpeed.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        colMoves.setCellValueFactory(new PropertyValueFactory<>("moves"));
 
         loadPokemonDataFromFile();
         initializeTypeComboBox();
@@ -61,12 +64,37 @@ public class SearchPokemonController {
         typeComboBox.setValue("-- Select Type --");
     }
 
+    private Map<String, String> loadPokemonMoves() {
+        Map<String, String> movesMap = new HashMap<>();
+        File file = new File("pokemon_moves.txt");
+
+        if (!file.exists()) return movesMap;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    String moves = parts[1].trim();
+                    movesMap.put(name, moves);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return movesMap;
+    }
+
     private void loadPokemonDataFromFile() {
         File file = new File("pokemon_data.txt");
         if (!file.exists()) {
             System.err.println("❌ File not found: pokemon_data.txt");
             return;
         }
+
+        Map<String, String> movesMap = loadPokemonMoves(); // ✅
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -84,6 +112,12 @@ public class SearchPokemonController {
                     int speed = Integer.parseInt(tokens[11].trim());
 
                     PokemonBasic p = new PokemonBasic(dex, name, hp, attack, defense, speed);
+
+                    // ✅ Attach moves if available
+                    if (movesMap.containsKey(name)) {
+                        p.setMoves(movesMap.get(name));
+                    }
+
                     allPokemon.add(p);
                     typeMap.put(p, types);
                 } catch (NumberFormatException e) {

@@ -11,3 +11,5 @@ Psychic,Launches a psychic blast to harm the foe.,Psychic,Special,TM (Technical 
 Shadow Ball,Hurls a shadowy blob at the foe.,Ghost,Special,TM (Technical Machine)
 Flamethrower,Scorches the foe with intense flames.,Fire,Special,TM (Technical Machine)
 Earthquake,A powerful quake that hits all around.,Ground,Physical,TM (Technical Machine)
+Kick,Aww,None,Normal,TM (Technical Machine)
+Acupressure,Sharply raises a random stat.,None,Normal,HM (Hidden Machine)
