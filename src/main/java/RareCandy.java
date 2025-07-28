@@ -6,21 +6,56 @@ import com.pokedex.app.PokemonManager;
 
 public class RareCandy extends Item {
 
-    public RareCandy(String name, String description, String effect,
+    public RareCandy() {
+        super("Rare Candy", "Level-Up Item",
+                "A candy packed with energy.", "Increases level by 1",
+                500, 250, 10);
+    }
+
+    public RareCandy(String name, String category, String description, String effect,
                      int buyingPrice, int sellingPrice, int stock) {
-        super(name, "Rare Candy", description, effect, buyingPrice, sellingPrice, stock);
+        super(name, category, description, effect, buyingPrice, sellingPrice, stock);
     }
 
     @Override
     public String use(Pokemon pokemon, PokemonManager manager) {
         boolean evolved = pokemon.levelUpWithRareCandy(manager);
 
-        String message = pokemon.getName() + " leveled up to " + pokemon.getBaseLevel() + "!";
+        StringBuilder result = new StringBuilder();
+        result.append(pokemon.getName()).append(" leveled up!");
 
         if (evolved) {
-            message += "\nIt evolved into " + pokemon.getName() + "!";
+            result.append(" ").append(pokemon.getName()).append(" evolved!");
         }
 
-        return message;
+        return result.toString();
+    }
+
+    @Override
+    public String getPreviewEffect(Pokemon pokemon, PokemonManager manager) {
+        int currentLevel = pokemon.getBaseLevel(); // current level
+        int previewLevel = currentLevel + 1;
+
+        int evolvesToDex = pokemon.getEvolvesTo();
+        int evolutionLevel = pokemon.getEvolutionLevel();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Effect: ").append(getEffect()).append("\n");
+        sb.append(pokemon.getName())
+                .append(" will become level ")
+                .append(previewLevel)
+                .append(".\n");
+
+        if (evolvesToDex != 0 && previewLevel >= evolutionLevel) {
+            Pokemon evolved = manager.getPokemonByDex(evolvesToDex);
+            if (evolved != null) {
+                sb.append(pokemon.getName())
+                        .append(" will evolve into ")
+                        .append(evolved.getName())
+                        .append("!");
+            }
+        }
+
+        return sb.toString();
     }
 }

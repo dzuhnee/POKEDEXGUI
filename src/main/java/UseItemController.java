@@ -93,39 +93,33 @@ public class UseItemController {
     private void updateInfoBox() {
         if (selectedPokemon != null && selectedItem != null) {
             StringBuilder sb = new StringBuilder();
-            sb.append("Using ").append(selectedItem.getName()).append(" on ").append(selectedPokemon.getName()).append("\n\n");
+            sb.append("Using ").append(selectedItem.getName())
+                    .append(" on ").append(selectedPokemon.getName()).append("\n\n");
 
-            int currHP = selectedPokemon.getHP();
-            int currATK = selectedPokemon.getAttack();
-            int currDEF = selectedPokemon.getDefense();
-            int currSPD = selectedPokemon.getSpeed();
+            sb.append("Current Stats:\n")
+                    .append("HP: ").append(selectedPokemon.getHP()).append("\n")
+                    .append("ATK: ").append(selectedPokemon.getAttack()).append("\n")
+                    .append("DEF: ").append(selectedPokemon.getDefense()).append("\n")
+                    .append("SPD: ").append(selectedPokemon.getSpeed()).append("\n\n");
 
-            // Use the item's preview logic to get the predicted stat changes
-            String preview = selectedItem.getItem().getPreviewEffect(selectedPokemon, AppState.getInstance().getPokemonManager());
-
-            // TEMP clone to simulate stat application
-            Pokemon simulated = new Pokemon(
-                    selectedPokemon.getPokedexNumber(),
-                    selectedPokemon.getName(),
-                    selectedPokemon.getPrimaryType(),
-                    selectedPokemon.getSecondaryType(),
-                    selectedPokemon.getBaseLevel(),
-                    selectedPokemon.getEvolvesFrom(),
-                    selectedPokemon.getEvolvesTo(),
-                    selectedPokemon.getEvolutionLevel(),
-                    currHP, currATK, currDEF, currSPD
-            );
-
-            // Apply item effect simulation
+            // 🔽 Clone the Pokémon and simulate the item effect on it
+            Pokemon simulated = selectedPokemon.cloneForPreview();
             selectedItem.getItem().use(simulated, AppState.getInstance().getPokemonManager());
 
-            sb.append("Stats:\n");
-            sb.append("HP: ").append(currHP).append(" → ").append(simulated.getHP()).append("\n");
-            sb.append("ATK: ").append(currATK).append(" → ").append(simulated.getAttack()).append("\n");
-            sb.append("DEF: ").append(currDEF).append(" → ").append(simulated.getDefense()).append("\n");
-            sb.append("SPD: ").append(currSPD).append(" → ").append(simulated.getSpeed()).append("\n\n");
+            // 🔽 Append the "after" stats
+            sb.append("After Use:\n")
+                    .append("HP: ").append(selectedPokemon.getHP())
+                    .append(" → ").append(simulated.getHP()).append("\n")
+                    .append("ATK: ").append(selectedPokemon.getAttack())
+                    .append(" → ").append(simulated.getAttack()).append("\n")
+                    .append("DEF: ").append(selectedPokemon.getDefense())
+                    .append(" → ").append(simulated.getDefense()).append("\n")
+                    .append("SPD: ").append(selectedPokemon.getSpeed())
+                    .append(" → ").append(simulated.getSpeed()).append("\n\n");
 
-            sb.append(preview);
+            // 🔽 Optional: if your item includes more details like evolution messages
+            String extraInfo = selectedItem.getItem().getPreviewEffect(selectedPokemon, AppState.getInstance().getPokemonManager());
+            sb.append(extraInfo);
 
             infoLabel.setText(sb.toString());
         } else {

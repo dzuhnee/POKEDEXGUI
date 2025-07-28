@@ -13,7 +13,7 @@ Birthdate: 1987-05-22
 Gender: Male
 Hometown: Pallet Town
 Description: Pokemon Trainer from Kanto
-Money: 970000
+Money: 960000
 --------------------------------------------------
 Trainer Info:
 ID: 21

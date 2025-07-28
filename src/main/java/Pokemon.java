@@ -156,21 +156,25 @@ public class Pokemon {
         Pokemon evolved = manager.getPokemonByDex(this.evolvesTo);
         if (evolved == null) return false;
 
-        this.name = evolved.getName();
-        this.evolvesFrom = this.pokedexNumber;
-        this.pokedexNumber = evolved.getPokedexNumber();
-        this.primaryType = evolved.getPrimaryType();
-        this.secondaryType = evolved.getSecondaryType();
-        this.evolvesTo = evolved.getEvolvesTo();
-        this.evolutionLevel = evolved.getEvolutionLevel();
+        // 🔒 Use a clone so we don't mutate the original Raichu/Butterfree etc.
+        Pokemon evolvedCopy = evolved.cloneForPreview();
 
-        this.hp = evolved.getHP();
-        this.attack = evolved.getAttack();
-        this.defense = evolved.getDefense();
-        this.speed = evolved.getSpeed();
+        this.name = evolvedCopy.getName();
+        this.evolvesFrom = this.pokedexNumber;
+        this.pokedexNumber = evolvedCopy.getPokedexNumber();
+        this.primaryType = evolvedCopy.getPrimaryType();
+        this.secondaryType = evolvedCopy.getSecondaryType();
+        this.evolvesTo = evolvedCopy.getEvolvesTo();
+        this.evolutionLevel = evolvedCopy.getEvolutionLevel();
+
+        this.hp = evolvedCopy.getHP();
+        this.attack = evolvedCopy.getAttack();
+        this.defense = evolvedCopy.getDefense();
+        this.speed = evolvedCopy.getSpeed();
 
         return true;
     }
+
 
     public boolean evolveUsingStone(String stoneType, PokemonManager manager) {
         if (!TypeUtils.isValidType(stoneType)) return false;
@@ -223,4 +227,15 @@ public class Pokemon {
         if (secondaryType != null && move.getSecondaryType() != null && secondaryType.equalsIgnoreCase(move.getSecondaryType())) return true;
         return false;
     }
+
+    public Pokemon cloneForPreview() {
+        Pokemon clone = new Pokemon(
+                this.pokedexNumber, this.name, this.primaryType, this.secondaryType,
+                this.baseLevel, this.evolvesFrom, this.evolvesTo, this.evolutionLevel,
+                this.hp, this.attack, this.defense, this.speed
+        );
+        clone.setHeldItem(this.getHeldItem()); // optional
+        return clone;
+    }
+
 }

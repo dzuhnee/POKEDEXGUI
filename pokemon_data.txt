@@ -17,8 +17,8 @@
 17,Raticate,Normal,None,20,0,16,0,55,81,60,97
 18,Ekans,Poison,None,6,22,0,19,35,60,44,55
 19,Arbok,Poison,None,22,0,18,0,60,85,69,80
-20,Pikachu,Electric,None,10,22,0,21,35,55,40,90
-21,Raichu,Electric,None,22,0,20,0,60,90,55,110
+20,Pikachu,Electric,None,10,0,21,11,35,55,40,90
+21,Raichu,Electric,None,11,20,0,0,60,90,55,110
 22,Jigglypuff,Normal,Fairy,7,20,0,23,115,45,20,20
 23,Wigglytuff,Normal,Fairy,20,0,22,0,140,70,45,45
 24,Zubat,Poison,Flying,6,22,0,25,40,45,35,55

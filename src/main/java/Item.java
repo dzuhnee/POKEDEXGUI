@@ -134,4 +134,6 @@ public abstract class Item {
         // Default implementation if a subclass doesn’t override
         return "Effect: " + getEffect();
     }
+
+
 }

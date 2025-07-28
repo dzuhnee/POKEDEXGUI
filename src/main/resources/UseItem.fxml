@@ -50,7 +50,7 @@
       </Button>
       <Label fx:id="infoLabel" alignment="TOP_LEFT" layoutX="451.0" layoutY="171.0" prefHeight="161.0" prefWidth="124.0" wrapText="true">
          <font>
-            <Font name="Arial Rounded MT Bold" size="10.0" />
+            <Font name="Arial Rounded MT Bold" size="8.0" />
          </font>
       </Label>
       <Label fx:id="trainerNameLabel" layoutX="116.0" layoutY="102.0" prefHeight="17.0" prefWidth="241.0">
