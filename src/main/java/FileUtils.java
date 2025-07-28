@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pokedex.app.Trainer;
+import com.pokedex.app.TrainerManager;
 import com.pokedex.app.Pokemon;
 import com.pokedex.app.Item;
 import com.pokedex.app.ItemRow;
@@ -17,6 +18,7 @@ public class FileUtils {
     private static final String TRAINER_ITEMS_FILE = "trainer_items.txt";
     private static final String HELD_ITEMS_FILE = "pokemon_held_items.txt";
     private static final String LINEUP_FILE = "trainer_lineup.txt";
+    private static final String POKEMON_DATA_FILE = "pokemon_data.txt";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static List<String> readFile(String filename) {
@@ -253,40 +255,35 @@ public class FileUtils {
     }
 
     public static List<Pokemon> loadTrainerPokemon(int id) {
-        List<Pokemon> pokemons = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(LINEUP_FILE))) {
-            String line;
-            Trainer fullTrainer = AppState.getInstance().getFullTrainer();
-            if (fullTrainer == null) {
-                System.err.println("AppState fullTrainer is null. Cannot load Pokémon lineup.");
-                return pokemons;
-            }
+        List<Pokemon> lineup = new ArrayList<>();
+        Trainer trainer = loadTrainerBasicInfo(id); // get name from ID
+        if (trainer == null) return lineup;
 
-            String trainerName = fullTrainer.getName();
+        String trainerName = trainer.getName().trim();
+        List<String> lines = readFile(LINEUP_FILE); // ✅ uses constant now
 
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith(trainerName + " -> ")) {
-                    String[] parts = line.split("->")[1].trim().split(",");
-                    int pokedexNumber = Integer.parseInt(parts[0].trim());
-                    String name = parts[1].trim();
-                    Pokemon p = new Pokemon(pokedexNumber, name, "", "", 1, -1, -1, -1, 0, 0, 0, 0);
+        for (String line : lines) {
+            String[] split = line.split("->");
+            if (split.length < 2) continue;
 
-                    String heldItemName = loadHeldItem(id, name);
-                    if (!heldItemName.equals("None")) {
-                        Item item = new ItemManager().findItem(heldItemName);
-                        if (item != null) {
-                            p.setHeldItem(item);
-                        }
-                    }
+            String name = split[0].trim();
+            String pokemonData = split[1].trim();
 
-                    pokemons.add(p);
+            if (name.equalsIgnoreCase(trainerName)) {
+                String[] pokeParts = pokemonData.split(",");
+                if (pokeParts.length < 2) continue;
+
+                int pokemonId = Integer.parseInt(pokeParts[0].trim());
+                Pokemon pokemon = createPokemonFromDataFile(pokemonId);
+                if (pokemon != null) {
+                    lineup.add(pokemon);
                 }
             }
-        } catch (IOException e) {
-            System.err.println("Failed to load trainer Pokémon: " + e.getMessage());
         }
-        return pokemons;
+
+        return lineup;
     }
+
 
     public static List<Item> loadTrainerItems(int id) {
         List<Item> items = new ArrayList<>();
@@ -314,38 +311,31 @@ public class FileUtils {
     }
 
     public static Pokemon loadPokemonByDex(int dexNumber) {
-        File file = new File("pokemon_data.txt");
+        List<String> lines = readFile(POKEMON_DATA_FILE); // ✅ now uses constant
+        for (String line : lines) {
+            String[] tokens = line.split(",");
+            int pokedexNumber = Integer.parseInt(tokens[0]);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                int pokedexNumber = Integer.parseInt(tokens[0]);
+            if (pokedexNumber == dexNumber) {
+                String name = tokens[1];
+                String primary = tokens[2];
+                String secondary = tokens[3].equalsIgnoreCase("None") ? null : tokens[3];
+                int baseLevel = Integer.parseInt(tokens[4]);
+                int evolvesTo = Integer.parseInt(tokens[5]);
+                int evolvesFrom = Integer.parseInt(tokens[6]);
+                int evolutionLevel = Integer.parseInt(tokens[7]);
+                int hp = Integer.parseInt(tokens[8]);
+                int atk = Integer.parseInt(tokens[9]);
+                int def = Integer.parseInt(tokens[10]);
+                int spd = Integer.parseInt(tokens[11]);
 
-                if (pokedexNumber == dexNumber) {
-                    String name = tokens[1];
-                    String primary = tokens[2];
-                    String secondary = tokens[3].equalsIgnoreCase("None") ? null : tokens[3];
-                    int baseLevel = Integer.parseInt(tokens[4]);
-                    int evolvesTo = Integer.parseInt(tokens[5]);
-                    int evolvesFrom = Integer.parseInt(tokens[6]);
-                    int evolutionLevel = Integer.parseInt(tokens[7]);
-                    int hp = Integer.parseInt(tokens[8]);
-                    int atk = Integer.parseInt(tokens[9]);
-                    int def = Integer.parseInt(tokens[10]);
-                    int spd = Integer.parseInt(tokens[11]);
-
-                    if (secondary == null) {
-                        return new Pokemon(pokedexNumber, name, primary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
-                    } else {
-                        return new Pokemon(pokedexNumber, name, primary, secondary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
-                    }
+                if (secondary == null) {
+                    return new Pokemon(pokedexNumber, name, primary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
+                } else {
+                    return new Pokemon(pokedexNumber, name, primary, secondary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace(); // or show GUI alert
         }
-
         return null;
     }
 
@@ -374,6 +364,79 @@ public class FileUtils {
 
         return itemRows;
     }
+
+
+    public static Pokemon createPokemonFromDataFile(int id) {
+        List<String> lines = readFile(POKEMON_DATA_FILE); // ✅ uses constant now
+
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            int pokeId = Integer.parseInt(parts[0]);
+            if (pokeId == id) {
+                String name = parts[1];
+                String type1 = parts[2];
+                String type2 = parts[3];
+                int baseLevel = Integer.parseInt(parts[4]);
+                int evolveLevel = Integer.parseInt(parts[5]);
+                int preEvoId = Integer.parseInt(parts[6]);
+                int nextEvoId = Integer.parseInt(parts[7]);
+                int hp = Integer.parseInt(parts[8]);
+                int attack = Integer.parseInt(parts[9]);
+                int defense = Integer.parseInt(parts[10]);
+                int speed = Integer.parseInt(parts[11]);
+
+                Pokemon pokemon = new Pokemon(
+                        pokeId, name, type1, type2.equals("None") ? null : type2,
+                        baseLevel, preEvoId, nextEvoId, evolveLevel,
+                        hp, attack, defense, speed
+                );
+
+                pokemon.setBaseLevel(baseLevel);
+                return pokemon;
+            }
+        }
+        return null;
+    }
+
+    public static List<Pokemon> loadLineupFromFile(String trainerName) {
+        List<Pokemon> lineup = new ArrayList<>();
+        List<String> lines = readFile(LINEUP_FILE);
+        Trainer trainer = TrainerManager.findByName(trainerName);
+        if (trainer == null) return lineup;
+
+        for (String line : lines) {
+            String[] split = line.split("->");
+            if (split.length < 2) continue;
+
+            String name = split[0].trim();
+            String pokemonData = split[1].trim();
+
+            if (name.equalsIgnoreCase(trainerName)) {
+                String[] pokeParts = pokemonData.split(",");
+                for (String pokeIDStr : pokeParts) {
+                    int pokeID = Integer.parseInt(pokeIDStr.trim());
+                    Pokemon p = createPokemonFromDataFile(pokeID);
+
+                    if (p != null) {
+                        // 🟡 Load held item from file
+                        String heldItemName = loadHeldItem(trainer.getTrainerID(), p.getName());
+                        if (!"None".equals(heldItemName)) {
+                            ItemManager itemManager = new ItemManager();
+                            Item heldItem = itemManager.findItem(heldItemName);
+                            if (heldItem != null) {
+                                p.setHeldItem(heldItem);
+                            }
+                        }
+
+                        lineup.add(p);
+                    }
+                }
+            }
+        }
+
+        return lineup;
+    }
+
 
 
 }

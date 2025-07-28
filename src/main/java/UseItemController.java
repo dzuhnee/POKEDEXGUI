@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +25,7 @@ import com.pokedex.app.FileUtils;
 import com.pokedex.app.Trainer;
 import com.pokedex.app.AppState;
 import com.pokedex.app.ItemRow;
+import com.pokedex.app.TrainerManager;
 
 public class UseItemController {
     @FXML private Label trainerNameLabel;
@@ -45,14 +47,17 @@ public class UseItemController {
     private Pokemon selectedPokemon;
 
     public void initialize() {
-        Trainer trainer = AppState.getInstance().getFullTrainer();
+        Trainer trainer = TrainerManager.loadTrainerByID(AppState.getInstance().getFullTrainer().getTrainerID());
+        AppState.getInstance().setFullTrainer(trainer);
         if (trainer != null && trainerNameLabel != null) {
             trainerNameLabel.setText(trainer.getName());
         }
 
-        pokemonNameColumn.setCellValueFactory(new PropertyValueFactory<>("getName"));
-        pokemonLevelColumn.setCellValueFactory(new PropertyValueFactory<>("getBaseLevel"));
-        heldItemColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getHeldItemName()));
+        pokemonNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        pokemonLevelColumn.setCellValueFactory(new PropertyValueFactory<>("baseLevel"));
+        heldItemColumn.setCellValueFactory(cellData ->
+                new ReadOnlyStringWrapper(cellData.getValue().getHeldItemName())
+        );
 
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         itemEffectColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -89,17 +94,48 @@ public class UseItemController {
         if (selectedPokemon != null && selectedItem != null) {
             StringBuilder sb = new StringBuilder();
             sb.append("Using ").append(selectedItem.getName()).append(" on ").append(selectedPokemon.getName()).append("\n\n");
-            sb.append("Current Stats:\n")
-                    .append("HP: ").append(selectedPokemon.getHP()).append("\n")
-                    .append("ATK: ").append(selectedPokemon.getAttack()).append("\n")
-                    .append("DEF: ").append(selectedPokemon.getDefense()).append("\n")
-                    .append("SPD: ").append(selectedPokemon.getSpeed()).append("\n\n");
-            sb.append("Effect: ").append(selectedItem.getDescription()).append("\n");
+
+            int currHP = selectedPokemon.getHP();
+            int currATK = selectedPokemon.getAttack();
+            int currDEF = selectedPokemon.getDefense();
+            int currSPD = selectedPokemon.getSpeed();
+
+            // Use the item's preview logic to get the predicted stat changes
+            String preview = selectedItem.getItem().getPreviewEffect(selectedPokemon, AppState.getInstance().getPokemonManager());
+
+            // TEMP clone to simulate stat application
+            Pokemon simulated = new Pokemon(
+                    selectedPokemon.getPokedexNumber(),
+                    selectedPokemon.getName(),
+                    selectedPokemon.getPrimaryType(),
+                    selectedPokemon.getSecondaryType(),
+                    selectedPokemon.getBaseLevel(),
+                    selectedPokemon.getEvolvesFrom(),
+                    selectedPokemon.getEvolvesTo(),
+                    selectedPokemon.getEvolutionLevel(),
+                    currHP, currATK, currDEF, currSPD
+            );
+
+            // Apply item effect simulation
+            selectedItem.getItem().use(simulated, AppState.getInstance().getPokemonManager());
+
+            sb.append("Stats:\n");
+            sb.append("HP: ").append(currHP).append(" → ").append(simulated.getHP()).append("\n");
+            sb.append("ATK: ").append(currATK).append(" → ").append(simulated.getAttack()).append("\n");
+            sb.append("DEF: ").append(currDEF).append(" → ").append(simulated.getDefense()).append("\n");
+            sb.append("SPD: ").append(currSPD).append(" → ").append(simulated.getSpeed()).append("\n\n");
+
+            sb.append(preview);
+
             infoLabel.setText(sb.toString());
         } else {
             infoLabel.setText("");
         }
     }
+
+
+
+
 
     @FXML
     private void handleUse(ActionEvent event) {
@@ -108,14 +144,26 @@ public class UseItemController {
             return;
         }
 
-        selectedPokemon.useItem(selectedItem.getItem(), AppState.getInstance().getPokemonManager());
+        // Use the item and get the result message
+        String resultMessage = selectedPokemon.useItem(selectedItem.getItem(), AppState.getInstance().getPokemonManager());
 
-        currentTrainer.getItemBag().remove(selectedItem.getItem());
+        // Remove one instance of the used item from the bag
+        currentTrainer.removeItemFromBag(selectedItem.getName(), 1);
+
+        // Update trainer items file (for trainer_items.txt)
+        FileUtils.updateTrainerItemsInFile(currentTrainer);
+
+        // Update main trainer file (trainers.txt)
         FileUtils.updateTrainerInFile(currentTrainer);
 
-        infoLabel.setText("Item used successfully on " + selectedPokemon.getName());
+        // Show success and effect message
+        infoLabel.setText(resultMessage);
+
+        // Reload tables to reflect changes
         loadTables();
     }
+
+
 
     @FXML
     private void handleBack(ActionEvent event) {

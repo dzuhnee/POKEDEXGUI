@@ -29,20 +29,20 @@ class ItemManager {
      */
     public void populateInitialItems() {
         // Vitamins (boost EVs)
-        itemList.add(new Vitamin("Calcium", "A nutritious drink for Pokémon.", "+10 Special Attack EVs", 10000, 5000, 10, "Special Attack"));
+        itemList.add(new Vitamin("Calcium", "A nutritious drink for Pokémon.", "+10 Attack EVs", 10000, 5000, 10, "Attack"));
         itemList.add(new Vitamin("Carbos", "A nutritious drink for Pokémon.", "+10 Speed EVs", 10000, 5000, 10, "Speed"));
         itemList.add(new Vitamin("HP Up", "A nutritious drink for Pokémon.", "+10 HP EVs", 10000, 5000, 10, "HP"));
         itemList.add(new Vitamin("Iron", "A nutritious drink for Pokémon.", "+10 Defense EVs", 10000, 5000, 10, "Defense"));
         itemList.add(new Vitamin("Protein", "A nutritious drink for Pokémon.", "+10 Attack EVs", 10000, 5000, 10, "Attack"));
-        itemList.add(new Vitamin("Zinc", "A nutritious drink for Pokémon.", "+10 Special Defense EVs", 10000, 5000, 10, "Special Defense"));
+        itemList.add(new Vitamin("Zinc", "A nutritious drink for Pokémon.", "+10 Defense EVs", 10000, 5000, 10, "Defense"));
 
         // Feathers
         itemList.add(new Feather("Health Feather", "Slightly increases HP.", "+1 HP EV", 300, 150, 10, "HP"));
         itemList.add(new Feather("Muscle Feather", "Slightly increases Attack.", "+1 Attack EV", 300, 150, 10, "Attack"));
         itemList.add(new Feather("Resist Feather", "Slightly increases Defense.", "+1 Defense EV", 300, 150, 10, "Defense"));
         itemList.add(new Feather("Swift Feather", "Slightly increases Speed.", "+1 Speed EV", 300, 150, 10, "Speed"));
-        itemList.add(new Feather("Genius Feather", "Slightly increases Special Attack.", "+1 Special Attack EV", 300, 150, 10, "Special Attack"));
-        itemList.add(new Feather("Clever Feather", "Slightly increases Special Defense.", "+1 Special Defense EV", 300, 150, 10, "Special Defense"));
+        itemList.add(new Feather("Genius Feather", "Slightly increases Attack.", "+1 Attack EV", 300, 150, 10, "Attack"));
+        itemList.add(new Feather("Clever Feather", "Slightly increases Defense.", "+1 Defense EV", 300, 150, 10, "Defense"));
 
         // Others
         itemList.add(new RareCandy("Rare Candy", "A candy packed with energy.", "Increases level by 1", -1, 2400, 10));

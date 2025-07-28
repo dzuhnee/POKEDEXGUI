@@ -46,25 +46,16 @@ public class ManageTrainerController {
     // UNCOMMENT LATER
     @FXML
     public void handleBuyItem(ActionEvent event) {
-        if (trainer == null) {
-            trainer = AppState.getInstance().getFullTrainer();
-        }
         navigateToScreen("/BuyItem.fxml", event);
     }
 
     @FXML
     public void handleSellItem(ActionEvent event) {
-        if (trainer == null) {
-            trainer = AppState.getInstance().getFullTrainer();
-        }
         navigateToScreen("/SellItem.fxml", event);
     }
 
     @FXML
     public void handleUseItem(ActionEvent event) {
-        if (trainer == null) {
-            trainer = AppState.getInstance().getFullTrainer();
-        }
         navigateToScreen("/UseItem.fxml", event);
     }
 
@@ -209,6 +200,10 @@ public class ManageTrainerController {
 
     private void navigateToScreen(String fxmlPath, ActionEvent event) {
         try {
+            if (trainer != null) {
+                AppState.getInstance().setFullTrainer(trainer);
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 

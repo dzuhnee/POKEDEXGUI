@@ -192,14 +192,6 @@ public class PokemonManager {
         return null;
     }
 
-    public List<String> getAllPokemonInfo() {
-        List<String> output = new ArrayList<>();
-        for (Pokemon p : pokemons) {
-            output.add(p.displayInfo());
-        }
-        return output;
-    }
-
     public List<Pokemon> getAllPokemon() {
         return new ArrayList<>(pokemons);
     }

@@ -11,14 +11,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.pokedex.app.AppState;
 import com.pokedex.app.Pokemon;
+import com.pokedex.app.ItemRow;
 import com.pokedex.app.Item;
 import com.pokedex.app.Trainer;
 import com.pokedex.app.TrainerManager;
 import com.pokedex.app.FileUtils;
-import com.pokedex.app.AppState;
 
 public class GiveItemController {
 
@@ -35,23 +37,15 @@ public class GiveItemController {
 
     private Trainer trainer;
 
-
     @FXML
     public void initialize() {
-        trainer = AppState.getInstance().getFullTrainer();
+        trainer = TrainerManager.loadTrainerByID(AppState.getInstance().getFullTrainer().getTrainerID());
+        AppState.getInstance().setFullTrainer(trainer);
+        trainer.setLineup(AppState.getInstance().loadLineupFromFile(trainer.getName()));
 
-        if (trainer == null) {
-            feedbackLabel.setText("No trainer loaded.");
-            return;
-        }
 
         trainerNameLabel.setText("Trainer: " + trainer.getName());
 
-        // ✅ Reload updated lineup from file
-        List<Pokemon> lineupFromFile = AppState.getInstance().loadLineupFromFile(trainer.getName());
-        trainer.setLineup(lineupFromFile);
-
-        // Set up table columns
         colPokemonName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colHeldItem.setCellValueFactory(new PropertyValueFactory<>("heldItemName"));
 
@@ -62,25 +56,26 @@ public class GiveItemController {
         populateItemsTable();
     }
 
-
     private void populatePokemonTable() {
         ObservableList<Pokemon> pokemons = FXCollections.observableArrayList(trainer.getLineup());
         pokemonTable.setItems(pokemons);
     }
 
     private void populateItemsTable() {
+        List<Item> bagItems = trainer.getItemBag();
         List<ItemRow> itemRows = new ArrayList<>();
 
-        for (Item item : trainer.getItemBag()) {
+        for (Item item : bagItems) {
             boolean found = false;
-            for (ItemRow row : itemRows) {
+            for (int i = 0; i < itemRows.size(); i++) {
+                ItemRow row = itemRows.get(i);
                 if (row.getName().equals(item.getName())) {
-                    row.increaseQuantity();
+                    // Replace the old row with a new one with incremented quantity
+                    itemRows.set(i, new ItemRow(item, row.getQuantity() + 1));
                     found = true;
                     break;
                 }
             }
-
             if (!found) {
                 itemRows.add(new ItemRow(item, 1));
             }
@@ -88,6 +83,7 @@ public class GiveItemController {
 
         itemTable.setItems(FXCollections.observableArrayList(itemRows));
     }
+
 
     @FXML
     public void handleGive() {
@@ -99,32 +95,22 @@ public class GiveItemController {
             return;
         }
 
-        // ❗ Prevent giving item if Pokémon is already holding something
         if (selectedPokemon.getHeldItem() != null) {
             feedbackLabel.setText(selectedPokemon.getName() + " is already holding an item.");
             return;
         }
 
-        // Set new held item
         selectedPokemon.setHeldItem(selectedItem.getItem());
-
-        // Remove one quantity of item from bag
         trainer.removeItemFromBag(selectedItem.getName(), 1);
 
-        // Save item change
         FileUtils.saveHeldItem(trainer.getTrainerID(), selectedPokemon.getName(), selectedItem.getName());
         FileUtils.updateTrainerItemsInFile(trainer);
-        FileUtils.updateTrainerInFile(trainer); // Optional if only money changes
+        FileUtils.updateTrainerInFile(trainer);
 
-        // Feedback and refresh
         feedbackLabel.setText(selectedPokemon.getName() + " is now holding " + selectedItem.getName() + ".");
         populateItemsTable();
         pokemonTable.refresh();
     }
-
-
-
-
 
     @FXML
     public void handleBack() {
@@ -134,32 +120,6 @@ public class GiveItemController {
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static class ItemRow {
-        private Item item;
-        private int quantity;
-
-        public ItemRow(Item item, int quantity) {
-            this.item = item;
-            this.quantity = quantity;
-        }
-
-        public Item getItem() {
-            return item;
-        }
-
-        public String getName() {
-            return item.getName();
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void increaseQuantity() {
-            quantity++;
         }
     }
 }

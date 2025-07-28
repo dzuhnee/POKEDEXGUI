@@ -13,7 +13,7 @@ Birthdate: 1987-05-22
 Gender: Male
 Hometown: Pallet Town
 Description: Pokemon Trainer from Kanto
-Money: 990000
+Money: 970000
 --------------------------------------------------
 Trainer Info:
 ID: 21
@@ -22,7 +22,7 @@ Birthdate: 2006-01-21
 Gender: Female
 Hometown: Cabsy
 Description: Ganda lang
-Money: 855200
+Money: 765200
 --------------------------------------------------
 Trainer Info:
 ID: 2

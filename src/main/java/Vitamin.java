@@ -1,5 +1,9 @@
 package com.pokedex.app;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.Pokemon;
+import com.pokedex.app.PokemonManager;
+
 public class Vitamin extends Item {
     private String statAffected; // e.g., "HP", "Attack", "Defense", "Speed", "Special Attack", "Special Defense"
 
@@ -13,13 +17,12 @@ public class Vitamin extends Item {
         return statAffected;
     }
 
-    public void use(Pokemon pokemon, PokemonManager manager) {
-        int amount = 10; // Vitamins typically increase EVs by a set amount (e.g., 10)
+    @Override
+    public String use(Pokemon pokemon, PokemonManager manager) {
+        int amount = 10;
 
         pokemon.increaseStat(statAffected, amount);
 
-        System.out.println(pokemon.getName() + "'s " + statAffected + " increased by " + amount + " through " + getName() + "!");
-        // Optional: Decrease the item's stock after use
-        // setStock(getStock() - 1);
+        return pokemon.getName() + "'s " + statAffected + " increased by " + amount + " through " + getName() + "!";
     }
 }

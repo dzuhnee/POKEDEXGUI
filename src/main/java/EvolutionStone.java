@@ -1,26 +1,30 @@
 package com.pokedex.app;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.Pokemon;
+import com.pokedex.app.PokemonManager;
+
 public class EvolutionStone extends Item {
-    private String stoneType; // e.g., "Fire", "Water", "Thunder", "Leaf", "Moon", etc.
+    private final String type;
 
     public EvolutionStone(String name, String description, String effect,
-                          int buyingPrice, int sellingPrice, int stock, String stoneType) {
-        // MODIFIED: Calling super() with all 7 arguments, ensuring type consistency
+                          int buyingPrice, int sellingPrice, int stock, String type) {
         super(name, "Evolution Stone", description, effect, buyingPrice, sellingPrice, stock);
-        this.stoneType = stoneType;
+        this.type = type;
     }
 
-    public String getStoneType() {
-        return stoneType;
+    public String getType() {
+        return type;
     }
 
-    public void use(Pokemon pokemon, PokemonManager manager) {
-        boolean evolved = pokemon.evolveUsingStone(this.stoneType, manager); // Correctly passes the manager
+    @Override
+    public String use(Pokemon pokemon, PokemonManager manager) {
+        boolean evolved = pokemon.evolveUsingStone(type, manager);
 
         if (evolved) {
-            System.out.println(pokemon.getName() + " evolved using " + getName() + "!");
+            return pokemon.getName() + " evolved successfully using the " + getName() + "!";
         } else {
-            System.out.println(pokemon.getName() + " cannot evolve with " + getName() + ".");
+            return "The " + getName() + " had no effect on " + pokemon.getName() + ".";
         }
     }
 }

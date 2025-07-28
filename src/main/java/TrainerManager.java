@@ -93,17 +93,25 @@ public class TrainerManager {
     }
 
     public static Trainer loadTrainerByID(int id) {
-        Trainer trainer = null;
-        // load base trainer info first (name, ID, etc)
-        trainer = FileUtils.loadTrainerBasicInfo(id);
+        Trainer trainer = FileUtils.loadTrainerBasicInfo(id);
 
         if (trainer != null) {
-            // load Pokémon
-            List<Pokemon> pokemonList = FileUtils.loadTrainerPokemon(id);
+            // ✅ Load Pokémon with held items
+            List<Pokemon> pokemonList = FileUtils.loadTrainerPokemon(trainer.getTrainerID());
+
+            for (Pokemon p : pokemonList) {
+                String heldItem = FileUtils.loadHeldItem(trainer.getTrainerID(), p.getName());
+                if (!"None".equals(heldItem)) {
+                    Item item = new ItemManager().findItem(heldItem);
+                    if (item != null) {
+                        p.setHeldItem(item);
+                    }
+                }
+            }
+
             trainer.setLineup(pokemonList);
 
-
-            // load items from trainer_items.txt
+            // ✅ Load items from trainer_items.txt
             List<Item> items = FileUtils.loadTrainerItems(id);
             trainer.setItemBag(items);
         }

@@ -113,7 +113,7 @@ public class AppState {
                     Pokemon p = new Pokemon(pokedexNumber, name, "", "", 1, -1, -1, -1, 0, 0, 0, 0);
 
                     // ✅ Load held item for this Pokémon
-                    String heldItemName = FileUtils.loadHeldItem(getFullTrainer().getTrainerID(), name);
+                    String heldItemName = FileUtils.loadHeldItem(AppState.getInstance().getFullTrainer().getTrainerID(), name);
                     if (!heldItemName.equals("None")) {
                         ItemManager itemManager = new ItemManager();
                         Item heldItem = itemManager.findItem(heldItemName);
@@ -133,5 +133,6 @@ public class AppState {
 
         return lineup;
     }
+
 
 }

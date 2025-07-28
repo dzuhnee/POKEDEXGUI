@@ -3,6 +3,10 @@ package com.pokedex.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pokedex.app.Pokemon;
+import com.pokedex.app.PokemonManager;
+
+
 /**
  * Represents a single Pokémon item with attributes such as name, category,
  * description, effect, buying/selling price, and stock quantity.
@@ -100,7 +104,7 @@ public abstract class Item {
         this.stock = stock;
     }
 
-    public abstract void use(Pokemon pokemon, PokemonManager manager);
+    public abstract String use(Pokemon pokemon, PokemonManager manager);
 
     // Might remove ??
     public String displayInfo() {
@@ -123,5 +127,11 @@ public abstract class Item {
         }
         details.append("Current Stock: ").append(stock);
         return details.toString();
+    }
+
+
+    public String getPreviewEffect(Pokemon pkmn, PokemonManager manager) {
+        // Default implementation if a subclass doesn’t override
+        return "Effect: " + getEffect();
     }
 }

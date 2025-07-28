@@ -1,7 +1,11 @@
 package com.pokedex.app;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.Pokemon;
+import com.pokedex.app.PokemonManager;
+
 public class Feather extends Item {
-    private String statAffected; // e.g., "HP", "Attack", "Defense", "Speed"
+    private String statAffected; // e.g., "HP", "Attack", "Defense", "Speed", etc.
 
     public Feather(String name, String description, String effect,
                    int buyingPrice, int sellingPrice, int stock, String statAffected) {
@@ -13,10 +17,12 @@ public class Feather extends Item {
         return statAffected;
     }
 
-    public void use(Pokemon pokemon, PokemonManager manager) {
-        int amount = 1; // Feathers typically increase EVs by 1
+    @Override
+    public String use(Pokemon pokemon, PokemonManager manager) {
+        int amount = 1;
+
         pokemon.increaseStat(statAffected, amount);
-        System.out.println(pokemon.getName() + "'s " + statAffected + " EVs increased by " + amount + " through " + getName() + "!");
-        // Decrease stock logic here
+
+        return pokemon.getName() + "'s " + statAffected + " increased by " + amount + " through " + getName() + "!";
     }
 }
