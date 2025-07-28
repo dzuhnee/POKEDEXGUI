@@ -23,4 +23,9 @@ chas -> 2,Ivysaur
 chas -> 4,Charmander
 chas -> 5,Charmeleon
 chas -> 6,Charizard
-Byron -> 3,Venusaur
+Riki -> 26,Oddish
+Riki -> 21,Raichu
+Riki -> 28,Vileplume
+Kyle -> 23,Wigglytuff
+ella -> 11,Metapod
+ella -> 27,Gloom

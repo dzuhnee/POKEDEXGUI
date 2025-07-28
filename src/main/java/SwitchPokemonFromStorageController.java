@@ -20,7 +20,7 @@ import com.pokedex.app.Trainer;
 
 public class SwitchPokemonFromStorageController {
 
-    private static final Map<Integer, String> pokemonIdNameMap = new HashMap<>();
+    private static final Map<Integer, PokemonInfo> pokemonIdNameMap = new HashMap<>();
 
     @FXML
     private Label trainerNameLabel;
@@ -64,17 +64,39 @@ public class SwitchPokemonFromStorageController {
         switchButton.setOnAction(e -> handleSwitch());
     }
 
+    public static class PokemonInfo {
+        String name;
+        int hp, attack, defense, speed;
+
+        public PokemonInfo(String name, int hp, int attack, int defense, int speed) {
+            this.name = name;
+            this.hp = hp;
+            this.attack = attack;
+            this.defense = defense;
+            this.speed = speed;
+        }
+
+        public String toString() {
+            return String.format("%s (HP: %d, ATK: %d, DEF: %d, SPD: %d)", name, hp, attack, defense, speed);
+        }
+    }
+
     private void loadPokemonData() {
         pokemonIdNameMap.clear();
         try (BufferedReader br = new BufferedReader(new FileReader("pokemon_data.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length >= 2) {
+                if (data.length >= 12) {
                     try {
                         int id = Integer.parseInt(data[0].trim());
                         String name = data[1].trim();
-                        pokemonIdNameMap.put(id, name);
+                        int hp = Integer.parseInt(data[8].trim());
+                        int attack = Integer.parseInt(data[9].trim());
+                        int defense = Integer.parseInt(data[10].trim());
+                        int speed = Integer.parseInt(data[11].trim());
+
+                        pokemonIdNameMap.put(id, new PokemonInfo(name, hp, attack, defense, speed));
                     } catch (NumberFormatException ignored) {}
                 }
             }
@@ -124,7 +146,12 @@ public class SwitchPokemonFromStorageController {
             lineupListView.getItems().add("No Pokémon in lineup.");
         } else {
             for (int id : lineupIDs) {
-                lineupListView.getItems().add(id + " - " + pokemonIdNameMap.getOrDefault(id, "Unknown"));
+                PokemonInfo info = pokemonIdNameMap.get(id);
+                if (info != null) {
+                    lineupListView.getItems().add(id + " - " + info.toString());
+                } else {
+                    lineupListView.getItems().add(id + " - Unknown");
+                }
             }
         }
     }
@@ -134,17 +161,21 @@ public class SwitchPokemonFromStorageController {
 
         Set<Integer> used = new HashSet<>(lineupIDs);
         used.addAll(storageIDs);
-
         Set<Integer> listed = new HashSet<>();
+
         for (int id : storageIDs) {
-            if (listed.add(id) && pokemonIdNameMap.containsKey(id)) {
-                storageListView.getItems().add(id + " - " + pokemonIdNameMap.get(id));
+            if (listed.add(id)) {
+                PokemonInfo info = pokemonIdNameMap.get(id);
+                if (info != null) {
+                    storageListView.getItems().add(id + " - " + info.toString());
+                }
             }
         }
 
-        for (Map.Entry<Integer, String> entry : pokemonIdNameMap.entrySet()) {
-            if (!used.contains(entry.getKey()) && listed.add(entry.getKey())) {
-                storageListView.getItems().add(entry.getKey() + " - " + entry.getValue());
+        for (Map.Entry<Integer, PokemonInfo> entry : pokemonIdNameMap.entrySet()) {
+            int id = entry.getKey();
+            if (!used.contains(id) && listed.add(id)) {
+                storageListView.getItems().add(id + " - " + entry.getValue().toString());
             }
         }
     }
@@ -184,6 +215,8 @@ public class SwitchPokemonFromStorageController {
                 }
             }
 
+            Map<Integer, String> pokemonIdNameMap = new HashMap<>();
+
             for (int id : lineupIDs) {
                 String name = pokemonIdNameMap.getOrDefault(id, "Unknown");
                 writer.println(trainerName + " -> " + id + "," + name);
@@ -210,5 +243,46 @@ public class SwitchPokemonFromStorageController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleRelease() {
+        int storageIndex = storageListView.getSelectionModel().getSelectedIndex();
+        if (storageIndex < 0 || storageIndex >= storageListView.getItems().size()) return;
+
+        String selectedItem = storageListView.getItems().get(storageIndex);
+        int selectedId = Integer.parseInt(selectedItem.split(" - ")[0]);
+
+        // Remove from memory
+        storageIDs.remove((Integer) selectedId);
+        pokemonIdNameMap.remove(selectedId);
+
+        // Remove from pokemon_data.txt
+        File dataFile = new File("pokemon_data.txt");
+        List<String> updatedLines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.startsWith(selectedId + ",")) {
+                    updatedLines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading pokemon_data.txt: " + e.getMessage());
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile, false))) {
+            for (String updatedLine : updatedLines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to pokemon_data.txt: " + e.getMessage());
+        }
+
+        updateStorageListView();
+        saveTrainerSwitchData();
+    }
+
 
 }

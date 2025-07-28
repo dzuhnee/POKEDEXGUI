@@ -70,7 +70,7 @@ public class ViewItemsController {
         itemBasicList.add(new ItemBasic("Iron", "Vitamin", "A nutritious drink for Pokémon.", "+10 Defense EVs", 10000, 5000));
         itemBasicList.add(new ItemBasic("Carbos", "Vitamin", "A nutritious drink for Pokémon.", "+10 Speed EVs", 10000, 5000));
         itemBasicList.add(new ItemBasic("Zinc", "Vitamin", "A nutritious drink for Pokémon.", "+10 Special Defense EVs", 10000, 5000));
-        itemBasicList.add(new ItemBasic("Rare Candy", "Leveling Item", "A candy packed with energy.", "Increases level by 1", -1, 2400));
+        itemBasicList.add(new ItemBasic("Rare Candy", "Leveling Item", "A candy packed with energy.", "Increases level by 1", 0, 2400));
         itemBasicList.add(new ItemBasic("Health Feather", "Feather", "A feather that slightly increases HP.", "+1 HP EV", 300, 150));
         itemBasicList.add(new ItemBasic("Muscle Feather", "Feather", "A feather that slightly increases Attack.", "+1 Attack EV", 300, 150));
         itemBasicList.add(new ItemBasic("Resist Feather", "Feather", "A feather that slightly increases Defense.", "+1 Defense EV", 300, 150));
@@ -80,7 +80,7 @@ public class ViewItemsController {
         itemBasicList.add(new ItemBasic("Water Stone", "Evolution Stone", "Blue, watery appearance.", "Evolves Poliwhirl, Shellder, Eevee (Vaporeon), etc.", 3000, 1500));
         itemBasicList.add(new ItemBasic("Thunder Stone", "Evolution Stone", "Sparkles with electricity.", "Evolves Pikachu, Eevee (Jolteon), etc.", 3000, 1500));
         itemBasicList.add(new ItemBasic("Leaf Stone", "Evolution Stone", "Leaf pattern.", "Evolves Gloom, Weepinbell, Exeggcute, etc.", 3000, 1500));
-        itemBasicList.add(new ItemBasic("Moon Stone", "Evolution Stone", "Glows faintly.", "Evolves Clefairy, Jigglypuff, Nidorina, etc.", -1, 1500));
+        itemBasicList.add(new ItemBasic("Moon Stone", "Evolution Stone", "Glows faintly.", "Evolves Clefairy, Jigglypuff, Nidorina, etc.", 0, 1500));
         itemBasicList.add(new ItemBasic("Sun Stone", "Evolution Stone", "Glows like the sun.", "Evolves Gloom, Sunkern, Cottonee, etc.", 3000, 1500));
         itemBasicList.add(new ItemBasic("Shiny Stone", "Evolution Stone", "Sparkles brightly.", "Evolves Togetic, Roselia, Minccino, etc.", 3000, 1500));
         itemBasicList.add(new ItemBasic("Dusk Stone", "Evolution Stone", "Ominous appearance.", "Evolves Murkrow, Misdreavus, Doublade, etc.", 3000, 1500));

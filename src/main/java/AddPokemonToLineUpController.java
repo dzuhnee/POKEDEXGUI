@@ -36,7 +36,7 @@ public class AddPokemonToLineUpController {
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
         trainerNameLabel.setText(trainerName);
-        AppState.setSelectedTrainerName(trainerName); // ✅ use the correct method
+        AppState.setSelectedTrainerName(trainerName);
     }
 
     private void loadPokemonData() {
@@ -44,8 +44,13 @@ public class AddPokemonToLineUpController {
             List<String> lines = Files.readAllLines(Paths.get("pokemon_data.txt"));
             for (String line : lines) {
                 String[] tokens = line.split(",");
-                if (tokens.length >= 4) {
-                    String displayName = tokens[1] + " (" + tokens[2] + (tokens[3].isEmpty() ? "" : "/" + tokens[3]) + ")";
+                if (tokens.length >= 12) {  // must include up to Speed
+                    String displayName = tokens[1] + " (" + tokens[2] +
+                            (tokens[3].isEmpty() ? "" : "/" + tokens[3]) +
+                            ") - HP: " + tokens[8] +
+                            ", Atk: " + tokens[9] +
+                            ", Def: " + tokens[10] +
+                            ", Spd: " + tokens[11];
                     displayList.add(displayName);
                     fullPokemonDataMap.put(displayName, line);
                 }
