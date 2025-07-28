@@ -23,3 +23,6 @@ chas -> 2,Ivysaur
 chas -> 4,Charmander
 chas -> 5,Charmeleon
 chas -> 6,Charizard
+Riki -> 26,Oddish
+Riki -> 21,Raichu
+Riki -> 28,Vileplume
