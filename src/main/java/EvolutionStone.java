@@ -3,6 +3,9 @@ package com.pokedex.app;
 import com.pokedex.app.Item;
 import com.pokedex.app.PokemonManager;
 
+// C:\Users\Kyle Dominique\Desktop\gui\PokedexTest\src\main\java\EvolutionStone.java:6:8
+//java: com.pokedex.app.EvolutionStone is not abstract and does not override abstract method use(com.pokedex.app.Pokemon,com.pokedex.app.PokemonManager) in com.pokedex.app.Item
+
 public class EvolutionStone extends Item {
     private String stoneType; // e.g., "Fire", "Water", "Thunder", "Leaf", "Moon", etc.
 
