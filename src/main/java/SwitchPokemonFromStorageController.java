@@ -244,4 +244,45 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    @FXML
+    private void handleRelease() {
+        int storageIndex = storageListView.getSelectionModel().getSelectedIndex();
+        if (storageIndex < 0 || storageIndex >= storageListView.getItems().size()) return;
+
+        String selectedItem = storageListView.getItems().get(storageIndex);
+        int selectedId = Integer.parseInt(selectedItem.split(" - ")[0]);
+
+        // Remove from memory
+        storageIDs.remove((Integer) selectedId);
+        pokemonIdNameMap.remove(selectedId);
+
+        // Remove from pokemon_data.txt
+        File dataFile = new File("pokemon_data.txt");
+        List<String> updatedLines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.startsWith(selectedId + ",")) {
+                    updatedLines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading pokemon_data.txt: " + e.getMessage());
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile, false))) {
+            for (String updatedLine : updatedLines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to pokemon_data.txt: " + e.getMessage());
+        }
+
+        updateStorageListView();
+        saveTrainerSwitchData();
+    }
+
+
 }

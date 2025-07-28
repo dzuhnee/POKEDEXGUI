@@ -5,3 +5,4 @@
 21:Venusaur:Health Feather
 21:Venusaur:Clever Feather
 21:Charmander:Health Feather
+17:Ivysaur:Calcium

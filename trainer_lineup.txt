@@ -26,3 +26,6 @@ chas -> 6,Charizard
 Riki -> 26,Oddish
 Riki -> 21,Raichu
 Riki -> 28,Vileplume
+Kyle -> 23,Wigglytuff
+ella -> 11,Metapod
+ella -> 27,Gloom

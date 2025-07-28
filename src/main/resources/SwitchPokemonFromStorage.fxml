@@ -28,6 +28,7 @@
             <ListView fx:id="storageListView" layoutX="375.0" layoutY="185.0" prefHeight="180.0" prefWidth="280.0" />
 
             <Button fx:id="switchButton" layoutX="321.0" layoutY="386.0" style="-fx-font-size: 14px;" text="Switch" />
+            <Button fx:id="releaseButton" layoutX="600.0" layoutY="430.0" style="-fx-font-size: 14px;" text="Release" onAction="#handleRelease" />
             <Button fx:id="backButton" layoutX="326.0" layoutY="430.0" style="-fx-font-size: 14px;" text="Back" onAction="#handleBack" />
          </children>
       </AnchorPane>

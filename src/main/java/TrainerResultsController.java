@@ -65,6 +65,8 @@ public class TrainerResultsController {
         itemInventoryColumn.setCellValueFactory(new PropertyValueFactory<>("itemInventoryDisplay"));
 
         allTrainers.setAll(loadTrainersFromFile());
+        enableTextWrap(pokeLineupColumn);
+        enableTextWrap(itemInventoryColumn);
 
         List<Trainer> previousResults = AppState.getInstance().getLastSearchResults();
         String lastKeyword = AppState.getInstance().getLastSearchKeyword();
@@ -79,6 +81,27 @@ public class TrainerResultsController {
         }
 
         resultTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+
+    private void enableTextWrap(TableColumn<Trainer, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<Trainer, String> cell = new TableCell<>() {
+                private final javafx.scene.text.Text text = new javafx.scene.text.Text();
+
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty().subtract(10));
+                    text.getStyleClass().add("wrapped-text"); // Optional: for styling
+                    setGraphic(text);
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            };
+            return cell;
+        });
     }
 
 
