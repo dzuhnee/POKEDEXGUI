@@ -62,8 +62,10 @@ public class ManageTrainerController {
 
     @FXML
     public void handleUseItem(ActionEvent event) {
-        System.out.println("Use Item clicked!");
-        // navigateToScreen("/UseItem.fxml", event);
+        if (trainer == null) {
+            trainer = AppState.getInstance().getFullTrainer();
+        }
+        navigateToScreen("/UseItem.fxml", event);
     }
 
     @FXML

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.pokedex.app.FileUtils;
+import com.pokedex.app.Pokemon;
+
 /**
  * This class manages a list of Pokémon and allows adding, displaying, and
  * searching Pokémon.
@@ -178,7 +181,7 @@ public class PokemonManager {
                 return p;
             }
         }
-        return null;
+        return FileUtils.loadPokemonByDex(pokedexNumber);
     }
 
     public String getNameByDex(int pokedexNumber) {

@@ -8,6 +8,7 @@ import java.util.List;
 import com.pokedex.app.Trainer;
 import com.pokedex.app.Pokemon;
 import com.pokedex.app.Item;
+import com.pokedex.app.ItemRow;
 import com.pokedex.app.ItemManager;
 import com.pokedex.app.AppState;
 
@@ -311,4 +312,68 @@ public class FileUtils {
 
         return items;
     }
+
+    public static Pokemon loadPokemonByDex(int dexNumber) {
+        File file = new File("pokemon_data.txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split(",");
+                int pokedexNumber = Integer.parseInt(tokens[0]);
+
+                if (pokedexNumber == dexNumber) {
+                    String name = tokens[1];
+                    String primary = tokens[2];
+                    String secondary = tokens[3].equalsIgnoreCase("None") ? null : tokens[3];
+                    int baseLevel = Integer.parseInt(tokens[4]);
+                    int evolvesTo = Integer.parseInt(tokens[5]);
+                    int evolvesFrom = Integer.parseInt(tokens[6]);
+                    int evolutionLevel = Integer.parseInt(tokens[7]);
+                    int hp = Integer.parseInt(tokens[8]);
+                    int atk = Integer.parseInt(tokens[9]);
+                    int def = Integer.parseInt(tokens[10]);
+                    int spd = Integer.parseInt(tokens[11]);
+
+                    if (secondary == null) {
+                        return new Pokemon(pokedexNumber, name, primary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
+                    } else {
+                        return new Pokemon(pokedexNumber, name, primary, secondary, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, atk, def, spd);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // or show GUI alert
+        }
+
+        return null;
+    }
+
+    public static List<ItemRow> getItemRows(Trainer trainer) {
+        List<ItemRow> itemRows = new ArrayList<>();
+        List<Item> bag = trainer.getItemBag();
+        List<String> counted = new ArrayList<>();
+
+        for (Item item : bag) {
+            String itemName = item.getName();
+
+            if (!counted.contains(itemName)) {
+                // Count how many times this item appears in the bag
+                int count = 0;
+                for (Item i : bag) {
+                    if (i.getName().equals(itemName)) {
+                        count++;
+                    }
+                }
+
+                // Add to result and mark as counted
+                itemRows.add(new ItemRow(item, count));
+                counted.add(itemName);
+            }
+        }
+
+        return itemRows;
+    }
+
+
 }

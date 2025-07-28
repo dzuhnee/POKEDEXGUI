@@ -12,6 +12,7 @@ import com.pokedex.app.TrainerManager;
 import com.pokedex.app.ItemManager;
 import com.pokedex.app.FileUtils;
 import com.pokedex.app.Item;
+import com.pokedex.app.PokemonManager;
 
 public class AppState {
     // Singleton instance
@@ -50,6 +51,11 @@ public class AppState {
     private Trainer fullTrainer;
     private List<Trainer> lastSearchResults;
     private String lastSearchKeyword;
+    private PokemonManager pokemonManager = new PokemonManager(new Scanner(System.in));
+
+    public PokemonManager getPokemonManager() {
+        return pokemonManager;
+    }
 
     public Trainer getFullTrainer() {
         return fullTrainer;

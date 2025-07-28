@@ -410,6 +410,15 @@ public class Pokemon {
         } // else display an informative message
     }
 
+    public String getHeldItemNameProperty() {
+        return (heldItem == null) ? "None" : heldItem.getName();
+    }
+
+    public String getNameProperty() {
+        return name;
+    }
+
+
 }
 
 /**

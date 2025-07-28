@@ -23,3 +23,4 @@ chas -> 2,Ivysaur
 chas -> 4,Charmander
 chas -> 5,Charmeleon
 chas -> 6,Charizard
+Byron -> 3,Venusaur
