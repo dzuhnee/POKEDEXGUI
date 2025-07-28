@@ -1,5 +1,8 @@
 package com.pokedex.app;
 
+import com.pokedex.app.Item;
+import com.pokedex.app.PokemonManager;
+
 public class EvolutionStone extends Item {
     private String stoneType; // e.g., "Fire", "Water", "Thunder", "Leaf", "Moon", etc.
 
@@ -14,7 +17,7 @@ public class EvolutionStone extends Item {
         return stoneType;
     }
 
-    public void use(Pokemon pokemon, PokemonManager manager) {
+    public void use(com.pokedex.app.Pokemon pokemon, PokemonManager manager) {
         boolean evolved = pokemon.evolveUsingStone(this.stoneType, manager); // Correctly passes the manager
 
         if (evolved) {
