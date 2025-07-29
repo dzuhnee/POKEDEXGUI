@@ -1,3 +1,3 @@
-21: Calcium,Protein,Protein,Protein,Protein,Carbos,Carbos,Carbos
+21: Calcium,Protein,Protein,Protein,Carbos,Carbos,Carbos
 17: 
-1: Iron
+1: 
