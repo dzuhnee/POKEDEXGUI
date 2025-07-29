@@ -40,6 +40,8 @@ public class AddPokemonController {
 
         typeField.getItems().addAll(types);
         type2Field.getItems().addAll(types);
+
+        baseLevelField.setPromptText("Enter base level default: 5");
     }
 
     @FXML

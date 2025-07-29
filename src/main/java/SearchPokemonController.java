@@ -113,10 +113,14 @@ public class SearchPokemonController {
 
                     PokemonBasic p = new PokemonBasic(dex, name, hp, attack, defense, speed);
 
-                    // ✅ Attach moves if available
+                    // Attach moves if available
+                    String defaultMoves = "Tackle, Defend";
                     if (movesMap.containsKey(name)) {
-                        p.setMoves(movesMap.get(name));
+                        p.setMoves(defaultMoves + ", " + movesMap.get(name));
+                    } else {
+                        p.setMoves(defaultMoves);
                     }
+
 
                     allPokemon.add(p);
                     typeMap.put(p, types);
