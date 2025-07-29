@@ -16,6 +16,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import com.pokedex.app.AppState;
+import com.pokedex.app.Trainer;
 
 public class AddPokemonToLineUpController {
 
@@ -25,11 +26,16 @@ public class AddPokemonToLineUpController {
     private final ObservableList<String> displayList = FXCollections.observableArrayList();
     private final Map<String, String> fullPokemonDataMap = new HashMap<>();
     private String trainerName;  // store trainer name internally
+    private Trainer trainer;
 
     @FXML
     public void initialize() {
         loadPokemonData();
         pokemonListView.setItems(displayList);
+        trainer = AppState.getInstance().getFullTrainer();
+        if (trainer == null) {
+            System.out.println("Trainer not loaded in AddPokemonToLineUpController");
+        }
     }
 
     // This method will be called by the previous controller to pass the trainer name

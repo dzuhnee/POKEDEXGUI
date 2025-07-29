@@ -33,9 +33,11 @@ public class SwitchPokemonFromStorageController {
     @FXML
     private Button backButton;
 
+
     private String trainerName;
     private final List<Integer> lineupIDs = new ArrayList<>();
     private final List<Integer> storageIDs = new ArrayList<>();
+    private Trainer trainer;
 
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
@@ -51,6 +53,11 @@ public class SwitchPokemonFromStorageController {
     private void initialize() {
         if (trainerName == null) {
             trainerName = AppState.getSelectedTrainerName();
+        }
+
+        trainer = AppState.getInstance().getFullTrainer();
+        if (trainer == null) {
+            System.out.println("Trainer not loaded in SwitchPokemonFromStorageController");
         }
 
         if (trainerName != null && trainerNameLabel != null) {
