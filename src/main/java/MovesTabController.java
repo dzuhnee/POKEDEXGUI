@@ -10,8 +10,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller for the Moves tab of the Pokédex application.
+ * Handles navigation to different scenes related to Pokémon moves.
+ */
 public class MovesTabController {
 
+    /**
+     * Handles the "Back" button click.
+     * Navigates the user back to the Main Menu scene.
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -25,6 +33,10 @@ public class MovesTabController {
         }
     }
 
+    /**
+     * Handles the "Add Move" button click.
+     * Loads the AddMoves scene where users can add new moves.
+     */
     @FXML
     private void handleAdd(ActionEvent event) {
         try {
@@ -38,6 +50,10 @@ public class MovesTabController {
         }
     }
 
+    /**
+     * Handles the "View Moves" button click.
+     * Loads the ViewMoves scene which displays all saved moves.
+     */
     @FXML
     private void handleView(ActionEvent event) {
         try {
@@ -51,6 +67,10 @@ public class MovesTabController {
         }
     }
 
+    /**
+     * Handles the "Search Moves" button click.
+     * Loads the SearchMoves scene where users can search for specific moves.
+     */
     @FXML
     private void handleSearch(ActionEvent event) {
         try {

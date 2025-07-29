@@ -15,6 +15,11 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Declares FXML UI components:
+ * - Text fields for inputting Pokémon details such as Pokédex number, name, base level, evolution info, and stats.
+ * - ComboBoxes for selecting type1 and type2.
+ */
 public class AddPokemonController {
 
     @FXML private TextField pokedexNumberField;
@@ -30,6 +35,10 @@ public class AddPokemonController {
     @FXML private TextField defField;
     @FXML private TextField spdField;
 
+    /*
+     * Initializes the type selection ComboBoxes with all possible Pokémon types.
+     * Also sets a default prompt for the base level input.
+     */
     @FXML
     public void initialize() {
         List<String> types = Arrays.asList(
@@ -44,6 +53,12 @@ public class AddPokemonController {
         baseLevelField.setPromptText("Enter base level default: 5");
     }
 
+    /*
+     * Handles the "Save" button click:
+     * - Validates if all required fields are filled and contain valid input
+     * - Checks for duplicate Pokédex numbers or Pokémon names
+     * - Writes the new Pokémon entry to pokemon_data.txt if all checks pass
+     */
     @FXML
     private void handleSave(ActionEvent event) {
         if (isAnyFieldEmpty()) {
@@ -109,6 +124,10 @@ public class AddPokemonController {
         }
     }
 
+    /*
+     * Checks if any of the required input fields are empty.
+     * Returns true if any field is blank; otherwise false.
+     */
     private boolean isAnyFieldEmpty() {
         return pokedexNumberField.getText().isEmpty() ||
                 pokemonNameField.getText().isEmpty() ||
@@ -124,6 +143,10 @@ public class AddPokemonController {
                 spdField.getText().isEmpty();
     }
 
+    /*
+     * Utility method to check if a string can be parsed as an integer.
+     * Returns true if parsable; otherwise false.
+     */
     private boolean isInteger(String value) {
         try {
             Integer.parseInt(value.trim());
@@ -133,6 +156,10 @@ public class AddPokemonController {
         }
     }
 
+    /*
+     * Checks for existing entries in pokemon_data.txt that match
+     * the same Pokédex number or Pokémon name to avoid duplicates.
+     */
     private boolean isDuplicate(String pokedexNumber, String pokemonName) {
         File file = new File("pokemon_data.txt");
         if (!file.exists()) return false;
@@ -153,6 +180,11 @@ public class AddPokemonController {
         return false;
     }
 
+    /*
+     * Handles the "Back" button click:
+     * - Loads the previous screen (PokemonTab.fxml)
+     * - Navigates back to the main Pokémon tab interface
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -165,6 +197,9 @@ public class AddPokemonController {
         }
     }
 
+    /*
+     * Displays an error alert dialog with the given message.
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Input Error");
