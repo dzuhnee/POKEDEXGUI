@@ -17,9 +17,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.pokedex.app.Trainer;
+
 public class ReleasePokemonController {
     @FXML private ListView<String> pokemonListView;
     @FXML private Label trainerLabel;
+    private Trainer trainer;
 
     private String trainerName;
     private final String TRAINER_LINEUP_FILE = "trainer_lineup.txt";
@@ -28,6 +31,14 @@ public class ReleasePokemonController {
         this.trainerName = name;
         trainerLabel.setText("Trainer: " + name);
         loadTrainerPokemon();
+    }
+
+    @FXML
+    public void initialize() {
+        trainer = com.pokedex.app.AppState.getInstance().getFullTrainer();
+        if (trainer == null) {
+            System.out.println("Trainer not loaded in ReleasePokemonController");
+        }
     }
 
     private void loadTrainerPokemon() {

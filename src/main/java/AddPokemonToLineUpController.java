@@ -139,6 +139,10 @@ public class AddPokemonToLineUpController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
+
+            com.pokedex.app.ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

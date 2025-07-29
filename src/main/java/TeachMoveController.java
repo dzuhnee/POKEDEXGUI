@@ -17,6 +17,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import com.pokedex.app.Trainer;
+
 public class TeachMoveController {
 
     @FXML private ComboBox<String> pokemonComboBox;
@@ -30,6 +32,7 @@ public class TeachMoveController {
     private Map<String, String> pokedexMap = new HashMap<>();
     private List<String> moveList = new ArrayList<>();
     private int selectedTrainerId = -1;
+    private Trainer trainer;
 
     public void setTrainerId(int trainerId) {
         this.selectedTrainerId = trainerId;
@@ -44,6 +47,11 @@ public class TeachMoveController {
         forgetButton.setOnAction(this::handleForgetMove);
 
         pokemonComboBox.setOnAction(e -> updateForgetMoves());
+
+        trainer = com.pokedex.app.AppState.getInstance().getFullTrainer();
+        if (trainer == null) {
+            System.out.println("Trainer not loaded in TeachMoveController");
+        }
     }
 
     private void loadPokemonForTrainer() {
