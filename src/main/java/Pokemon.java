@@ -156,24 +156,25 @@ public class Pokemon {
         Pokemon evolved = manager.getPokemonByDex(this.evolvesTo);
         if (evolved == null) return false;
 
-        // 🔒 Use a clone so we don't mutate the original Raichu/Butterfree etc.
-        Pokemon evolvedCopy = evolved.cloneForPreview();
+        // Transfer properties
+        evolved.setBaseLevel(this.baseLevel); // ✅ carry over new level
+        evolved.setHeldItem(this.heldItem);   // ✅ keep held item if any
+        // Add any other fields you need to retain
 
-        this.name = evolvedCopy.getName();
-        this.evolvesFrom = this.pokedexNumber;
-        this.pokedexNumber = evolvedCopy.getPokedexNumber();
-        this.primaryType = evolvedCopy.getPrimaryType();
-        this.secondaryType = evolvedCopy.getSecondaryType();
-        this.evolvesTo = evolvedCopy.getEvolvesTo();
-        this.evolutionLevel = evolvedCopy.getEvolutionLevel();
-
-        this.hp = evolvedCopy.getHP();
-        this.attack = evolvedCopy.getAttack();
-        this.defense = evolvedCopy.getDefense();
-        this.speed = evolvedCopy.getSpeed();
+        // Replace this Pokémon’s identity with evolved one
+        this.name = evolved.getName();
+        this.primaryType = evolved.getPrimaryType();
+        this.secondaryType = evolved.getSecondaryType();
+        this.evolutionLevel = evolved.getEvolutionLevel();
+        this.evolvesTo = evolved.getEvolvesTo();
+        this.hp = evolved.getHP();
+        this.attack = evolved.getAttack();
+        this.defense = evolved.getDefense();
+        this.speed = evolved.getSpeed();
 
         return true;
     }
+
 
 
     public boolean evolveUsingStone(String stoneType, PokemonManager manager) {

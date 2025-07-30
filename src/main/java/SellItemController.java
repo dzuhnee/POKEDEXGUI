@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -41,6 +42,8 @@ public class SellItemController {
     public void initialize() {
         Trainer currentTrainer = AppState.getInstance().getFullTrainer();
 
+        quantityField.setPromptText("1");
+
         setupTableColumns();
         updateTrainerInfo();
         loadBagTable();
@@ -50,6 +53,8 @@ public class SellItemController {
         colItemName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colItemDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colItemPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+
+        enableTextWrap(colItemDescription);
     }
 
     private void updateTrainerInfo() {
@@ -90,7 +95,6 @@ public class SellItemController {
                 rows.add(new ItemRow(current, count));
             }
         }
-
         displayedItems = FXCollections.observableArrayList(rows);
         bagTable.setItems(displayedItems);
     }
@@ -173,5 +177,25 @@ public class SellItemController {
         } else {
             feedbackLabel.setStyle("");
         }
+    }
+
+    private void enableTextWrap(TableColumn<ItemRow, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<ItemRow, String> cell = new TableCell<>() {
+                private final Text text = new Text();
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            };
+            return cell;
+        });
+
+        // test
     }
 }

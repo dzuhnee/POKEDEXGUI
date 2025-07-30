@@ -52,7 +52,7 @@ class ItemManager {
         itemList.add(new EvolutionStone("Water Stone", "Blue, watery appearance.", "Evolves Poliwhirl, Shellder, Eevee, etc.", 3000, 1500, 10, "Water"));
         itemList.add(new EvolutionStone("Thunder Stone", "Sparkles with electricity.", "Evolves Pikachu, Eelektrik, Eevee, etc.", 3000, 1500, 10, "Electric"));
         itemList.add(new EvolutionStone("Leaf Stone", "Leaf pattern.", "Evolves Gloom, Weepinbell, Exeggcute etc.", 3000, 1500, 10, "Grass"));
-        itemList.add(new EvolutionStone("Moon Stone", "Glows faintly.", "Evolves Nidorina, Clefairy, Jigglypuff, etc.", -1, 1500, 10, "Moon"));
+        itemList.add(new EvolutionStone("Moon Stone", "Glows faintly.", "Evolves Nidorina, Clefairy, Jigglypuff, etc.", 3000, 1500, 10, "Moon"));
         itemList.add(new EvolutionStone("Sun Stone", "Glows like the sun.", "Evolves Gloom, Sunkern, Cottonee, etc.", 3000, 1500, 10, "Sun"));
         itemList.add(new EvolutionStone("Shiny Stone", "Sparkles brightly.", "Evolves Togetic, Roselia, Minccino, etc.", 3000, 1500, 10, "Fairy"));
         itemList.add(new EvolutionStone("Dusk Stone", "Ominous appearance.", "Evolves Murkrow, Misdreavus, Doublade, etc.", 3000, 1500, 10, "Dark"));

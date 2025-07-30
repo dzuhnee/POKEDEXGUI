@@ -9,7 +9,7 @@ public class RareCandy extends Item {
     public RareCandy() {
         super("Rare Candy", "Level-Up Item",
                 "A candy packed with energy.", "Increases level by 1",
-                500, 250, 10);
+                4800, 2400, 10);
     }
 
     public RareCandy(String name, String category, String description, String effect,
@@ -19,17 +19,27 @@ public class RareCandy extends Item {
 
     @Override
     public String use(Pokemon pokemon, PokemonManager manager) {
+        String originalName = pokemon.getName(); // Save before evolution
+        int originalLevel = pokemon.getBaseLevel();
+
         boolean evolved = pokemon.levelUpWithRareCandy(manager);
 
         StringBuilder result = new StringBuilder();
-        result.append(pokemon.getName()).append(" leveled up!");
+        result.append(originalName)
+                .append(" leveled up from Level ")
+                .append(originalLevel)
+                .append(" to Level ")
+                .append(pokemon.getBaseLevel())
+                .append("!");
 
-        if (evolved) {
-            result.append(" ").append(pokemon.getName()).append(" evolved!");
+        if (evolved && !originalName.equals(pokemon.getName())) {
+            result.append(" ").append(originalName)
+                    .append(" evolved into ").append(pokemon.getName()).append("!");
         }
 
         return result.toString();
     }
+
 
     @Override
     public String getPreviewEffect(Pokemon pokemon, PokemonManager manager) {

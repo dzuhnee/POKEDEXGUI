@@ -150,6 +150,7 @@ public class PokemonManager {
             return false;
         }
         pokemons.add(pokemon);
+
         return true;
     }
 

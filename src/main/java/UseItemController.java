@@ -17,7 +17,6 @@ import javafx.event.ActionEvent;
 
 import java.io.IOException;
 
-
 import com.pokedex.app.Pokemon;
 import com.pokedex.app.PokemonManager;
 import com.pokedex.app.Item;
@@ -26,6 +25,7 @@ import com.pokedex.app.Trainer;
 import com.pokedex.app.AppState;
 import com.pokedex.app.ItemRow;
 import com.pokedex.app.TrainerManager;
+
 
 public class UseItemController {
     @FXML private Label trainerNameLabel;
@@ -64,6 +64,7 @@ public class UseItemController {
         itemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         enableTextWrap(itemEffectColumn);
+        enableTextWrap(itemNameColumn);
 
         pokemonTable.setOnMouseClicked(this::handlePokemonSelection);
         itemTable.setOnMouseClicked(this::handleItemSelection);
@@ -72,13 +73,24 @@ public class UseItemController {
         loadTables();
     }
 
+    // Loads the Pokemon Lineup Item Inventory tables
     private void loadTables() {
-        ObservableList<Pokemon> pokemons = FXCollections.observableArrayList(currentTrainer.getLineup());
+        // Updated trainer
+        this.currentTrainer = AppState.getInstance().getFullTrainer();
+
+        // After evolving
+        ObservableList<Pokemon> pokemons = FXCollections.observableArrayList(
+                currentTrainer.getLineup()
+        );
         pokemonTable.setItems(pokemons);
 
-        ObservableList<ItemRow> items = FXCollections.observableArrayList(FileUtils.getItemRows(currentTrainer));
+        // After using item
+        ObservableList<ItemRow> items = FXCollections.observableArrayList(
+                FileUtils.getItemRows(currentTrainer)
+        );
         itemTable.setItems(items);
     }
+
 
     private void handlePokemonSelection(MouseEvent event) {
         selectedPokemon = pokemonTable.getSelectionModel().getSelectedItem();
@@ -128,9 +140,6 @@ public class UseItemController {
     }
 
 
-
-
-
     @FXML
     private void handleUse(ActionEvent event) {
         if (selectedPokemon == null || selectedItem == null) {
@@ -138,24 +147,78 @@ public class UseItemController {
             return;
         }
 
+        // Store the Pokemon's position before using the item
+        int pokemonPosition = currentTrainer.getLineup().indexOf(selectedPokemon);
+
         // Use the item and get the result message
         String resultMessage = selectedPokemon.useItem(selectedItem.getItem(), AppState.getInstance().getPokemonManager());
 
-        // Remove one instance of the used item from the bag
         currentTrainer.removeItemFromBag(selectedItem.getName(), 1);
 
-        // Update trainer items file (for trainer_items.txt)
         FileUtils.updateTrainerItemsInFile(currentTrainer);
-
-        // Update main trainer file (trainers.txt) - this should handle lineup changes
         FileUtils.updateTrainerInFile(currentTrainer);
 
-        // Use existing AppState method to reload data from files
         AppState.getInstance().reloadTrainerDataFromFile();
         this.currentTrainer = AppState.getInstance().getFullTrainer();
 
-        // Show success and effect message
+        loadTables();
+        pokemonTable.refresh();
+        itemTable.refresh();
+
         infoLabel.setText(resultMessage);
+        selectedPokemon = null;
+        selectedItem = null;
+        pokemonTable.getSelectionModel().clearSelection();
+        itemTable.getSelectionModel().clearSelection();
+
+
+        // Check if the item had an effect
+        boolean itemHadEffect = !resultMessage.toLowerCase().contains("no effect") &&
+                !resultMessage.toLowerCase().contains("cannot be used") &&
+                !resultMessage.toLowerCase().contains("has no effect");
+
+        if (itemHadEffect) {
+            // Remove one instance of the used item from the bag
+            currentTrainer.removeItemFromBag(selectedItem.getName(), 1);
+
+            // CRITICAL: Update the trainer's lineup with the evolved/modified Pokemon
+            if (pokemonPosition >= 0 && pokemonPosition < currentTrainer.getLineup().size()) {
+                currentTrainer.getLineup().set(pokemonPosition, selectedPokemon);
+            }
+
+            // Update AppState with the modified trainer
+            AppState.getInstance().setFullTrainer(currentTrainer);
+
+            // Update the info label with the new stats
+            updateInfoBox(); // Refresh the info label
+
+            // Update this controller's reference
+            this.currentTrainer = AppState.getInstance().getFullTrainer();
+
+            // Build enhanced message with updated stats using the evolved Pokemon
+            StringBuilder enhancedMessage = new StringBuilder();
+            enhancedMessage.append(resultMessage).append("\n\n");
+            enhancedMessage.append("Updated Stats:\n")
+                    .append("Name: ").append(selectedPokemon.getName()).append("\n")
+                    .append("Level: ").append(selectedPokemon.getBaseLevel()).append("\n")
+                    .append("HP: ").append(selectedPokemon.getHP()).append("\n")
+                    .append("ATK: ").append(selectedPokemon.getAttack()).append("\n")
+                    .append("DEF: ").append(selectedPokemon.getDefense()).append("\n")
+                    .append("SPD: ").append(selectedPokemon.getSpeed()).append("\n");
+
+            // Show enhanced message with updated stats
+            infoLabel.setText(enhancedMessage.toString());
+
+            // Try to save to file (but don't reload from file since that breaks things)
+            try {
+                FileUtils.updateTrainerInFile(currentTrainer);
+            } catch (Exception e) {
+                System.out.println("File save error: " + e.getMessage());
+            }
+        } else {
+            // Item had no effect, just show the result message without consuming the item
+            infoLabel.setText(resultMessage);
+        }
 
         // Clear selections to avoid confusion with old data
         selectedPokemon = null;
@@ -163,20 +226,18 @@ public class UseItemController {
         pokemonTable.getSelectionModel().clearSelection();
         itemTable.getSelectionModel().clearSelection();
 
-        // Reload tables to reflect changes
+        // Reload tables to reflect changes (this should now show the evolved Pokemon)
         loadTables();
-
-        // Force table refresh
-        pokemonTable.refresh();
-        itemTable.refresh();
     }
+
 
     @FXML
     private void handleBack(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/ManageTrainer.fxml"));
-            Stage stage = (Stage) itemTable.getScene().getWindow(); // bag table to fx:id ng inventory
+            Stage stage = (Stage) itemTable.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -198,7 +259,5 @@ public class UseItemController {
             };
             return cell;
         });
-
-        // test
     }
 }

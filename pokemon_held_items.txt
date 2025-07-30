@@ -12,3 +12,5 @@
 21:Oddish:Carbos
 21:Wigglytuff:Protein
 21:Wigglytuff:Calcium
+1:Charmander:Calcium
+1:Charmander:HP Up
