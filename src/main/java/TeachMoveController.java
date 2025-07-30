@@ -112,6 +112,7 @@ public class TeachMoveController {
 
     /*
      * Loads available moves from moves.txt and formats them for display.
+     * Tackle and Defend are default HM moves — excluded from teachable list.
      */
     private void loadMoves() {
         moveList.clear();
@@ -121,6 +122,10 @@ public class TeachMoveController {
                 String[] parts = line.split(",");
                 if (parts.length >= 5) {
                     String name = parts[0].trim();
+                    if (name.equalsIgnoreCase("Tackle") || name.equalsIgnoreCase("Defend")) {
+                        continue; //  skip default moves
+                    }
+
                     String type = parts[2].trim();
                     String category = parts[3].trim();
                     String classification = parts[4].trim();
@@ -134,6 +139,7 @@ public class TeachMoveController {
             e.printStackTrace();
         }
     }
+
 
     /*
      * Sets the trainer name and updates the trainer label.
@@ -160,9 +166,6 @@ public class TeachMoveController {
         }
     }
 
-    /*
-     * Handles teaching a new move to a selected Pokémon.
-     */
     private void handleTeachMove(ActionEvent event) {
         String selectedPokemon = pokemonComboBox.getValue();
         String selectedMove = moveComboBox.getValue();
@@ -239,7 +242,8 @@ public class TeachMoveController {
             return;
         }
 
-        if (currentMoves.size() >= 4 && !isHM) {
+        long moveCount = currentMoves.size();
+        if (moveCount >= 2 && !isHM) {
             showAlert("Too Many Moves", pokemonName + " already knows 4 moves. Please forget one first.");
             return;
         }
@@ -259,6 +263,7 @@ public class TeachMoveController {
         updateForgetMoves();
         showAlert("Success", pokemonName + " has successfully learned " + moveName + "!");
     }
+
 
     /*
      * Handles removing a move from the selected Pokémon.
@@ -333,7 +338,8 @@ public class TeachMoveController {
     }
 
     /*
-     * Updates the forgetMoveComboBox with current moves of the selected Pokémon.
+     * Updates the forgetMoveComboBox with current moves of the selected Pokémon,
+     * excluding default HM moves like Tackle and Defend.
      */
     private void updateForgetMoves() {
         String selected = pokemonComboBox.getValue();
@@ -348,7 +354,10 @@ public class TeachMoveController {
                 String[] parts = line.split(":");
                 if (parts.length == 2 && parts[0].trim().equalsIgnoreCase(pokemonName)) {
                     for (String move : parts[1].split(",")) {
-                        moveSet.add(move.trim());
+                        String trimmed = move.trim();
+                        if (!trimmed.equalsIgnoreCase("Tackle") && !trimmed.equalsIgnoreCase("Defend")) {
+                            moveSet.add(trimmed);
+                        }
                     }
                     break;
                 }

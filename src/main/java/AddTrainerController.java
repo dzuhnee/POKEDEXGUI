@@ -122,7 +122,8 @@ public class AddTrainerController {
                 writer.newLine();
                 writer.write("Description: " + description);
                 writer.newLine();
-                // Removed the -----
+                writer.write("--------------------------------------------------");
+                writer.newLine();
             } catch (IOException e) {
                 System.err.println("Error saving trainer data: " + e.getMessage());
                 feedbackLabel.setText("Error saving trainer data!");

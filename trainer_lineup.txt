@@ -2,10 +2,7 @@ chas -> 1,Bulbasaur
 Kyle -> 1,Bulbasaur
 Riki -> 1,Bulbasaur
 blair -> 2,Ivysaur
-ella -> 2,Ivysaur
-ella -> 3,Venusaur
 Ash Ketchum -> 1,Bulbasaur
-ella -> 13,Pidgey
 Kyle -> 29,Abra
 Kyle -> 28,Vileplume
 Byron -> 5,Charmeleon
@@ -25,8 +22,17 @@ Riki -> 26,Oddish
 Riki -> 21,Raichu
 Riki -> 28,Vileplume
 Kyle -> 23,Wigglytuff
-ella -> 11,Metapod
-ella -> 27,Gloom
 Kyle -> 6,Charizard
 Kyle -> 26,Oddish
-ella -> 29,Abra
+ella -> 1,Unknown
+ella -> 3,Unknown
+ella -> 13,Unknown
+ella -> 11,Unknown
+ella -> 27,Unknown
+ella -> 29,Unknown
+Oli -> 1,Bulbasaur
+Oli -> 2,Ivysaur
+Oli -> 3,Venusaur
+Oli -> 4,Charmander
+Oli -> 5,Charmeleon
+Oli -> 11,Metapod

@@ -13,7 +13,7 @@ Birthdate: 1987-05-22
 Gender: Male
 Hometown: Pallet Town
 Description: Pokemon Trainer from Kanto
-Money: 815400
+Money: 806400
 --------------------------------------------------
 Trainer Info:
 ID: 21
@@ -47,7 +47,7 @@ Birthdate: 2005-11-20
 Gender: female
 Hometown: nacalub
 Description: sybau
-Money: 985000
+Money: 981500
 --------------------------------------------------
 Trainer Info:
 ID: 19
@@ -70,3 +70,32 @@ Birthdate: 2002-12-13
 Gender: Female
 Hometown: Katip
 Description: Crazy
+--------------------------------------------------
+ID: 12
+Name: Oli
+Birthdate: 1985-05-22
+Gender: Male
+Hometown: Taft
+Description: Best CCPROG2 Prof
+--------------------------------------------------
+ID: 100
+Name: idk
+Birthdate: 2025-07-30
+Gender: female
+Hometown: pamp
+Description: sybau
+--------------------------------------------------
+ID: 123
+Name: Fitz
+Birthdate: 1997-06-09
+Gender: Male
+Hometown: Japan
+Description: Interlinked
+--------------------------------------------------
+ID: 78
+Name: test
+Birthdate: 1111-11-11
+Gender: f
+Hometown: s
+Description: s
+--------------------------------------------------

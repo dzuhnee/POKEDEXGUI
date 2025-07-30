@@ -1,1 +1,5 @@
-Raticate: Defend, Cut, Strength, Acupressure
+Charizard: Absorb, Cut, Fly, Flamethrower
+Bulbasaur: Absorb
+Charmander: Cut, Blaze Kick, Absorb
+Ivysaur: Venom Jab, Solar Strike, Leaf Blade
+Charmeleon: Cut, Absorb

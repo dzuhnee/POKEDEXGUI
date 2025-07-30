@@ -33,25 +33,26 @@
 
       <Button fx:id="forgetButton" layoutX="402.0" layoutY="238.0" mnemonicParsing="false" text="Forget Move" />
 
-
       <!-- Teach Button -->
-      <Button fx:id="teachButton" contentDisplay="GRAPHIC_ONLY" layoutX="227.0" layoutY="257.0" mnemonicParsing="false" style="-fx-background-color: transparent;;" text="Teach Move">
+      <Button fx:id="teachButton" layoutX="227.0" layoutY="251.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: transparent; -fx-background-color: transparent;">
+            <ImageView fitHeight="30.0" fitWidth="106.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@teachMove.png" />
                </image>
             </ImageView>
-         </graphic></Button>
+         </graphic>
+      </Button>
 
       <!-- Back Button -->
-      <Button fx:id="backButton" contentDisplay="GRAPHIC_ONLY" layoutX="233.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: transparent;;">
+      <Button fx:id="backButton" layoutX="233.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="94.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@back.png" />
                </image>
             </ImageView>
-         </graphic></Button>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

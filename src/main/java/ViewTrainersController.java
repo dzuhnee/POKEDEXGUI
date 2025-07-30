@@ -37,6 +37,7 @@ public class ViewTrainersController {
     private ObservableList<com.pokedex.app.Trainer> trainerData = FXCollections.observableArrayList();
 
     @FXML
+
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("trainerID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -75,7 +76,7 @@ public class ViewTrainersController {
         String[] fieldOrder = {"ID", "Name", "Birthdate", "Gender", "Hometown", "Description"};
         String[] currentTrainerData = new String[fieldOrder.length];
         int fieldIndex = 0;
-        int money = 1_000_000;  // Default if missing
+        int money = 1_000_000;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -104,7 +105,7 @@ public class ViewTrainersController {
 
                     currentTrainerData = new String[fieldOrder.length];
                     fieldIndex = 0;
-                    money = 1_000_000; // Reset for next trainer
+                    money = 1_000_000;
                     continue;
                 }
 
@@ -126,6 +127,7 @@ public class ViewTrainersController {
                 }
             }
 
+            // ✅ Save the last trainer if no delimiter after
             if (fieldIndex == fieldOrder.length) {
                 int id = Integer.parseInt(currentTrainerData[0]);
                 LocalDate birthdate = LocalDate.parse(currentTrainerData[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -144,6 +146,4 @@ public class ViewTrainersController {
             System.err.println("Error reading trainer data from " + filename + ": " + e.getMessage());
         }
     }
-
-
 }
