@@ -24,6 +24,4 @@
 24,Zubat,Poison,Flying,6,22,0,25,40,45,35,55
 25,Golbat,Poison,Flying,22,36,24,0,75,80,70,90
 26,Oddish,Grass,Poison,8,21,0,27,45,50,55,30
-27,Gloom,Grass,Poison,21,36,26,28,60,65,70,40
-28,Vileplume,Grass,Poison,36,0,27,0,75,80,85,50
-30,Kadabra,Psychic,None,16,36,29,0,40,35,30,105
+95,Jakol,Electric,Dragon,5,45,12,18,450,100,100,100

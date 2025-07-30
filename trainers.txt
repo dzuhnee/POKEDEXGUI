@@ -47,7 +47,7 @@ Birthdate: 2005-11-20
 Gender: female
 Hometown: nacalub
 Description: sybau
-Money: 981500
+Money: 978500
 --------------------------------------------------
 Trainer Info:
 ID: 19
