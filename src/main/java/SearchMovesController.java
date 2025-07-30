@@ -40,6 +40,10 @@ public class SearchMovesController {
 
     private ObservableList<MoveBasic> allMoveBasics = FXCollections.observableArrayList();
 
+    /*
+     * Initializes the controller.
+     * Binds table columns to the MoveBasic object's fields and loads all move data from file.
+     */
     @FXML
     public void initialize() {
         colName.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
@@ -52,6 +56,10 @@ public class SearchMovesController {
         allMoveBasics.addAll(loadMovesFromFile());
     }
 
+    /*
+     * Reads move data from the moves.txt file and returns it as a list of MoveBasic objects.
+     * Skips lines that do not match the expected format.
+     */
     public List<com.pokedex.app.MoveBasic> loadMovesFromFile() {
         List<com.pokedex.app.MoveBasic> moveBasics = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("moves.txt"))) {
@@ -75,7 +83,11 @@ public class SearchMovesController {
         }
         return moveBasics;
     }
-    
+
+    /*
+     * Handles the search button click.
+     * Filters moves based on the input keyword and updates the result table with matches.
+     */
     @FXML
     public void handleSearch(ActionEvent event) {
         String keyword = searchField.getText().trim().toLowerCase();
@@ -93,6 +105,10 @@ public class SearchMovesController {
         resultTable.setVisible(true);
     }
 
+    /*
+     * Handles the "Back" button.
+     * Loads the previous MovesTab.fxml view and navigates the user back.
+     */
     @FXML
     public void handleBack(ActionEvent event) {
         try {

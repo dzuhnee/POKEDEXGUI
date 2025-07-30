@@ -34,6 +34,10 @@ public class SearchPokemonController {
     private final ObservableList<PokemonBasic> allPokemon = FXCollections.observableArrayList();
     private final Map<PokemonBasic, List<String>> typeMap = new HashMap<>();
 
+    /*
+     * Initializes the controller by setting up table column mappings,
+     * loading Pokémon data and types from file, and preparing the type dropdown.
+     */
     @FXML
     public void initialize() {
         colDex.setCellValueFactory(new PropertyValueFactory<>("dexNumber"));
@@ -49,6 +53,10 @@ public class SearchPokemonController {
         resultTable.setVisible(false);
     }
 
+    /*
+     * Populates the type combo box with all possible Pokémon types
+     * and sets the default value to "-- Select Type --".
+     */
     private void initializeTypeComboBox() {
         List<String> allTypes = Arrays.asList(
                 "Normal", "Fire", "Water", "Electric", "Grass", "Ice",
@@ -64,6 +72,10 @@ public class SearchPokemonController {
         typeComboBox.setValue("-- Select Type --");
     }
 
+    /*
+     * Loads additional moves per Pokémon from "pokemon_moves.txt" file.
+     * Returns a map where key = Pokémon name and value = comma-separated moves.
+     */
     private Map<String, String> loadPokemonMoves() {
         Map<String, String> movesMap = new HashMap<>();
         File file = new File("pokemon_moves.txt");
@@ -87,14 +99,18 @@ public class SearchPokemonController {
         return movesMap;
     }
 
+    /*
+     * Loads all Pokémon data from "pokemon_data.txt" and adds them to the observable list.
+     * Also loads their corresponding moves and maps each Pokémon to their types for filtering.
+     */
     private void loadPokemonDataFromFile() {
         File file = new File("pokemon_data.txt");
         if (!file.exists()) {
-            System.err.println("❌ File not found: pokemon_data.txt");
+            System.err.println("File not found: pokemon_data.txt");
             return;
         }
 
-        Map<String, String> movesMap = loadPokemonMoves(); // ✅
+        Map<String, String> movesMap = loadPokemonMoves();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -129,12 +145,17 @@ public class SearchPokemonController {
                 }
             }
 
-            System.out.println("✅ Loaded " + allPokemon.size() + " Pokémon.");
+            System.out.println("Loaded " + allPokemon.size() + " Pokémon.");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /*
+     * Handles the search button click.
+     * Filters Pokémon based on the entered keyword and selected type.
+     * Displays the results in the table.
+     */
     @FXML
     public void handleSearch(ActionEvent event) {
         String keyword = searchField.getText().trim().toLowerCase();
@@ -157,13 +178,17 @@ public class SearchPokemonController {
         }
 
         if (filteredList.isEmpty()) {
-            System.out.println("🔍 No data found for that search.");
+            System.out.println("No data found for that search.");
         }
 
         resultTable.setItems(filteredList);
         resultTable.setVisible(true);
     }
 
+    /*
+     * Handles the "Back" button.
+     * Loads the Pokémon tab scene to return to the previous menu.
+     */
     @FXML
     public void handleBack(ActionEvent event) {
         try {
