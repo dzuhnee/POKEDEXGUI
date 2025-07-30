@@ -117,11 +117,17 @@ public class AddPokemonController {
             FileWriter txtWriter = new FileWriter("pokemon_data.txt", true);
             txtWriter.write(data + "\n");
             txtWriter.close();
-            System.out.println("Pokémon saved successfully!");
+
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Success");
+            successAlert.setHeaderText(null);
+            successAlert.setContentText("Pokémon added successfully!");
+            successAlert.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error saving Pokémon data.");
         }
+
     }
 
     /*

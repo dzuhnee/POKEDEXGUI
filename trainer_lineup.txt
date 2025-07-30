@@ -32,3 +32,8 @@ Ash Ketchum -> 3,Unknown
 Ash Ketchum -> 4,Unknown
 Ash Ketchum -> 22,Unknown
 Ash Ketchum -> 23,Unknown
+Nathan -> 6,Unknown
+Nathan -> 11,Unknown
+Nathan -> 19,Unknown
+Nathan -> 20,Unknown
+Nathan -> 31,Unknown

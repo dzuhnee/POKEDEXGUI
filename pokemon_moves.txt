@@ -1,6 +1,9 @@
+Pikachu: Thunderbolt, Zap Ring
 Charizard: Absorb, Cut, Fly, Flamethrower
-Bulbasaur: Solar Strike, Leaf Blade
+Bulbasaur: 
 Charmander: Cut, Blaze Kick, Absorb
 Ivysaur: Venom Jab, Solar Strike, Leaf Blade
 Charmeleon: Cut, Absorb
+Metapod: Bug Bite
+Poliwrath: Surf, Hydro Cutter
 Butterfree: Fly, Sky Chop

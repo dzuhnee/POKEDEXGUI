@@ -45,7 +45,7 @@ class ItemManager {
         itemList.add(new Feather("Clever Feather", "Slightly increases Defense.", "+1 Defense EV", 300, 150, 10, "Defense"));
 
         // Others
-        itemList.add(new RareCandy("Rare Candy", "Level-Up Item", "A candy packed with energy.", "Increases level by 1", 500, -1, 0));  // -1 or 0 indicates it cannot be sold
+        itemList.add(new RareCandy("Rare Candy", "Level-Up Item", "A candy packed with energy.", "Increases level by 1", 4800, 2400, 10));  // -1 or 0 indicates it cannot be sold
 
         // Evolution Stones
         itemList.add(new EvolutionStone("Fire Stone", "Radiates heat.", "Evolves Vulpix, Growlithe, Eevee, etc.", 3000, 1500, 10, "Fire"));

@@ -1,3 +1,4 @@
 21: Protein,Protein,Dusk Stone,Shiny Stone,Sun Stone,Leaf Stone,Thunder Stone,Rare Candy,Protein
 17: 
 1: Iron,Protein,Zinc,Health Feather,Swift Feather,Protein,Zinc,Health Feather,Swift Feather,Carbos,Protein,Health Feather,Sun Stone,Moon Stone,Moon Stone,Moon Stone,Moon Stone,Moon Stone,Thunder Stone,Rare Candy
+12: Carbos,Iron,Protein,Zinc,Thunder Stone,Thunder Stone,Dusk Stone,Dawn Stone

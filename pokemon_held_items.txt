@@ -14,3 +14,4 @@
 21:Wigglytuff:Calcium
 1:Charmander:Calcium
 1:Charmander:HP Up
+12:Poliwrath:Carbos

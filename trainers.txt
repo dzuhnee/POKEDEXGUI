@@ -70,3 +70,19 @@ Birthdate: 2002-12-13
 Gender: Female
 Hometown: Katip
 Description: Crazy
+--------------------------------------------------
+ID: 911
+Name: Natsilog
+Birthdate: 2024-12-21
+Gender: female
+Hometown: rawr
+Description: scary
+--------------------------------------------------
+ID: 12
+Name: Nathan
+Birthdate: 1922-11-12
+Gender: male
+Hometown: shs
+Description: shsh
+Money: 930800
+--------------------------------------------------
