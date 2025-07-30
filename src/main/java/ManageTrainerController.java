@@ -69,8 +69,7 @@ public class ManageTrainerController {
 
     @FXML
     public void handleRemoveItem(ActionEvent event) {
-        System.out.println("Remove Item clicked!");
-        // navigateToScreen("/RemoveItem.fxml", event);
+        navigateToScreen("/RemoveItem.fxml", event);
     }
 
     @FXML

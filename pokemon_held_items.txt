@@ -7,3 +7,8 @@
 21:Charmander:Health Feather
 17:Ivysaur:Calcium
 1:Bulbasaur:Iron
+21:Oddish:Protein
+21:Oddish:Calcium
+21:Oddish:Carbos
+21:Wigglytuff:Protein
+21:Wigglytuff:Calcium

@@ -1,3 +1,3 @@
-21: Calcium,Protein,Protein,Protein,Carbos,Carbos,Carbos
+21: Protein,Protein,Dusk Stone,Shiny Stone,Sun Stone,Leaf Stone,Thunder Stone,Rare Candy,Protein
 17: 
-1: 
+1: Calcium,HP Up,Iron,Protein,Zinc,Health Feather,Swift Feather,HP Up,Protein,Calcium,Zinc,Health Feather,Swift Feather

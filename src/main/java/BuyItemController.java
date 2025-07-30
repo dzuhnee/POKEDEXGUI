@@ -46,7 +46,6 @@ public class BuyItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        debugPrintBag();
         trainer = AppState.getInstance().getFullTrainer();
         if (trainer == null) {
             System.out.println("Trainer not loaded in BuyItemController");
@@ -62,48 +61,13 @@ public class BuyItemController implements Initializable {
         quantityField.textProperty().addListener((observable, oldValue, newValue) -> updateTotalCost());
         shopTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateTotalCost());
 
+        enableTextWrap(colItemName);
+        enableTextWrap(colItemDescription);
+
         feedbackLabel.setText("");
-        quantityField.setText("1"); // Default
-        updateTrainerInfo();        // Display trainer's name and money
+        quantityField.setPromptText("1");
+        updateTrainerInfo();    // Display trainer's name and money
     }
-
-    // FOR DEBUGGING - DELETE SOON
-    private void debugPrintBag() {
-        Trainer trainer = AppState.getInstance().getFullTrainer();
-        if (trainer == null) {
-            System.out.println("⚠ No trainer loaded.");
-            return;
-        }
-
-        List<Item> bag = trainer.getItemBag();
-        if (bag == null || bag.isEmpty()) {
-            System.out.println("Bag is empty.");
-            return;
-        }
-
-        System.out.println("Items in bag:");
-
-        List<String> countedNames = new ArrayList<>();
-
-        for (int i = 0; i < bag.size(); i++) {
-            Item current = bag.get(i);
-            String currentName = current.getName();
-
-            if (!countedNames.contains(currentName)) {
-                int count = 0;
-
-                for (int j = 0; j < bag.size(); j++) {
-                    if (bag.get(j).getName().equals(currentName)) {
-                        count++;
-                    }
-                }
-
-                System.out.println("• " + currentName + " x" + count);
-                countedNames.add(currentName);
-            }
-        }
-    }
-
 
     public void setSearchKeyword(String keyword) {
         this.searchKeyword = keyword;
@@ -188,7 +152,7 @@ public class BuyItemController implements Initializable {
                     trainer.getUniqueItemTypeCount() >= 10) {
                 showFeedback("Bag full - too many item types!", "error");
             } else if (trainer.getTotalItemCount() + quantity > 50) {
-                showFeedback("Bag full - not enough space!", "error");
+                showFeedback("Bag full - not enough space, remove an item first!", "error");
             } else {
                 showFeedback("Purchase failed!", "error");
             }
@@ -227,4 +191,26 @@ public class BuyItemController implements Initializable {
                     "-fx-background-radius: 3px;");
         }
     }
+
+    private void enableTextWrap(TableColumn<Item, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<Item, String> cell = new TableCell<>() {
+                private final javafx.scene.text.Text text = new javafx.scene.text.Text();
+
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty().subtract(10));
+                    text.getStyleClass().add("wrapped-text");
+                    setGraphic(text);
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            };
+            return cell;
+        });
+    }
+
 }

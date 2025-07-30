@@ -147,17 +147,29 @@ public class UseItemController {
         // Update trainer items file (for trainer_items.txt)
         FileUtils.updateTrainerItemsInFile(currentTrainer);
 
-        // Update main trainer file (trainers.txt)
+        // Update main trainer file (trainers.txt) - this should handle lineup changes
         FileUtils.updateTrainerInFile(currentTrainer);
+
+        // Use existing AppState method to reload data from files
+        AppState.getInstance().reloadTrainerDataFromFile();
+        this.currentTrainer = AppState.getInstance().getFullTrainer();
 
         // Show success and effect message
         infoLabel.setText(resultMessage);
 
+        // Clear selections to avoid confusion with old data
+        selectedPokemon = null;
+        selectedItem = null;
+        pokemonTable.getSelectionModel().clearSelection();
+        itemTable.getSelectionModel().clearSelection();
+
         // Reload tables to reflect changes
         loadTables();
+
+        // Force table refresh
+        pokemonTable.refresh();
+        itemTable.refresh();
     }
-
-
 
     @FXML
     private void handleBack(ActionEvent event) {

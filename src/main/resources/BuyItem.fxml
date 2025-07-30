@@ -39,7 +39,7 @@
             <Font name="Arial Rounded MT Bold" size="17.0" />
          </font>
       </Label>
-      <Label fx:id="feedbackLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="357.0" layoutY="135.0" prefHeight="69.0" prefWidth="219.0">
+      <Label fx:id="feedbackLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="357.0" layoutY="135.0" prefHeight="69.0" prefWidth="219.0" wrapText="true">
          <font>
             <Font name="Arial Rounded MT Bold" size="15.0" />
          </font>
