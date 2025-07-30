@@ -69,3 +69,5 @@ public class RareCandy extends Item {
         return sb.toString();
     }
 }
+
+// TEST
