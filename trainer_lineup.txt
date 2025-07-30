@@ -17,7 +17,6 @@ chas -> 3,Venusaur
 chas -> 2,Ivysaur
 chas -> 4,Charmander
 chas -> 5,Charmeleon
-chas -> 6,Charizard
 Riki -> 26,Oddish
 Riki -> 21,Raichu
 Riki -> 28,Vileplume
@@ -36,3 +35,8 @@ Oli -> 3,Venusaur
 Oli -> 4,Charmander
 Oli -> 5,Charmeleon
 Oli -> 11,Metapod
+Test 1 -> 4,Unknown
+Test 1 -> 7,Unknown
+Test 1 -> 11,Unknown
+Test 1 -> 30,Unknown
+chas -> 20,Pikachu

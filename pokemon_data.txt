@@ -26,5 +26,4 @@
 26,Oddish,Grass,Poison,8,21,0,27,45,50,55,30
 27,Gloom,Grass,Poison,21,36,26,28,60,65,70,40
 28,Vileplume,Grass,Poison,36,0,27,0,75,80,85,50
-29,Abra,Psychic,None,10,16,0,30,25,20,15,90
 30,Kadabra,Psychic,None,16,36,29,0,40,35,30,105

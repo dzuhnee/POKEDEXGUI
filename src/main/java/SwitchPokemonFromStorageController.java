@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
 import java.io.*;
 import java.util.*;
@@ -35,6 +36,7 @@ public class SwitchPokemonFromStorageController {
 
 
     private String trainerName;
+    private String searchKeyword;
     private final List<Integer> lineupIDs = new ArrayList<>();
     private final List<Integer> storageIDs = new ArrayList<>();
     private Trainer trainer;
@@ -238,11 +240,20 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    public void setSearchKeyword(String keyword) {
+        this.searchKeyword = keyword;
+    }
+
     @FXML
-    private void handleBack(javafx.event.ActionEvent event) {
+    private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
+
+            com.pokedex.app.ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

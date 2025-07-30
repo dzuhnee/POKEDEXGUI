@@ -1,3 +1,4 @@
 21: Protein,Protein,Dusk Stone,Shiny Stone,Sun Stone,Leaf Stone,Thunder Stone,Rare Candy,Protein
 17: 
 1: Calcium,HP Up,Iron,Protein,Zinc,Health Feather,Swift Feather,HP Up,Protein,Zinc,Health Feather,Swift Feather,Dusk Stone,Dawn Stone,Ice Stone
+99: Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium,Calcium

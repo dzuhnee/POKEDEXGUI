@@ -17,7 +17,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import com.pokedex.app.Item;
 import com.pokedex.app.Trainer;
+import com.pokedex.app.TrainerManager;
+import com.pokedex.app.FileUtils;
+import com.pokedex.app.ManageTrainerController;
+import com.pokedex.app.ItemManager;
+import com.pokedex.app.AppState;
 
 public class TeachMoveController {
 
@@ -33,6 +39,11 @@ public class TeachMoveController {
     private List<String> moveList = new ArrayList<>();
     private int selectedTrainerId = -1;
     private Trainer trainer;
+    private String searchKeyword;
+    public void setSearchKeyword(String keyword) {
+        this.searchKeyword = keyword;
+    }
+
 
     /*
      * Sets the selected trainer ID and loads their Pokémon.
@@ -157,7 +168,13 @@ public class TeachMoveController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/ManageTrainer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
+            Parent root = loader.load();
+
+            ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
