@@ -34,11 +34,17 @@ public class TeachMoveController {
     private int selectedTrainerId = -1;
     private Trainer trainer;
 
+    /*
+     * Sets the selected trainer ID and loads their Pokémon.
+     */
     public void setTrainerId(int trainerId) {
         this.selectedTrainerId = trainerId;
         loadPokemonForTrainer();
     }
 
+    /*
+     * Initializes the controller, loads available moves and sets up button actions.
+     */
     @FXML
     public void initialize() {
         loadMoves();
@@ -54,6 +60,9 @@ public class TeachMoveController {
         }
     }
 
+    /*
+     * Loads Pokémon lineup for the selected trainer from trainer_lineup.txt.
+     */
     private void loadPokemonForTrainer() {
         try (BufferedReader br = new BufferedReader(new FileReader("trainer_lineup.txt"));
              BufferedReader pokedexReader = new BufferedReader(new FileReader("pokemon_data.txt"))) {
@@ -101,6 +110,9 @@ public class TeachMoveController {
         }
     }
 
+    /*
+     * Loads available moves from moves.txt and formats them for display.
+     */
     private void loadMoves() {
         moveList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader("moves.txt"))) {
@@ -123,6 +135,9 @@ public class TeachMoveController {
         }
     }
 
+    /*
+     * Sets the trainer name and updates the trainer label.
+     */
     public void setTrainerName(String name) {
         this.trainerName = name;
         if (trainerLabel != null) {
@@ -130,6 +145,9 @@ public class TeachMoveController {
         }
     }
 
+    /*
+     * Handles navigation back to the ManageTrainer screen.
+     */
     @FXML
     public void handleBack(ActionEvent event) {
         try {
@@ -142,6 +160,9 @@ public class TeachMoveController {
         }
     }
 
+    /*
+     * Handles teaching a new move to a selected Pokémon.
+     */
     private void handleTeachMove(ActionEvent event) {
         String selectedPokemon = pokemonComboBox.getValue();
         String selectedMove = moveComboBox.getValue();
@@ -239,6 +260,9 @@ public class TeachMoveController {
         showAlert("Success", pokemonName + " has successfully learned " + moveName + "!");
     }
 
+    /*
+     * Handles removing a move from the selected Pokémon.
+     */
     private void handleForgetMove(ActionEvent event) {
         String selectedPokemon = pokemonComboBox.getValue();
         String selectedMove = forgetMoveComboBox.getValue();
@@ -308,6 +332,9 @@ public class TeachMoveController {
         showAlert("Move Forgotten", pokemonName + " forgot " + selectedMove + ".");
     }
 
+    /*
+     * Updates the forgetMoveComboBox with current moves of the selected Pokémon.
+     */
     private void updateForgetMoves() {
         String selected = pokemonComboBox.getValue();
         if (selected == null) return;
@@ -333,6 +360,9 @@ public class TeachMoveController {
         forgetMoveComboBox.setItems(FXCollections.observableArrayList(moveSet));
     }
 
+    /*
+     * Utility method to show a simple information alert to the user.
+     */
     private void showAlert(String title, String content) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle(title);

@@ -29,3 +29,4 @@ ella -> 11,Metapod
 ella -> 27,Gloom
 Kyle -> 6,Charizard
 Kyle -> 26,Oddish
+ella -> 29,Abra

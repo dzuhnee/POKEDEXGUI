@@ -27,6 +27,10 @@ public class ViewPokemonController {
     @FXML private TableColumn<com.pokedex.app.PokemonBasic, Integer> colDefense;
     @FXML private TableColumn<com.pokedex.app.PokemonBasic, Integer> colSpeed;
 
+    /*
+     * Initializes the table columns and sets the table data with Pokémon stats.
+     * This is automatically called by JavaFX after the FXML fields are injected.
+     */
     @FXML
     public void initialize() {
         colDex.setCellValueFactory(new PropertyValueFactory<>("dexNumber"));
@@ -39,6 +43,10 @@ public class ViewPokemonController {
         pokemonTable.setItems(loadPokemonData());
     }
 
+    /*
+     * Loads Pokémon data from the "pokemon_data.txt" file and returns it
+     * as an observable list to populate the table.
+     */
     private ObservableList<com.pokedex.app.PokemonBasic> loadPokemonData() {
         ObservableList<com.pokedex.app.PokemonBasic> list = FXCollections.observableArrayList();
 
@@ -64,6 +72,9 @@ public class ViewPokemonController {
         return list;
     }
 
+    /*
+     * Handles the back button action, navigating the user back to the Pokémon tab view.
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {

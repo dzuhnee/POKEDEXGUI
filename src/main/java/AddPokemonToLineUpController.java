@@ -20,14 +20,30 @@ import com.pokedex.app.Trainer;
 
 public class AddPokemonToLineUpController {
 
+    /*
+     * UI components:
+     * - pokemonListView: List of available Pokémon to assign
+     * - trainerNameLabel: Displays the current trainer's name
+     */
     @FXML private ListView<String> pokemonListView;
     @FXML private Label trainerNameLabel;  // changed from TextField to Label
 
+    /*
+     * displayList: Observable list for the ListView UI
+     * fullPokemonDataMap: Maps display name to full Pokémon data line
+     * trainerName: Stores the trainer's name
+     * trainer: The currently selected Trainer object from AppState
+     */
     private final ObservableList<String> displayList = FXCollections.observableArrayList();
     private final Map<String, String> fullPokemonDataMap = new HashMap<>();
     private String trainerName;  // store trainer name internally
     private Trainer trainer;
 
+    /*
+     * Called automatically when the FXML view is loaded.
+     * - Loads Pokémon data from file
+     * - Sets the ListView and trainer label
+     */
     @FXML
     public void initialize() {
         loadPokemonData();
@@ -46,13 +62,21 @@ public class AddPokemonToLineUpController {
         }
     }
 
-    // This method will be called by the previous controller to pass the trainer name
+    /*
+     * Allows another controller to set the trainer name.
+     * - Updates label and AppState with selected trainer
+     */
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
         trainerNameLabel.setText(trainerName);
         AppState.setSelectedTrainerName(trainerName);
     }
 
+    /*
+     * Loads Pokémon data from pokemon_data.txt.
+     * - Populates displayList with formatted Pokémon info
+     * - Maps display name to original file line for later access
+     */
     private void loadPokemonData() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("pokemon_data.txt"));
@@ -74,6 +98,11 @@ public class AddPokemonToLineUpController {
         }
     }
 
+    /*
+     * Assigns selected Pokémon to a trainer:
+     * - Checks for missing input, duplicate entries, or max lineup (6 Pokémon)
+     * - Saves assignment to trainer_lineup.txt
+     */
     @FXML
     public void handleAssignPokemon() {
         String selectedDisplay = pokemonListView.getSelectionModel().getSelectedItem();
@@ -134,6 +163,9 @@ public class AddPokemonToLineUpController {
         pokemonListView.getSelectionModel().clearSelection();
     }
 
+    /*
+     * Displays an alert with the given type, title, and message.
+     */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -142,6 +174,9 @@ public class AddPokemonToLineUpController {
         alert.showAndWait();
     }
 
+    /*
+     * Navigates back to the Manage Trainer screen when "Back" button is clicked.
+     */
     @FXML
     private void handleBackButton(ActionEvent event) {
         try {

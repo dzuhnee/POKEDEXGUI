@@ -27,12 +27,21 @@ public class ReleasePokemonController {
     private String trainerName;
     private final String TRAINER_LINEUP_FILE = "trainer_lineup.txt";
 
+    /*
+     * Sets the trainer's name and updates the UI label.
+     * Also triggers the loading of that trainer's Pokémon lineup from the file.
+     */
     public void setTrainerName(String name) {
         this.trainerName = name;
         trainerLabel.setText("Trainer: " + name);
         loadTrainerPokemon();
     }
 
+
+    /*
+     * Called automatically after the FXML has been loaded.
+     * Retrieves the full Trainer object from the shared AppState.
+     */
     @FXML
     public void initialize() {
         trainer = com.pokedex.app.AppState.getInstance().getFullTrainer();
@@ -41,6 +50,10 @@ public class ReleasePokemonController {
         }
     }
 
+    /*
+     * Reads the trainer_lineup.txt file and finds all Pokémon associated with the current trainer.
+     * Populates the ListView with those Pokémon, or shows a placeholder message if none are found.
+     */
     private void loadTrainerPokemon() {
         ObservableList<String> trainerPokemons = FXCollections.observableArrayList();
         try (BufferedReader reader = new BufferedReader(new FileReader(TRAINER_LINEUP_FILE))) {
@@ -63,6 +76,11 @@ public class ReleasePokemonController {
         pokemonListView.setItems(trainerPokemons);
     }
 
+    /*
+     * Removes the selected Pokémon from the trainer_lineup.txt file,
+     * effectively "releasing" it from the trainer's team.
+     * Then reloads the updated list of Pokémon.
+     */
     @FXML
     private void releasePokemon() {
         String selected = pokemonListView.getSelectionModel().getSelectedItem();
@@ -82,6 +100,10 @@ public class ReleasePokemonController {
         loadTrainerPokemon();
     }
 
+    /*
+     * Handles the "Back" button.
+     * Loads the ManageTrainer.fxml scene and replaces the current window content with it.
+     */
     @FXML
     private void handleBack(javafx.event.ActionEvent event) {
         try {
