@@ -17,7 +17,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import com.pokedex.app.Item;
 import com.pokedex.app.Trainer;
+import com.pokedex.app.TrainerManager;
+import com.pokedex.app.FileUtils;
+import com.pokedex.app.ManageTrainerController;
+import com.pokedex.app.ItemManager;
+import com.pokedex.app.AppState;
 
 public class TeachMoveController {
 
@@ -33,6 +39,11 @@ public class TeachMoveController {
     private List<String> moveList = new ArrayList<>();
     private int selectedTrainerId = -1;
     private Trainer trainer;
+    private String searchKeyword;
+    public void setSearchKeyword(String keyword) {
+        this.searchKeyword = keyword;
+    }
+
 
     /*
      * Sets the selected trainer ID and loads their Pokémon.
@@ -112,6 +123,7 @@ public class TeachMoveController {
 
     /*
      * Loads available moves from moves.txt and formats them for display.
+     * Tackle and Defend are default HM moves — excluded from teachable list.
      */
     private void loadMoves() {
         moveList.clear();
@@ -121,6 +133,10 @@ public class TeachMoveController {
                 String[] parts = line.split(",");
                 if (parts.length >= 5) {
                     String name = parts[0].trim();
+                    if (name.equalsIgnoreCase("Tackle") || name.equalsIgnoreCase("Defend")) {
+                        continue; //  skip default moves
+                    }
+
                     String type = parts[2].trim();
                     String category = parts[3].trim();
                     String classification = parts[4].trim();
@@ -134,6 +150,7 @@ public class TeachMoveController {
             e.printStackTrace();
         }
     }
+
 
     /*
      * Sets the trainer name and updates the trainer label.
@@ -151,7 +168,13 @@ public class TeachMoveController {
     @FXML
     public void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/ManageTrainer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
+            Parent root = loader.load();
+
+            ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -160,9 +183,6 @@ public class TeachMoveController {
         }
     }
 
-    /*
-     * Handles teaching a new move to a selected Pokémon.
-     */
     private void handleTeachMove(ActionEvent event) {
         String selectedPokemon = pokemonComboBox.getValue();
         String selectedMove = moveComboBox.getValue();
@@ -239,7 +259,8 @@ public class TeachMoveController {
             return;
         }
 
-        if (currentMoves.size() >= 4 && !isHM) {
+        long moveCount = currentMoves.size();
+        if (moveCount >= 2 && !isHM) {
             showAlert("Too Many Moves", pokemonName + " already knows 4 moves. Please forget one first.");
             return;
         }
@@ -259,6 +280,7 @@ public class TeachMoveController {
         updateForgetMoves();
         showAlert("Success", pokemonName + " has successfully learned " + moveName + "!");
     }
+
 
     /*
      * Handles removing a move from the selected Pokémon.
@@ -333,7 +355,8 @@ public class TeachMoveController {
     }
 
     /*
-     * Updates the forgetMoveComboBox with current moves of the selected Pokémon.
+     * Updates the forgetMoveComboBox with current moves of the selected Pokémon,
+     * excluding default HM moves like Tackle and Defend.
      */
     private void updateForgetMoves() {
         String selected = pokemonComboBox.getValue();
@@ -348,7 +371,10 @@ public class TeachMoveController {
                 String[] parts = line.split(":");
                 if (parts.length == 2 && parts[0].trim().equalsIgnoreCase(pokemonName)) {
                     for (String move : parts[1].split(",")) {
-                        moveSet.add(move.trim());
+                        String trimmed = move.trim();
+                        if (!trimmed.equalsIgnoreCase("Tackle") && !trimmed.equalsIgnoreCase("Defend")) {
+                            moveSet.add(trimmed);
+                        }
                     }
                     break;
                 }

@@ -216,7 +216,13 @@ public class RemoveItemController implements Initializable {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/ManageTrainer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
+            Parent root = loader.load();
+
+            com.pokedex.app.ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+            
             Stage stage = (Stage) itemBagTable.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {

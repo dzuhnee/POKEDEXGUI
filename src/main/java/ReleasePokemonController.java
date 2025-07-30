@@ -26,6 +26,10 @@ public class ReleasePokemonController {
 
     private String trainerName;
     private final String TRAINER_LINEUP_FILE = "trainer_lineup.txt";
+    private String searchKeyword;
+    public void setSearchKeyword(String keyword) {
+        this.searchKeyword = keyword;
+    }
 
     /*
      * Sets the trainer's name and updates the UI label.
@@ -109,6 +113,11 @@ public class ReleasePokemonController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
+
+            com.pokedex.app.ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

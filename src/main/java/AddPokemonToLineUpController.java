@@ -27,6 +27,7 @@ public class AddPokemonToLineUpController {
      */
     @FXML private ListView<String> pokemonListView;
     @FXML private Label trainerNameLabel;  // changed from TextField to Label
+    private String trainerName; // store trainer name internally
 
     /*
      * displayList: Observable list for the ListView UI
@@ -36,8 +37,12 @@ public class AddPokemonToLineUpController {
      */
     private final ObservableList<String> displayList = FXCollections.observableArrayList();
     private final Map<String, String> fullPokemonDataMap = new HashMap<>();
-    private String trainerName;  // store trainer name internally
     private Trainer trainer;
+    private String searchKeyword;
+
+    public void setSearchKeyword(String keyword) {
+        this.searchKeyword = keyword;
+    }
 
     /*
      * Called automatically when the FXML view is loaded.
@@ -182,6 +187,11 @@ public class AddPokemonToLineUpController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageTrainer.fxml"));
             Parent root = loader.load();
+
+            com.pokedex.app.ManageTrainerController manageController = loader.getController();
+            manageController.setTrainer(trainer);
+            manageController.setSearchKeyword(searchKeyword); // if needed
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
