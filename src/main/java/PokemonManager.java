@@ -370,7 +370,17 @@ public class PokemonManager {
             pokemons.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 0, 0, 0, 0, 45, 49, 49, 45));
             pokemons.add(new Pokemon(12, "Butterfree", "Bug", "Flying", 0, 0, 0, 0, 60, 45, 50, 70));
             pokemons.add(new Pokemon(25, "Pikachu", "Electric", null, 0, 0, 0, 0, 35, 55, 40, 90));
+            pokemons.add(new Pokemon(26, "Raichu", "Electric", null, 0, 25, 0, 0, 60, 90, 55, 110));
         }
+    }
+
+    public Pokemon getPokemonByName(String name) {
+        for (Pokemon p : pokemons) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return p;
+            }
+        }
+        return null;
     }
 
 }

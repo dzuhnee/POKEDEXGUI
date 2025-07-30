@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import javafx.event.ActionEvent;
 
+
 import java.io.IOException;
 
 import com.pokedex.app.Pokemon;
@@ -71,6 +72,19 @@ public class UseItemController {
 
         currentTrainer = AppState.getInstance().getFullTrainer();
         loadTables();
+
+        itemTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            selectedItem = newSel;
+        });
+
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     // Loads the Pokemon Lineup Item Inventory tables
@@ -114,11 +128,11 @@ public class UseItemController {
                     .append("DEF: ").append(selectedPokemon.getDefense()).append("\n")
                     .append("SPD: ").append(selectedPokemon.getSpeed()).append("\n\n");
 
-            // 🔽 Clone the Pokémon and simulate the item effect on it
+            // Clone the Pokémon and simulate the item effect on it
             Pokemon simulated = selectedPokemon.cloneForPreview();
             selectedItem.getItem().use(simulated, AppState.getInstance().getPokemonManager());
 
-            // 🔽 Append the "after" stats
+            // Append the "after" stats
             sb.append("After Use:\n")
                     .append("HP: ").append(selectedPokemon.getHP())
                     .append(" → ").append(simulated.getHP()).append("\n")
@@ -129,7 +143,7 @@ public class UseItemController {
                     .append("SPD: ").append(selectedPokemon.getSpeed())
                     .append(" → ").append(simulated.getSpeed()).append("\n\n");
 
-            // 🔽 Optional: if your item includes more details like evolution messages
+            // Optional: if your item includes more details like evolution messages
             String extraInfo = selectedItem.getItem().getPreviewEffect(selectedPokemon, AppState.getInstance().getPokemonManager());
             sb.append(extraInfo);
 
@@ -147,89 +161,82 @@ public class UseItemController {
             return;
         }
 
-        // Store the Pokemon's position before using the item
+        String itemName = selectedItem.getName();
+
+        // Special case: Thunder Stone triggers evolution manually
+        if (itemName.equals("Thunder Stone")) {
+            if (selectedPokemon.getName().equals("Pikachu")) {
+                // Evolve Pikachu → Raichu
+                selectedPokemon.setBaseLevel(11);
+                pokemonTable.refresh();
+                showAlert("Evolution Success!", "Pikachu evolved into Raichu!");
+            } else {
+                showAlert("Cannot use Thunder Stone", "This item can only be used on Pikachu.");
+                return;
+            }
+        }
+
+        // Store Pokémon position
         int pokemonPosition = currentTrainer.getLineup().indexOf(selectedPokemon);
 
-        // Use the item and get the result message
+        // Use the item (can be Rare Candy etc.)
         String resultMessage = selectedPokemon.useItem(selectedItem.getItem(), AppState.getInstance().getPokemonManager());
-
-        currentTrainer.removeItemFromBag(selectedItem.getName(), 1);
 
         FileUtils.updateTrainerItemsInFile(currentTrainer);
         FileUtils.updateTrainerInFile(currentTrainer);
-
-        AppState.getInstance().reloadTrainerDataFromFile();
-        this.currentTrainer = AppState.getInstance().getFullTrainer();
 
         loadTables();
         pokemonTable.refresh();
         itemTable.refresh();
 
         infoLabel.setText(resultMessage);
-        selectedPokemon = null;
-        selectedItem = null;
         pokemonTable.getSelectionModel().clearSelection();
         itemTable.getSelectionModel().clearSelection();
 
-
-        // Check if the item had an effect
         boolean itemHadEffect = !resultMessage.toLowerCase().contains("no effect") &&
                 !resultMessage.toLowerCase().contains("cannot be used") &&
                 !resultMessage.toLowerCase().contains("has no effect");
 
         if (itemHadEffect) {
-            // Remove one instance of the used item from the bag
-            currentTrainer.removeItemFromBag(selectedItem.getName(), 1);
+            currentTrainer.removeItemFromBag(itemName, 1);
 
-            // CRITICAL: Update the trainer's lineup with the evolved/modified Pokemon
-            if (pokemonPosition >= 0 && pokemonPosition < currentTrainer.getLineup().size()) {
-                currentTrainer.getLineup().set(pokemonPosition, selectedPokemon);
+            // Just reuse selectedPokemon — it’s already updated
+            Pokemon updatedPokemon = selectedPokemon;
+
+            if (pokemonPosition >= 0 && updatedPokemon != null) {
+                currentTrainer.getLineup().set(pokemonPosition, updatedPokemon);
             }
 
-            // Update AppState with the modified trainer
             AppState.getInstance().setFullTrainer(currentTrainer);
+            updateInfoBox();
 
-            // Update the info label with the new stats
-            updateInfoBox(); // Refresh the info label
-
-            // Update this controller's reference
-            this.currentTrainer = AppState.getInstance().getFullTrainer();
-
-            // Build enhanced message with updated stats using the evolved Pokemon
             StringBuilder enhancedMessage = new StringBuilder();
             enhancedMessage.append(resultMessage).append("\n\n");
             enhancedMessage.append("Updated Stats:\n")
-                    .append("Name: ").append(selectedPokemon.getName()).append("\n")
-                    .append("Level: ").append(selectedPokemon.getBaseLevel()).append("\n")
-                    .append("HP: ").append(selectedPokemon.getHP()).append("\n")
-                    .append("ATK: ").append(selectedPokemon.getAttack()).append("\n")
-                    .append("DEF: ").append(selectedPokemon.getDefense()).append("\n")
-                    .append("SPD: ").append(selectedPokemon.getSpeed()).append("\n");
+                    .append("Name: ").append(updatedPokemon.getName()).append("\n")
+                    .append("Level: ").append(updatedPokemon.getBaseLevel()).append("\n")
+                    .append("HP: ").append(updatedPokemon.getHP()).append("\n")
+                    .append("ATK: ").append(updatedPokemon.getAttack()).append("\n")
+                    .append("DEF: ").append(updatedPokemon.getDefense()).append("\n")
+                    .append("SPD: ").append(updatedPokemon.getSpeed()).append("\n");
 
-            // Show enhanced message with updated stats
             infoLabel.setText(enhancedMessage.toString());
 
-            // Try to save to file (but don't reload from file since that breaks things)
             try {
-                FileUtils.updateTrainerInFile(currentTrainer);
+                FileUtils.updateTrainerInFile(currentTrainer); // not required but fine to keep
             } catch (Exception e) {
                 System.out.println("File save error: " + e.getMessage());
             }
         } else {
-            // Item had no effect, just show the result message without consuming the item
             infoLabel.setText(resultMessage);
         }
 
-        // Clear selections to avoid confusion with old data
         selectedPokemon = null;
         selectedItem = null;
         pokemonTable.getSelectionModel().clearSelection();
         itemTable.getSelectionModel().clearSelection();
-
-        // Reload tables to reflect changes (this should now show the evolved Pokemon)
         loadTables();
     }
-
 
     @FXML
     private void handleBack(ActionEvent event) {
