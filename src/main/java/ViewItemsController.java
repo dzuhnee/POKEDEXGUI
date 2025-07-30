@@ -46,6 +46,7 @@ public class ViewItemsController {
         tableView.setItems(itemBasicList);
     }
 
+    // for formatting
     private void enableTextWrap(TableColumn<ItemBasic, String> column) {
         column.setCellFactory(tc -> {
             TableCell<ItemBasic, String> cell = new TableCell<>() {

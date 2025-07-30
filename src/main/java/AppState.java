@@ -81,7 +81,7 @@ public class AppState {
         this.lastSearchKeyword = keyword;
     }
 
-    // ✅ NEW METHOD TO RELOAD TRAINER DATA FROM FILE
+    // NEW METHOD TO RELOAD TRAINER DATA FROM FILE
     public void reloadTrainerDataFromFile() {
         Trainer current = this.fullTrainer;
         if (current != null) {
@@ -112,7 +112,7 @@ public class AppState {
 
                     Pokemon p = new Pokemon(pokedexNumber, name, "", "", 1, -1, -1, -1, 0, 0, 0, 0);
 
-                    // ✅ Load held item for this Pokémon
+                    // Load held item for this Pokémon
                     String heldItemName = FileUtils.loadHeldItem(AppState.getInstance().getFullTrainer().getTrainerID(), name);
                     if (!heldItemName.equals("None")) {
                         ItemManager itemManager = new ItemManager();

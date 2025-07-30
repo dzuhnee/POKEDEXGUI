@@ -108,7 +108,7 @@ public class ManageTrainerController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SwitchPokemonFromStorage.fxml"));
             Parent root = loader.load();
 
-            // ✅ Store globally so Switch controller can access it
+            // Store globally so Switch controller can access it
             TrainerBasic basicTrainer = new TrainerBasic(
                     trainer.getTrainerID(),
                     trainer.getName(),
@@ -184,6 +184,7 @@ public class ManageTrainerController {
         // navigateToScreen("/ViewProfile.fxml", event);
     }
 
+    // Returns to Trainer Results Screen
     @FXML
     public void handleBack(ActionEvent event) {
         try {
@@ -195,7 +196,6 @@ public class ManageTrainerController {
             e.printStackTrace();
         }
     }
-
 
     private void navigateToScreen(String fxmlPath, ActionEvent event) {
         try {

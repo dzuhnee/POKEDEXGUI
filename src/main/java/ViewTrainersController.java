@@ -127,7 +127,7 @@ public class ViewTrainersController {
                 }
             }
 
-            // ✅ Save the last trainer if no delimiter after
+            // Save the last trainer if no delimiter after
             if (fieldIndex == fieldOrder.length) {
                 int id = Integer.parseInt(currentTrainerData[0]);
                 LocalDate birthdate = LocalDate.parse(currentTrainerData[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));

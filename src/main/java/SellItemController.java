@@ -38,6 +38,10 @@ public class SellItemController {
 
     private ObservableList<ItemRow> displayedItems;
 
+    /*
+     * Initializes the controller.
+     * Sets up table columns, loads trainer info, and populates the item bag table.
+     */
     @FXML
     public void initialize() {
         Trainer currentTrainer = AppState.getInstance().getFullTrainer();
@@ -49,6 +53,10 @@ public class SellItemController {
         loadBagTable();
     }
 
+    /*
+     * Configures the columns of the TableView to bind item properties.
+     * Also enables text wrapping for the description column.
+     */
     private void setupTableColumns() {
         colItemName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colItemDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -57,6 +65,9 @@ public class SellItemController {
         enableTextWrap(colItemDescription);
     }
 
+    /*
+     * Updates the trainer's displayed name and money from the current AppState.
+     */
     private void updateTrainerInfo() {
         Trainer trainer = AppState.getInstance().getFullTrainer();
         if (trainer != null) {
@@ -65,6 +76,10 @@ public class SellItemController {
         }
     }
 
+    /*
+     * Loads and groups items from the trainer's bag into ItemRow objects.
+     * Displays them in the TableView.
+     */
     private void loadBagTable() {
         Trainer trainer = AppState.getInstance().getFullTrainer();
         if (trainer == null) return;
@@ -99,7 +114,10 @@ public class SellItemController {
         bagTable.setItems(displayedItems);
     }
 
-
+    /*
+     * Handles the logic for selling an item.
+     * Validates input, updates trainer's inventory and money, and refreshes display.
+     */
     @FXML
     private void handleSell(ActionEvent event) {
         Trainer trainer = AppState.getInstance().getFullTrainer();
@@ -150,7 +168,9 @@ public class SellItemController {
         }
     }
 
-
+    /*
+     * Navigates back to the ManageTrainer screen.
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -162,7 +182,10 @@ public class SellItemController {
         }
     }
 
-
+    /*
+     * Displays a styled message in the feedback label.
+     * Message style depends on the type: success, error, or neutral.
+     */
     private void showFeedback(String message, String type) {
         feedbackLabel.setText(message);
 
@@ -179,6 +202,9 @@ public class SellItemController {
         }
     }
 
+    /*
+     * Enables text wrapping for a given TableColumn to properly display long descriptions.
+     */
     private void enableTextWrap(TableColumn<ItemRow, String> column) {
         column.setCellFactory(tc -> {
             TableCell<ItemRow, String> cell = new TableCell<>() {

@@ -157,11 +157,10 @@ public class Pokemon {
         if (evolved == null) return false;
 
         // Transfer properties
-        evolved.setBaseLevel(this.baseLevel); // ✅ carry over new level
-        evolved.setHeldItem(this.heldItem);   // ✅ keep held item if any
-        // Add any other fields you need to retain
+        evolved.setBaseLevel(this.baseLevel); // carry over new level
+        evolved.setHeldItem(this.heldItem);   // keep held item if any
 
-        // Replace this Pokémon’s identity with evolved one
+        // Replace Pokémon’s identity with the evolved one
         this.name = evolved.getName();
         this.primaryType = evolved.getPrimaryType();
         this.secondaryType = evolved.getSecondaryType();
@@ -174,8 +173,6 @@ public class Pokemon {
 
         return true;
     }
-
-
 
     public boolean evolveUsingStone(String stoneType, PokemonManager manager) {
         if (!TypeUtils.isValidType(stoneType)) return false;

@@ -21,6 +21,10 @@ public class FileUtils {
     private static final String POKEMON_DATA_FILE = "pokemon_data.txt";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /*
+     * Reads a file line-by-line and returns the contents as a List of strings.
+     * Useful for loading text-based data (e.g., trainer, item, and Pokémon data).
+     */
     public static List<String> readFile(String filename) {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -34,6 +38,9 @@ public class FileUtils {
         return lines;
     }
 
+    /*
+     * Loads the trainer's items from `trainer_items.txt` and adds them to the trainer's bag.
+     */
     public static void loadTrainerItemsFromFile(Trainer trainer) {
         try (BufferedReader reader = new BufferedReader(new FileReader(TRAINER_ITEMS_FILE))) {
             String line;
@@ -61,6 +68,10 @@ public class FileUtils {
         }
     }
 
+    /*
+     * Updates the trainer's basic information in `trainers.txt`.
+     * Overwrites existing entry based on trainer ID and also updates the item list file.
+     */
     public static void updateTrainerInFile(Trainer updatedTrainer) {
         List<String> lines = new ArrayList<>();
         boolean isUpdating = false;
@@ -107,6 +118,10 @@ public class FileUtils {
         updateTrainerItemsInFile(updatedTrainer);
     }
 
+    /*
+     * Updates the item list of a trainer in `trainer_items.txt`.
+     * Writes the updated list of items the trainer currently owns.
+     */
     public static void updateTrainerItemsInFile(Trainer trainer) {
         List<String> lines = new ArrayList<>();
         int idToUpdate = trainer.getTrainerID();
@@ -161,6 +176,10 @@ public class FileUtils {
         }
     }
 
+    /*
+     * Saves a Pokémon's held item in the `pokemon_held_items.txt` file.
+     * If an entry already exists, it is replaced with the new one.
+     */
     public static void saveHeldItem(int trainerID, String pokemonName, String itemName) {
         List<String> lines = new ArrayList<>();
         boolean found = false;
@@ -197,6 +216,10 @@ public class FileUtils {
         }
     }
 
+    /*
+     * Loads the held item of a Pokémon from `pokemon_held_items.txt`.
+     * Returns "None" if no item is found.
+     */
     public static String loadHeldItem(int trainerID, String pokemonName) {
         System.out.println("Looking for held items at: " + new File(HELD_ITEMS_FILE).getAbsolutePath());
 
@@ -216,6 +239,10 @@ public class FileUtils {
         return "None";
     }
 
+    /*
+     * Loads basic information about a trainer (name, gender, money, etc.) using the trainer's ID.
+     * Does not include lineup or item data.
+     */
     public static Trainer loadTrainerBasicInfo(int id) {
         try (BufferedReader reader = new BufferedReader(new FileReader(TRAINER_FILE))) {
             String line;
@@ -254,13 +281,17 @@ public class FileUtils {
         return null;
     }
 
+    /*
+     * Loads the list of Pokémon currently in a trainer’s lineup using their trainer ID.
+     * Pokémon data is loaded from `trainer_lineup.txt` and `pokemon_data.txt`.
+     */
     public static List<Pokemon> loadTrainerPokemon(int id) {
         List<Pokemon> lineup = new ArrayList<>();
         Trainer trainer = loadTrainerBasicInfo(id); // get name from ID
         if (trainer == null) return lineup;
 
         String trainerName = trainer.getName().trim();
-        List<String> lines = readFile(LINEUP_FILE); // ✅ uses constant now
+        List<String> lines = readFile(LINEUP_FILE);
 
         for (String line : lines) {
             String[] split = line.split("->");
@@ -284,7 +315,10 @@ public class FileUtils {
         return lineup;
     }
 
-
+    /*
+     * Loads the list of items owned by the trainer using their trainer ID.
+     * Returns a list of Item objects.
+     */
     public static List<Item> loadTrainerItems(int id) {
         List<Item> items = new ArrayList<>();
         ItemManager itemManager = new ItemManager();
@@ -310,8 +344,12 @@ public class FileUtils {
         return items;
     }
 
+    /*
+     * Loads a specific Pokémon's full data using its Pokédex number.
+     * Returns a new Pokemon object if found; otherwise, returns null.
+     */
     public static Pokemon loadPokemonByDex(int dexNumber) {
-        List<String> lines = readFile(POKEMON_DATA_FILE); // ✅ now uses constant
+        List<String> lines = readFile(POKEMON_DATA_FILE);
         for (String line : lines) {
             String[] tokens = line.split(",");
             int pokedexNumber = Integer.parseInt(tokens[0]);
@@ -339,6 +377,10 @@ public class FileUtils {
         return null;
     }
 
+    /*
+     * Converts a trainer's item bag into a list of ItemRow objects.
+     * Groups identical items and counts their quantity for display purposes.
+     */
     public static List<ItemRow> getItemRows(Trainer trainer) {
         List<ItemRow> itemRows = new ArrayList<>();
         List<Item> bag = trainer.getItemBag();
@@ -365,9 +407,12 @@ public class FileUtils {
         return itemRows;
     }
 
-
+    /*
+     * Creates a Pokémon object using data from `pokemon_data.txt` based on Pokédex ID.
+     * Parses stats, types, evolution data, and other attributes.
+     */
     public static Pokemon createPokemonFromDataFile(int id) {
-        List<String> lines = readFile(POKEMON_DATA_FILE); // ✅ uses constant now
+        List<String> lines = readFile(POKEMON_DATA_FILE);
 
         for (String line : lines) {
             String[] parts = line.split(",");
@@ -398,6 +443,10 @@ public class FileUtils {
         return null;
     }
 
+    /*
+     * Loads a trainer's lineup using their name.
+     * Also loads each Pokémon's held item if any is found in `pokemon_held_items.txt`.
+     */
     public static List<Pokemon> loadLineupFromFile(String trainerName) {
         List<Pokemon> lineup = new ArrayList<>();
         List<String> lines = readFile(LINEUP_FILE);
@@ -418,7 +467,7 @@ public class FileUtils {
                     Pokemon p = createPokemonFromDataFile(pokeID);
 
                     if (p != null) {
-                        // 🟡 Load held item from file
+                        // Load held item from file
                         String heldItemName = loadHeldItem(trainer.getTrainerID(), p.getName());
                         if (!"None".equals(heldItemName)) {
                             ItemManager itemManager = new ItemManager();
@@ -427,16 +476,11 @@ public class FileUtils {
                                 p.setHeldItem(heldItem);
                             }
                         }
-
                         lineup.add(p);
                     }
                 }
             }
         }
-
         return lineup;
     }
-
-
-
 }

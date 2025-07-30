@@ -40,7 +40,6 @@ public class RareCandy extends Item {
         return result.toString();
     }
 
-
     @Override
     public String getPreviewEffect(Pokemon pokemon, PokemonManager manager) {
         int currentLevel = pokemon.getBaseLevel(); // current level

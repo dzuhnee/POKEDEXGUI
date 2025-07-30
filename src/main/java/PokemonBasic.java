@@ -7,7 +7,7 @@ public class PokemonBasic {
     private int attack;
     private int defense;
     private int speed;
-    private String moves = ""; // ✅ Added
+    private String moves = "";
 
     public PokemonBasic(int dexNumber, String name, int hp, int attack, int defense, int speed) {
         this.dexNumber = dexNumber;
@@ -18,7 +18,7 @@ public class PokemonBasic {
         this.speed = speed;
     }
 
-    // ✅ Getter/Setter for moves
+    // Getter/Setter for moves
     public String getMoves() {
         return moves;
     }

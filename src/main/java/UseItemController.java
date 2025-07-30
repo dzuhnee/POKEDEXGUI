@@ -28,6 +28,7 @@ import com.pokedex.app.ItemRow;
 import com.pokedex.app.TrainerManager;
 
 
+
 public class UseItemController {
     @FXML private Label trainerNameLabel;
 
@@ -47,6 +48,14 @@ public class UseItemController {
     private ItemRow selectedItem;
     private Pokemon selectedPokemon;
 
+    /*
+     * Initializes the UseItemController UI.
+     * - Loads trainer data and sets label.
+     * - Binds table columns to Pokemon and ItemRow properties.
+     * - Enables text wrapping on item columns.
+     * - Adds selection listeners for both tables.
+     * - Loads current data into tables.
+     */
     public void initialize() {
         Trainer trainer = TrainerManager.loadTrainerByID(AppState.getInstance().getFullTrainer().getTrainerID());
         AppState.getInstance().setFullTrainer(trainer);
@@ -79,6 +88,9 @@ public class UseItemController {
 
     }
 
+    /*
+     * Displays a warning alert popup with the specified title and content.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -87,7 +99,10 @@ public class UseItemController {
         alert.showAndWait();
     }
 
-    // Loads the Pokemon Lineup Item Inventory tables
+    /*
+     * Loads the current trainer’s Pokémon lineup and item inventory into the table views.
+     * Called after item use or evolution to reflect updated data.
+     */
     private void loadTables() {
         // Updated trainer
         this.currentTrainer = AppState.getInstance().getFullTrainer();
@@ -105,17 +120,33 @@ public class UseItemController {
         itemTable.setItems(items);
     }
 
-
+    /*
+     * Triggered when a Pokémon is selected in the table.
+     * - Updates the selectedPokemon variable.
+     * - Updates the info box to reflect potential item effect.
+     */
     private void handlePokemonSelection(MouseEvent event) {
         selectedPokemon = pokemonTable.getSelectionModel().getSelectedItem();
         updateInfoBox();
     }
 
+    /*
+     * Triggered when an item is selected in the table.
+     * - Updates the selectedItem variable.
+     * - Updates the info box to reflect potential item effect.
+     */
     private void handleItemSelection(MouseEvent event) {
         selectedItem = itemTable.getSelectionModel().getSelectedItem();
         updateInfoBox();
     }
 
+    /*
+     * Updates the info box to preview the effects of using the selected item
+     * on the selected Pokémon.
+     * - Shows current stats.
+     * - Simulates the item usage and shows resulting stats.
+     * - Appends any special messages or evolution notices.
+     */
     private void updateInfoBox() {
         if (selectedPokemon != null && selectedItem != null) {
             StringBuilder sb = new StringBuilder();
@@ -153,7 +184,14 @@ public class UseItemController {
         }
     }
 
-
+    /*
+     * Handles the actual item usage logic when the "Use" button is pressed.
+     * - Verifies that both a Pokémon and item are selected.
+     * - Handles special evolution (e.g., Thunder Stone for Pikachu).
+     * - Uses the item and updates stats and trainer data.
+     * - Refreshes the table views and UI.
+     * - Displays a detailed message of the result.
+     */
     @FXML
     private void handleUse(ActionEvent event) {
         if (selectedPokemon == null || selectedItem == null) {
@@ -238,6 +276,9 @@ public class UseItemController {
         loadTables();
     }
 
+    /*
+     * Returns to the ManageTrainer screen when "Back" button is clicked.
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -250,6 +291,10 @@ public class UseItemController {
         }
     }
 
+    /*
+     * Enables text wrapping for long strings in the specified table column.
+     * Useful for item names or descriptions that span multiple lines.
+     */
     private void enableTextWrap(TableColumn<ItemRow, String> column) {
         column.setCellFactory(tc -> {
             TableCell<ItemRow, String> cell = new TableCell<>() {

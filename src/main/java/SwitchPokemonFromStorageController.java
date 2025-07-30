@@ -41,6 +41,10 @@ public class SwitchPokemonFromStorageController {
     private final List<Integer> storageIDs = new ArrayList<>();
     private Trainer trainer;
 
+    /*
+     * Sets the trainer name for this controller, stores it in AppState,
+     * updates the label, and loads relevant Pokémon and switch data.
+     */
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
         AppState.setSelectedTrainerName(trainerName);
@@ -51,6 +55,10 @@ public class SwitchPokemonFromStorageController {
         loadTrainerSwitchData();
     }
 
+    /*
+     * JavaFX lifecycle method called after FXML components are loaded.
+     * Ensures trainer data is initialized and event handlers are set.
+     */
     @FXML
     private void initialize() {
         if (trainerName == null) {
@@ -73,6 +81,9 @@ public class SwitchPokemonFromStorageController {
         switchButton.setOnAction(e -> handleSwitch());
     }
 
+    /*
+     * Helper class for holding Pokémon display information such as stats.
+     */
     public static class PokemonInfo {
         String name;
         int hp, attack, defense, speed;
@@ -90,6 +101,10 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Loads Pokémon data from 'pokemon_data.txt' and populates the pokemonIdNameMap.
+     * Used for displaying detailed Pokémon information.
+     */
     private void loadPokemonData() {
         pokemonIdNameMap.clear();
         try (BufferedReader br = new BufferedReader(new FileReader("pokemon_data.txt"))) {
@@ -115,6 +130,10 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Loads Pokémon IDs from 'trainer_lineup.txt' for the selected trainer.
+     * Populates lineupIDs and storageIDs for lineup and storage Pokémon.
+     */
     private void loadTrainerSwitchData() {
         lineupIDs.clear();
         storageIDs.clear();
@@ -149,6 +168,9 @@ public class SwitchPokemonFromStorageController {
         updateStorageListView();
     }
 
+    /*
+     * Populates the lineup ListView with Pokémon info from lineupIDs.
+     */
     private void updateLineupListView() {
         lineupListView.getItems().clear();
         if (lineupIDs.isEmpty()) {
@@ -165,6 +187,10 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Populates the storage ListView with Pokémon info from storageIDs
+     * and other Pokémon not currently in lineup.
+     */
     private void updateStorageListView() {
         storageListView.getItems().clear();
 
@@ -189,6 +215,10 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Handles switching a selected Pokémon from the lineup with one from storage.
+     * Updates the lists and saves the changes to file.
+     */
     private void handleSwitch() {
         int lineupIndex = lineupListView.getSelectionModel().getSelectedIndex();
         int storageIndex = storageListView.getSelectionModel().getSelectedIndex();
@@ -209,6 +239,10 @@ public class SwitchPokemonFromStorageController {
         saveTrainerSwitchData();
     }
 
+    /*
+     * Saves the current trainer's lineup to 'trainer_lineup.txt' after a switch.
+     * Uses a temporary file for safe file replacement.
+     */
     private void saveTrainerSwitchData() {
         File inputFile = new File("trainer_lineup.txt");
         File tempFile = new File("trainer_lineup_temp.txt");
@@ -240,10 +274,16 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Stores the search keyword for filtering or navigation, if needed.
+     */
     public void setSearchKeyword(String keyword) {
         this.searchKeyword = keyword;
     }
 
+    /*
+     * Navigates back to the ManageTrainer view, restoring the trainer and search context.
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         try {
@@ -262,6 +302,10 @@ public class SwitchPokemonFromStorageController {
         }
     }
 
+    /*
+     * Handles releasing (deleting) a selected Pokémon from storage.
+     * Removes it from memory, storage list, and updates 'pokemon_data.txt'.
+     */
     @FXML
     private void handleRelease() {
         int storageIndex = storageListView.getSelectionModel().getSelectedIndex();
