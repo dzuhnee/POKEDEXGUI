@@ -107,7 +107,7 @@ public class SellItemController {
             return;
         }
 
-        quantityField.setPromptText("1");
+        quantityField.setPromptText("1"); // test
         int quantity;
         try {
             quantity = Integer.parseInt(quantityField.getText().trim());
